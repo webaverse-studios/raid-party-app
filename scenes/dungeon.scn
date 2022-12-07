@@ -1,0 +1,43 @@
+{
+  "objects": [
+    {
+      "type": "application/light",
+      "content": {
+        "lightType": "ambient",
+        "args": [[255, 255, 255], 1]
+      }
+    },
+    {
+      "type": "application/light",
+      "content": {
+        "lightType": "directional",
+        "args": [[63, 83, 143], 1],
+        "position": [1, 2, 3]
+      }
+    },
+    {
+      "type": "application/scene2D",
+      "content": {
+        "perspective": "top-down",
+        "cameraMode": "follow",
+        "viewSize": 14
+      }
+    },
+    {
+      "type": "application/rendersettings",
+      "content": {
+          "pixel": {
+            "pixelSize": 1
+          }
+      }
+    },
+    {
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "start_url": "../metaverse_modules/dungeon/"
+    }
+  ]
+}

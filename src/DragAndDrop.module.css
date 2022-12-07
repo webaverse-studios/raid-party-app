@@ -1,0 +1,214 @@
+.dragAndDrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.modalWrap {
+  background-color: #060b0f;
+  z-index: 10;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+  padding: 24px;
+  pointer-events: all;
+  box-sizing: border-box;
+}
+
+.modalWrap:not(.open) {
+  transform: scale(0.8);
+  visibility: hidden;
+  transition: none;
+}
+
+.modalWrap::before {
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: -20px;
+  height: 100%;
+  width: 40px;
+  transform: skewX(4deg);
+  background-color: #060b0f;
+  z-index: 0;
+}
+
+.modalWrap::after {
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: -20px;
+  height: 100%;
+  width: 40px;
+  transform: skewX(-4deg);
+  background-color: #060b0f;
+  z-index: 0;
+}
+
+.modalWrap .modalContentWrap {
+  position: relative;
+  z-index: 1;
+  width:600px;
+  height: 240px;
+  margin: 16px 0;
+  border-top:2px solid #101e27;
+  border-bottom: 2px solid #101e27;
+  padding: 16px 0;
+}
+
+.modalWrap .modalTitle {
+  background-color: #0d1a22;
+  position: relative;
+  font-family: "TTSC-Regular";
+  text-transform: uppercase;
+  color: #efefef;
+  display: inline-block;
+  text-align: center;
+  font-size: 18px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  position: absolute;
+  padding: 6px;
+  top: -14px;
+  min-width: 120px;
+}
+
+.modalWrap .modalTitle::before {
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  left: -20px;
+  height: 100%;
+  width: 40px;
+  transform: skewX(4deg);
+  background-color: #0d1a22;
+  z-index: -1;
+}
+
+.modalWrap .modalTitle::after {
+  display: block;
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: -20px;
+  height: 100%;
+  width: 40px;
+  transform: skewX(-4deg);
+  background-color: #0d1a22;
+  z-index: -1;
+}
+
+.dragAndDrop .itemPreviewBoxWrap {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.dragAndDrop .itemPreviewBox {
+ position: relative;
+ display: block;
+ float: left;
+ margin-bottom: 32px;
+ width: 160px;
+ height: 144px;
+}
+
+
+.dragAndDrop .itemPreviewBox .mask {
+  width: 190px;
+  height: 174px;
+  overflow: hidden;
+  position: relative;
+  -webkit-mask-image: url("/assets/backgrounds/token-frame-empty.svg");
+  mask-image: url("/assets/backgrounds/token-frame-empty.svg");
+  -webkit-mask-size: 100%;
+  mask-size: 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.dragAndDrop .itemPreviewBox .bg {
+  width: 198px;
+  height: 198px;
+  position: absolute;
+  top: -16px;
+  left: -4px;
+  z-index: 0;
+  background-image: url("/assets/backgrounds/token-frame-empty.svg");
+  background-position: center;
+  background-size: 100%;
+  background-repeat: no-repeat;
+}
+
+.dragAndDrop .itemPreviewBox .canvas {
+  width: 190px;
+  height: 174px;
+}
+
+.dragAndDrop .info {
+  margin-left: 64px;
+  float: left;
+  color: #efefef;
+  width: 374px;
+  height: 208px;
+  overflow-y: scroll;
+}
+
+.dragAndDrop .info .type {
+  width: 300px;
+  background-color: #050e11;
+  margin-bottom: 8px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  color: #e2e3e5;
+  text-transform: uppercase;
+}
+
+.dragAndDrop .info .type .label {
+  text-transform: capitalize;
+  width: 80px;
+  display: inline-block;
+  color: #929c9b;
+}
+
+.dragAndDrop .info h2 {
+  margin: 0;
+  font-size: 24px;
+  text-transform: capitalize;
+  padding-left: 14px;
+}
+.dragAndDrop .info p {
+  max-width: 300px;
+  padding-left: 14px;
+}
+
+.dragAndDrop .actions {
+  position: absolute;
+  bottom: -52px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.dragAndDrop .actions .button {
+  min-width: 120px;
+  border: 2px solid #000;
+  margin: 0 4px;
+}
+
+.dragAndDrop .actions .button * {
+  padding: 4px 16px !important;
+}

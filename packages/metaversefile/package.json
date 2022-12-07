@@ -1,0 +1,32 @@
+{
+  "name": "@webaverse-studios/metaversefile",
+  "version": "0.0.33",
+  "description": "",
+  "main": "./index.js",
+  "module": "./index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build", 
+    "preview": "vite preview"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webaverse-studios/metaversefile.git"
+  },
+  "author": "Webaverse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/webaverse-studios/metaversefile/issues"
+  },
+  "homepage": "https://github.com/webaverse-studios/metaversefile#readme",
+  "dependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "data-urls": "^3.0.1",
+    "mime-types": "^2.1.32",
+    "node-fetch": "^2.6.1",
+    "pako": "^2.0.4",
+    "unix-path": "^0.2.0",
+    "vite": "^3.1.3"
+  }
+}

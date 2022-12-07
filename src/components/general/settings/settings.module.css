@@ -1,0 +1,179 @@
+
+.clearfix {
+    clear: both;
+}
+
+.settings * {
+    font-family: "TTSC-Regular";
+}
+
+.settings.open {
+    transform: translate( 0%, 0% );
+}
+
+.wrapper {
+    margin-left: auto;
+    margin-right: auto;
+    width: 40%;
+    min-width: 640px;
+    height: 100%;
+}
+
+.tabs {
+    padding-top: 15px;
+    border-bottom: 2px solid #0d1a22;
+    margin-bottom: 4px;
+}
+
+.tab {
+    float: left;
+    margin-right: 10px;
+    margin-bottom: -2px;
+    padding: 10px 0px;
+    width: 118px;
+    border-bottom: 1px solid transparent;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+}
+
+.tab.active {
+    border-bottom: 1px solid #fdc503;
+}
+
+
+.tabContentWrapper {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    text-align: left;
+    overflow-y: scroll;
+}
+
+.tabContent {
+    padding-top: 8px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: none;
+}
+
+.tabContent.active {
+    display: block;
+}
+
+/*  */
+
+.row {
+    margin-bottom: 3px;
+    margin-right: 3px;
+    background-color: #050e11;
+}
+
+.blockTitle {
+    padding: 10px 10px 0px 10px;
+    color: #525b5e;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.paramName {
+    float: left;
+    width: 260px;
+    box-sizing: border-box;
+    padding-left: 22%;
+    text-align: left;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #aebbb4;
+}
+
+.apiKeysTab .input {
+    width: 350px;
+    margin: 20px 0;
+    padding: 5px;
+    margin-left: 230px;
+    font-family: inherit;
+}
+
+.apiKeysTab .textarea {
+    width: 100%;
+    height: 200px;
+    outline: none;
+    resize: vertical;
+}
+
+.apiKeysTab .input.enabled {
+    background-color: #66bb6a;
+    /* color: #FFF; */
+}
+/* .apiKeysTab .input.enabled::placeholder {
+    color: #FFFFFF80;
+} */
+
+.audioTab .slider {
+    float: left;
+    margin-left: 20px;
+    margin-top: 8px;
+}
+
+.audioTab .row {
+    margin-top: 8px;
+}
+
+.audioTab .paramName {
+    width: 250px;
+}
+
+/*  */
+
+.controlsTab .keyInput {
+    float: left;
+    margin-left: 20px;
+    margin-top: 2px;
+}
+
+/*  */
+
+.logoutBtn {
+    margin-left: 50%;
+    transform: translate( -50%, 0px );
+}
+
+/*  */
+
+.applyBtn {
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    color: #fff;
+    border: 1px solid #aaa;
+    padding: 10px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 200ms ease;
+}
+
+.applyBtn:hover {
+    opacity: 0.9;
+}
+
+.applyBtn.active {
+    opacity: 0.7;
+}
+
+/*  */
+
+.select {
+    margin-left: 20px;
+    width: 180px;
+    line-height: 26px;
+    height: 26px;
+    text-align: left;
+    font-weight: bold;
+    background-color: #0d1a22;
+    border: 1px solid #ddf3e6;
+    color: #ddf3e6;
+    margin-top: 2px;
+}

@@ -21,8 +21,6 @@ export const getBiomeType = async prompt => {
     },
   });
 
-  console.log(resp);
-
   return resp.data.result;
 };
 

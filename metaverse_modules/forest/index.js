@@ -141,12 +141,7 @@ export default e => {
       for (let i = 0; i < biome.tiles.length; i++) {
         for (let j = 0; j < 1; j++) {
           if (biome.tiles[i].includes('tree')) {
-            generateImageNew(
-              'top-down view of a ' +
-                biomeInfo +
-                ' tree' +
-                ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic',
-            ).then(imgs => {
+            generateImageNew(biomeInfo + ' tree').then(imgs => {
               console.log('generating tree');
               currentTiles++;
               textures[biome.tiles[i]].push(imgs[0]);
@@ -158,12 +153,7 @@ export default e => {
             }
 
             houseDone = true;
-            generateImageNew(
-              'top-down view of a ' +
-                biomeInfo +
-                ' house' +
-                ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic',
-            ).then(imgs => {
+            generateImageNew(biomeInfo + ' house').then(imgs => {
               console.log('generating house');
               currentTiles++;
               console.log('images:', imgs.length);
@@ -199,10 +189,7 @@ export default e => {
               prompt =
                 'Square uniform!!! ' + biomeInfo + ' path tile with grass';
             }
-            prompt =
-              'top-down view of a ' +
-              prompt +
-              ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic';
+
             if (prompt.includes('path')) {
               if (pathImg) {
                 continue;

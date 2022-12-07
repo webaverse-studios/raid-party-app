@@ -60,16 +60,18 @@ export default class Tiles extends THREE.Object3D {
               key.includes('water') ||
               key.includes('path')
                 ? new THREE.MeshStandardMaterial({
-                    map: value[i][j],
-                    premultipliedAlpha: true,
-                    blending: 1,
+                    map: value[i],
                   })
                 : new THREE.MeshStandardMaterial({
                     map: value[i][j],
-                    blending: 1,
                     transparent: true,
-                    premultipliedAlpha: true,
-                    transparent: 0.5,
+                    specular: new THREE.Color(0x101010),
+                    shininess: 40,
+                    alphaTest: 0.15,
+                    color: new THREE.Color(0xffffff),
+                    metal: true,
+                    wrapAround: true,
+                    side: THREE.DoubleSide,
                   });
             const geometry = new THREE.PlaneGeometry(1, 1);
             geometry.rotateX(-Math.PI / 2);
@@ -93,15 +95,17 @@ export default class Tiles extends THREE.Object3D {
               key.includes('path')
                 ? new THREE.MeshStandardMaterial({
                     map: value[i],
-                    premultipliedAlpha: true,
-                    blending: 1,
                   })
                 : new THREE.MeshStandardMaterial({
                     map: value[i],
-                    blending: 1,
                     transparent: true,
-                    premultipliedAlpha: true,
-                    transparent: 0.5,
+                    specular: new THREE.Color(0x101010),
+                    shininess: 40,
+                    alphaTest: 0.15,
+                    color: new THREE.Color(0xffffff),
+                    metal: true,
+                    wrapAround: true,
+                    side: THREE.DoubleSide,
                   });
             let geometry = new THREE.PlaneGeometry(1, 1);
             geometry.rotateX(-Math.PI / 2);
@@ -118,18 +122,12 @@ export default class Tiles extends THREE.Object3D {
               key.includes('grass') ||
               key.includes('sand') ||
               key.includes('water') ||
-              key.includes('path') ||
-              (key.includes('house') &&
-                (key.includes('Middle') || key.includes('Down')) &&
-                !key.includes('Up'))
+              key.includes('path')
                 ? new THREE.MeshStandardMaterial({
                     map: value[i],
-                    premultipliedAlpha: true,
-                    blending: 1,
                   })
                 : new THREE.MeshStandardMaterial({
                     map: value[i],
-                    blending: 1,
                     transparent: true,
                   });
             geometry = new THREE.PlaneGeometry(1, 1);
@@ -149,13 +147,17 @@ export default class Tiles extends THREE.Object3D {
               key.includes('path')
                 ? new THREE.MeshStandardMaterial({
                     map: value[i],
-                    premultipliedAlpha: true,
-                    blending: 1,
                   })
                 : new THREE.MeshStandardMaterial({
                     map: value[i],
-                    blending: 1,
                     transparent: true,
+                    specular: new THREE.Color(0x101010),
+                    shininess: 40,
+                    alphaTest: 0.15,
+                    color: new THREE.Color(0xffffff),
+                    metal: true,
+                    wrapAround: true,
+                    side: THREE.DoubleSide,
                   });
             const geometry = new THREE.PlaneGeometry(1, 1);
             geometry.rotateX(-Math.PI / 2);

@@ -52,6 +52,7 @@ import {ChainContext} from '../../hooks/chainProvider';
 import loadoutManager from '../../../loadout-manager';
 import Modals from '../modals';
 import {partyManager} from '../../../party-manager';
+import SpriteGenerator from '../../pages/SpriteGenerator';
 
 //
 const _startApp = async (weba, canvas) => {
@@ -330,6 +331,7 @@ export const App = () => {
         <DragAndDrop />
         <GrabKeyIndicators />
         <Stats app={app} />
+        <SpriteGenerator />
       </AppContext.Provider>
     </div>
   );

@@ -329,7 +329,6 @@ export const App = () => {
         <FocusBar />
         <DragAndDrop />
         <GrabKeyIndicators />
-        <BuildVersion />
         <Stats app={app} />
       </AppContext.Provider>
     </div>

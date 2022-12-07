@@ -2,27 +2,41 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import Agent from 'agentkeepalive';
 
-const CATEGORIZER_URL = 'http://127.0.0.1:8080/http://216.153.50.206:7777';
+const CATEGORIZER_URL =
+  'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'http://127.0.0.1:8080/https://stable-diffusion.webaverse.com/image';
-const SPRITESHEET_URL = 'http://127.0.0.1:8080/http://216.153.52.56:7777';
+  'https://cors-anywhere.herokuapp.com/https://stable-diffusion.webaverse.com/image';
+const SPRITESHEET_URL =
+  'https://cors-anywhere.herokuapp.com/http://216.153.52.56:7777';
 let agent = null;
 
 export const getBiomeType = async prompt => {
   const resp = await axios.get(CATEGORIZER_URL, {
     params: {
       prompt: prompt,
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
     },
   });
+
+  console.log(resp);
 
   return resp.data.result;
 };
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'http://127.0.0.1:8080/http://216.153.50.206:7777/completion',
+    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
     },
   );
 
@@ -31,10 +45,14 @@ export const getBiomeInfo = async inputPrompt => {
 
 export const generateImageCache = async prompt => {
   const resp = await axios.get(
-    'http://127.0.0.1:8080/http://216.153.50.206:7778',
+    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7778',
     {
       params: {
         imgType: prompt,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
       },
       responseType: 'blob',
     },
@@ -141,11 +159,12 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://127.0.0.1:8080/http://216.153.52.17/predictions',
+    'https://cors-anywhere.herokuapp.com/http://216.153.52.17/predictions',
     body,
     {
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       httpAgent: agent,
     },
@@ -171,6 +190,10 @@ export const generateImage = async prompt => {
     query: params,
     params: params,
     responseType: 'blob',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
   });
 
   //check if blob is zip and unzip it
@@ -203,6 +226,10 @@ export const generateSpritesheet = async prompt => {
     query: params,
     params: params,
     responseType: 'blob',
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+    },
   });
 
   //check if blob is zip and unzip it

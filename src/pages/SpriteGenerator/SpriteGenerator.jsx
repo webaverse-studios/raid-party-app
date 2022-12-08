@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {AnimatePresence, motion} from 'framer-motion';
 
 import Title from './components/Title';
+import GeneratorTap from './components/GeneratorTap';
 
 export default function SpriteGenerator() {
   const [visible, setVisible] = useState(true);
@@ -18,6 +19,7 @@ export default function SpriteGenerator() {
         >
           <Content>
             <Title />
+            <GeneratorTap />
             <PlayButton
               onClick={() => {
                 setVisible(false);
@@ -51,20 +53,20 @@ const Content = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PlayButton = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 10%;
-  z-index: 1;
   background-color: #a984a9;
   color: white;
-  padding: 0.5em 3em;
+  padding: 1em 4em;
   border-radius: 0.5em;
-  transform: translateX(-50%);
   cursor: pointer;
   transition: all 0.3s ease-out;
+  margin-top: 3em;
   &:hover {
     background-color: #f5bff5;
   }

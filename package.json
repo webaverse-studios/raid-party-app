@@ -46,6 +46,7 @@
     "pathfinding": "^0.4.18",
     "react": "18.2.0",
     "react-dom": "^18.2.0",
+    "react-tabs": "^6.0.0",
     "seedrandom": "^3.0.5",
     "smile2emoji": "^3.1.1",
     "stats.js": "^0.17.0",

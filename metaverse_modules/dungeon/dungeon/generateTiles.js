@@ -2,9 +2,10 @@ import {getAssetURL} from './asset_db';
 import axios from 'axios';
 import Agent from 'agentkeepalive';
 
-const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
+const CATEGORIZER_URL =
+  'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'http://localhost:8080/https://stable-diffusion.webaverse.com/image';
+  'https://cors-anywhere.herokuapp.com/https://stable-diffusion.webaverse.com/image';
 let agent = null;
 
 export const getBiomeType = async prompt => {
@@ -23,7 +24,7 @@ export const getBiomeType = async prompt => {
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.50.206:7777/completion',
+    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
     },
@@ -89,7 +90,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.52.17/predictions',
+    'https://cors-anywhere.herokuapp.com/http://216.153.52.17/predictions',
     body,
     {
       headers: {

@@ -20,7 +20,7 @@
       "content": {
         "perspective": "top-down",
         "cameraMode": "follow",
-        "viewSize": 14
+        "viewSize": 8
       }
     },
     {

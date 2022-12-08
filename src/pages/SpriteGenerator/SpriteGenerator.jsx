@@ -46,7 +46,7 @@ const Holder = styled(motion.div)`
   background-size: cover;
   background-repeat: no-repeat;
   font-family: 'A Goblin Appears!';
-  font-size: 1em;
+  font-size: 2em;
 `;
 
 const Content = styled.div`

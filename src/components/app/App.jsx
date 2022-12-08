@@ -307,7 +307,7 @@ export const App = () => {
         <Modals />
         <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
         <DomRenderer />
-        <Canvas app={app} />
+        {/* <Canvas app={app} /> */}
         <Crosshair />
         <ClaimsNotification />
         <WorldObjectsList

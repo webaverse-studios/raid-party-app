@@ -11,11 +11,37 @@ import {
 } from './libs/generate/index.js';
 import {Data, Textures} from './libs/utils/index.js';
 import {Grid, IDAStarFinder} from './libs/pathfinder/index.js';
+import {generateTiles} from './generateTiles.js';
+import {TEXTURE_ASSET} from './libs/utils/assets.js';
+import physicsManager from '../../../physics-manager.js';
 
 const {useLocalPlayer} = metaversefile;
 
 export default class Dungeon {
-  constructor() {
+  app = null;
+  physics = null;
+
+  constructor(app, physics, localPlayer) {
+    this.app = app;
+    this.physics = physics;
+
+    app.addEventListener('triggerin', async e => {
+      if (
+        e.oppositePhysicsId ===
+        localPlayer.characterPhysics.characterController.physicsId
+      ) {
+        console.log('local player trigger in');
+      }
+    });
+    app.addEventListener('triggerout', async e => {
+      if (
+        e.oppositePhysicsId ===
+        localPlayer.characterPhysics.characterController.physicsId
+      ) {
+        console.log('local player trigger out');
+      }
+    });
+
     this.assets = null;
 
     //
@@ -45,7 +71,58 @@ export default class Dungeon {
     this.playerPosition = new THREE.Vector3();
   }
 
+  addCollider(x, y, setTrigger = false) {
+    const physicsObject = this.physics.addBoxGeometry(
+      new THREE.Vector3(x * TILE_SIZE, 0, y * TILE_SIZE),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
+      new THREE.Vector3(0.5, 0.5, 0.5),
+      false,
+    );
+    if (setTrigger) {
+      physicsManager.getScene().setTrigger(physicsObject.physicsId);
+    }
+    this.app.add(physicsObject);
+  }
+
+  randomString(length) {
+    const chars =
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = length; i > 0; --i) {
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+  }
+
+  async regenerateMap() {
+    const sprites = await generateTiles();
+    console.log('new tile count:', sprites);
+  }
+
   async waitForLoad() {
+    document.addEventListener('keydown', e => {
+      if (e.key == 'u') {
+        console.log('regenerating tiles');
+        this.regenerateMap();
+      }
+    });
+
+    const sprites = await generateTiles();
+    console.log('generated sprites:', sprites);
+    //loop sprite keys, values
+    for (const [key, value] of Object.entries(sprites)) {
+      const _key = key.replace('_wall', '').trim();
+      console.log('key and value', key, _key, value);
+      for (const [key2, value2] of Object.entries(TEXTURE_ASSET)) {
+        if (key2 == _key || (_key == 'handcuff' && key2.includes(_key))) {
+          console.log('assigning file url to:', key, value);
+          TEXTURE_ASSET[key2].file_url = value;
+          break;
+        }
+      }
+    }
+    console.log(TEXTURE_ASSET);
+
     const assetManager = new AssetManager();
     this.assets = await assetManager.load();
     const newDungeon = generate({
@@ -58,7 +135,7 @@ export default class Dungeon {
       containerSplitRetries: 30,
       corridorWidth: 4,
       tileWidth: 32,
-      seed: '5ML3875MwgFzyejjoFV9i',
+      seed: this.randomString(21),
       debug: false,
       rooms: Data.loadRooms(),
     });
@@ -125,6 +202,12 @@ export default class Dungeon {
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+
+          if (id !== 0 && id !== 48) {
+            this.addCollider(x, y, false);
+          } else if (id === 48) {
+            this.addCollider(x, y, true);
+          }
         }
       }
     }
@@ -137,6 +220,7 @@ export default class Dungeon {
         if (id === 0) {
           continue;
         }
+
         const texture = sprites[id];
         if (texture) {
           const geometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 1, 1);
@@ -155,6 +239,7 @@ export default class Dungeon {
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+          this.addCollider(x, y);
         }
       }
     }

@@ -19,6 +19,7 @@ export default e => {
   const camera = useCamera();
   const procGenManager = useProcGenManager();
   const physics = usePhysics();
+  const localPlayer = useLocalPlayer();
 
   // locals
 
@@ -27,7 +28,7 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      const dungeon = new Dungeon();
+      const dungeon = new Dungeon(app, physics, localPlayer);
       app.add(dungeon.pivot);
       dungeon.pivot.updateMatrixWorld();
 

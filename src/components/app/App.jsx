@@ -278,66 +278,64 @@ export const App = () => {
   };
 
   return (
-    <div
-      className={styles.App}
-      id="app"
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
+    <AppContext.Provider
+      value={{
+        state,
+        setState,
+        app,
+        setSelectedApp,
+        selectedApp,
+        uiMode,
+        account,
+        chain,
+        selectedScene,
+        setSelectedScene,
+        selectedRoom,
+        setSelectedRoom,
+        avatarLoaded,
+        setAvatarLoaded,
+        startGame,
+        setStartGame,
+      }}
     >
-      <AppContext.Provider
-        value={{
-          state,
-          setState,
-          app,
-          setSelectedApp,
-          selectedApp,
-          uiMode,
-          account,
-          chain,
-          selectedScene,
-          setSelectedScene,
-          selectedRoom,
-          setSelectedRoom,
-          avatarLoaded,
-          setAvatarLoaded,
-          startGame,
-          setStartGame,
-        }}
-      >
-        {startGame && (
-          <>
-            <Modals />
-            <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
-            <DomRenderer />
-            <Canvas app={app} />
-            <Crosshair />
-            <ClaimsNotification />
-            <WorldObjectsList
-              setSelectedApp={setSelectedApp}
-              selectedApp={selectedApp}
-            />
-            <PlayMode />
-            <EditorMode
-              selectedScene={selectedScene}
-              setSelectedScene={setSelectedScene}
-              selectedRoom={selectedRoom}
-              setSelectedRoom={setSelectedRoom}
-            />
-            <IoHandler />
-            <QuickMenu />
-            <ZoneTitleCard />
-            <MapGen />
-            <Quests />
-            <LoadingBox />
-            <FocusBar />
-            <DragAndDrop />
-            <GrabKeyIndicators />
-            <Stats app={app} />
-          </>
-        )}
-        <SpriteGenerator />
-      </AppContext.Provider>
-    </div>
+      {startGame && (
+        <div
+          className={styles.App}
+          id="app"
+          onDragStart={onDragStart}
+          onDragEnd={onDragEnd}
+          onDragOver={onDragOver}
+        >
+          <Modals />
+          <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+          <DomRenderer />
+          <Canvas app={app} />
+          <Crosshair />
+          <ClaimsNotification />
+          <WorldObjectsList
+            setSelectedApp={setSelectedApp}
+            selectedApp={selectedApp}
+          />
+          <PlayMode />
+          <EditorMode
+            selectedScene={selectedScene}
+            setSelectedScene={setSelectedScene}
+            selectedRoom={selectedRoom}
+            setSelectedRoom={setSelectedRoom}
+          />
+          <IoHandler />
+          <QuickMenu />
+          <ZoneTitleCard />
+          <MapGen />
+          <Quests />
+          <LoadingBox />
+          <FocusBar />
+          <DragAndDrop />
+          <GrabKeyIndicators />
+          <Stats app={app} />
+        </div>
+      )}
+      <SpriteGenerator />
+    </AppContext.Provider>
   );
 };

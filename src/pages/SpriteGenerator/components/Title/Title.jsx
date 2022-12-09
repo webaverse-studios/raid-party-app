@@ -18,7 +18,7 @@ export default function Title() {
       }}
       transition={{
         // ease: 'easeInOut',
-        delay: 3,
+        delay: 2,
         // duration: 0.8,
         type: 'spring',
         stiffness: 350,

@@ -10,22 +10,23 @@ import PageAnimation from './components/Animations/PageAnimation';
 import RaiseFadeAnimation from './components/Animations/RaiseFadeAnimation';
 
 export default function SpriteGenerator() {
-  const [visible, setVisible] = useState(true);
   const {setStartGame} = useContext(AppContext);
-
+  const [visible, setVisible] = useState(true);
   return (
     <PageAnimation visible={visible}>
       <Holder>
         <Title />
-        <RaiseFadeAnimation delay={5500}>
+        <RaiseFadeAnimation delay={3500}>
           <GeneratorTap />
         </RaiseFadeAnimation>
-        <RaiseFadeAnimation delay={6000}>
+        <RaiseFadeAnimation delay={4000}>
           <Button
             title="Play"
             onClick={() => {
               setVisible(false);
-              setStartGame(true);
+              setTimeout(() => {
+                setStartGame(true);
+              }, [1000]);
             }}
           />
         </RaiseFadeAnimation>

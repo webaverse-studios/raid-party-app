@@ -1,10 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
 
 export default function Title() {
-  const [visible, setVisible] = useState(true);
-
   return (
     <Holder
       variants={{
@@ -20,13 +18,13 @@ export default function Title() {
       }}
       transition={{
         // ease: 'easeInOut',
-        delay: 5,
+        delay: 3,
         // duration: 0.8,
         type: 'spring',
         stiffness: 350,
       }}
       initial="init"
-      animate={visible ? 'show' : 'hide'}
+      animate="show"
     >
       <Content>
         <span>Welcome Creator!</span>

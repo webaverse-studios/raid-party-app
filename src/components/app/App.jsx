@@ -150,8 +150,7 @@ export const App = () => {
   const [apps, setApps] = useState(world.appManager.getApps().slice());
   const account = useContext(AccountContext);
   const chain = useContext(ChainContext);
-
-  //
+  const [startGame, setStartGame] = useState(false);
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -302,35 +301,41 @@ export const App = () => {
           setSelectedRoom,
           avatarLoaded,
           setAvatarLoaded,
+          startGame,
+          setStartGame,
         }}
       >
-        <Modals />
-        <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
-        <DomRenderer />
-        <Canvas app={app} />
-        <Crosshair />
-        <ClaimsNotification />
-        <WorldObjectsList
-          setSelectedApp={setSelectedApp}
-          selectedApp={selectedApp}
-        />
-        <PlayMode />
-        <EditorMode
-          selectedScene={selectedScene}
-          setSelectedScene={setSelectedScene}
-          selectedRoom={selectedRoom}
-          setSelectedRoom={setSelectedRoom}
-        />
-        <IoHandler />
-        <QuickMenu />
-        <ZoneTitleCard />
-        <MapGen />
-        <Quests />
-        <LoadingBox />
-        <FocusBar />
-        <DragAndDrop />
-        <GrabKeyIndicators />
-        <Stats app={app} />
+        {startGame && (
+          <>
+            <Modals />
+            <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+            <DomRenderer />
+            <Canvas app={app} />
+            <Crosshair />
+            <ClaimsNotification />
+            <WorldObjectsList
+              setSelectedApp={setSelectedApp}
+              selectedApp={selectedApp}
+            />
+            <PlayMode />
+            <EditorMode
+              selectedScene={selectedScene}
+              setSelectedScene={setSelectedScene}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+            />
+            <IoHandler />
+            <QuickMenu />
+            <ZoneTitleCard />
+            <MapGen />
+            <Quests />
+            <LoadingBox />
+            <FocusBar />
+            <DragAndDrop />
+            <GrabKeyIndicators />
+            <Stats app={app} />
+          </>
+        )}
         <SpriteGenerator />
       </AppContext.Provider>
     </div>

@@ -1,62 +1,81 @@
-import React, {useContext, useState} from 'react';
+import React, {useCallback, useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {ScrollMenu, VisibilityContext} from 'react-horizontal-scrolling-menu';
+import {nanoid} from 'nanoid';
 import BorderButton from '../Buttons/BorderButton';
 import './style.css';
 
-const PRE_ROLLED_DATA = [
-  {
-    id: '001',
-    name: 'Benny Bee',
-    image: '/images/rp/sprite-gen/avatar-01.jpg',
-  },
-  {
-    id: '002',
-    name: 'Snake Cartoon Character',
-    image: '/images/rp/sprite-gen/avatar-02.jpg',
-  },
-  {
-    id: '003',
-    name: 'Cute Pixel Penguin',
-    image: '/images/rp/sprite-gen/avatar-03.jpg',
-  },
-  {
-    id: '004',
-    name: 'Cartoon Pixel Bear',
-    image: '/images/rp/sprite-gen/avatar-04.jpg',
-  },
-  {
-    id: '005',
-    name: 'Cute Pixel Pig',
-    image: '/images/rp/sprite-gen/avatar-05.jpg',
-  },
-  {
-    id: '006',
-    name: 'Cartoon Pixel Mouse',
-    image: '/images/rp/sprite-gen/avatar-06.jpg',
-  },
-  {
-    id: '007',
-    name: 'Cute Pixel Bull',
-    image: '/images/rp/sprite-gen/avatar-07.jpg',
-  },
-  {
-    id: '008',
-    name: 'Cartoon Pixel Deer',
-    image: '/images/rp/sprite-gen/avatar-08.jpg',
-  },
-];
+import {generateAvatar} from '../../../../api/sprite';
+
+function saveSprites(sprites) {
+  localStorage.setItem('sprites', JSON.stringify(sprites));
+}
+
+function loadSprites() {
+  let parsed = [];
+
+  try {
+    const saved = localStorage.getItem('sprites');
+
+    // Firs time the page is loaded we return a default list
+    if (!saved) {
+      return {data: []};
+    }
+
+    parsed = JSON.parse(saved);
+  } catch (error) {
+    console.warn('Error loading rooms from local storage.');
+  }
+
+  return parsed;
+}
 
 export default function GeneratorTap() {
   const [tabIndex, setTabIndex] = useState(0);
-  const [selectedItem, setSelectedItem] = useState(PRE_ROLLED_DATA[0]);
+  const [selectedItem, setSelectedItem] = useState(null);
   const [describe, setDescribe] = useState('');
+  const [fetching, setFetching] = useState(false);
+  const [sprite, setSprite] = useState('');
+  const [preRolledSprites, setPreRolledSprites] = useState([]);
 
   const handleClick =
     item =>
     ({getItemById, scrollToItem}) => {
       setSelectedItem(item);
     };
+
+  const fetchSprite = useCallback(async () => {
+    if (fetching) {
+      return;
+    }
+
+    setFetching(true);
+
+    try {
+      const image = await generateAvatar(describe);
+      const url = URL.createObjectURL(image);
+
+      const oldSprites = loadSprites();
+      const newSprite = {
+        id: nanoid(),
+        name: describe,
+        image: url,
+      };
+      oldSprites.data.push(newSprite);
+      saveSprites(oldSprites);
+
+      setSprite(url);
+    } finally {
+      setFetching(false);
+    }
+  }, [describe, fetching]);
+
+  useEffect(() => {
+    if (tabIndex === 1) {
+      const sprites = loadSprites();
+      setPreRolledSprites(sprites.data);
+    }
+  }, [tabIndex]);
 
   return (
     <Tabs>
@@ -86,25 +105,32 @@ export default function GeneratorTap() {
             onChange={e => {
               setDescribe(e.target.value);
             }}
-          ></TextArea>
+          />
+          {sprite && (
+            <SpritePreview>
+              <img src={sprite} />
+            </SpritePreview>
+          )}
           <TabPanelFooter>
             <BorderButton icon="/images/rp/sprite-gen/redo.svg" />
             <BorderButton
               icon="/images/rp/sprite-gen/wizard.svg"
               title="Generate"
+              onClick={fetchSprite}
+              loading={fetching}
             />
           </TabPanelFooter>
         </TabPanel>
       )}
       {tabIndex === 1 && (
         <TabPanel>
-          <Text>{selectedItem.name}</Text>
+          <Text>{selectedItem?.name}</Text>
           <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-            {PRE_ROLLED_DATA.map((item, index) => (
+            {preRolledSprites.map((item, index) => (
               <Card
                 key={index}
                 item={item}
-                selected={selectedItem.id === item.id}
+                selected={selectedItem?.id === item.id}
                 onClick={handleClick(item)}
               />
             ))}
@@ -244,8 +270,6 @@ const Card = ({onClick, selected, item}) => {
 };
 
 const CardHolder = styled.div`
-  width: 5em;
-  height: 5em;
   background-color: #fff9ee;
   color: black;
   overflow: hidden;
@@ -257,6 +281,23 @@ const CardHolder = styled.div`
 `;
 
 const CardPreview = styled.img`
-  width: 100%;
-  height: 100%;
+  object-fit: none;
+  object-position: 0 0;
+  width: 64px;
+  height: 64px;
+  transform: scale(1.2);
+`;
+
+const SpritePreview = styled.div`
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  > img {
+    object-fit: none;
+    object-position: 0 0;
+    width: 64px;
+    height: 64px;
+    transform: scale(2.5);
+  }
 `;

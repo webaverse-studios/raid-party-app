@@ -1,10 +1,33 @@
 import React from 'react';
 import styled from 'styled-components';
+import Spiner from '../Spiner';
 
-export default function BorderButton({icon, title, onClick, className}) {
+export default function BorderButton({
+  icon,
+  title,
+  onClick,
+  className,
+  loading = false,
+}) {
   return (
-    <Holder className={className} onClick={onClick}>
-      {icon && <Icon src={icon} alt="" />}
+    <Holder
+      className={className}
+      onClick={e => {
+        if (loading) {
+          return;
+        }
+        onClick(e);
+      }}
+    >
+      {icon && (
+        <IconHolder>
+          {loading ? (
+            <Spiner size={40} color="#77baa2" />
+          ) : (
+            <Icon src={icon} alt="" />
+          )}
+        </IconHolder>
+      )}
       {title && <span>{title}</span>}
     </Holder>
   );
@@ -30,4 +53,11 @@ const Holder = styled.div`
   }
 `;
 
-const Icon = styled.img``;
+const IconHolder = styled.div`
+  position: relative;
+`;
+
+const Icon = styled.img`
+  width: 2em;
+  height: 2em;
+`;

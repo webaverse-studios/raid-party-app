@@ -2,12 +2,10 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import Agent from 'agentkeepalive';
 
-const CATEGORIZER_URL =
-  'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777';
+const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'https://cors-anywhere.herokuapp.com/https://stable-diffusion.webaverse.com/image';
-const SPRITESHEET_URL =
-  'https://cors-anywhere.herokuapp.com/http://216.153.52.56:7777';
+  'http://localhost:8080/https://stable-diffusion.webaverse.com/image';
+const SPRITESHEET_URL = 'http://localhost:8080/http://216.153.52.56:7777';
 let agent = null;
 
 export const getBiomeType = async prompt => {
@@ -26,7 +24,7 @@ export const getBiomeType = async prompt => {
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777/completion',
+    'http://localhost:8080/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
     },
@@ -43,7 +41,7 @@ export const getBiomeInfo = async inputPrompt => {
 
 export const generateImageCache = async prompt => {
   const resp = await axios.get(
-    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7778',
+    'http://localhost:8080/http://216.153.50.206:7778',
     {
       params: {
         imgType: prompt,
@@ -96,8 +94,12 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 };
 
 const getInputImageFrom = prompt => {
+  const rnd = Math.random();
+
   if (prompt.includes('house')) {
-    return 'https://cdn.discordapp.com/attachments/1042463989407416402/1047536541498626128/candy_shop_1.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/1042463989407416402/1047536541498626128/candy_shop_1.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050749860447531098/treehouse.png';
   } else if (
     (prompt.includes('forest') || prompt.includes('grass')) &&
     !prompt.includes('deep')
@@ -114,17 +116,27 @@ const getInputImageFrom = prompt => {
   } else if (prompt.includes('path')) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227296646635530/sprite_213.png';
   } else if (prompt.includes('stone')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227466629206056/sprite_177.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747831637520454/big_rock.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748907522625629/rock_pile.png';
   } else if (prompt.includes('sand bush')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227673190289408/sprite_174.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747990505181204/pile_of_stones.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748906780233758/ruin_stones.png';
   } else if (prompt.includes('torch')) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227673492258878/torch.png';
   } else if (prompt.includes('bush') && !prompt.includes('sand')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227673806843944/sprite_175.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747990773608519/raspberry_bush.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748907111587860/flowering_bush.png';
   } else if (prompt.includes('flower')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227674121424906/sprite_179.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050748647207346176/flower_1.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748647563866202/flower_2.png';
   } else if (prompt.includes('tree')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049234355601539143/sprite_0.png';
+    return rnd < 0.5
+      ? 'https://cdn.discordapp.com/attachments/1050731480873193543/1050734362406166589/tree_init.png'
+      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748931975421962/branching_bush.png';
   }
 };
 
@@ -157,7 +169,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'https://cors-anywhere.herokuapp.com/http://216.153.52.17/predictions',
+    'http://localhost:8080/http://sd-ingress.tenant-webaverse-prod-ord1.coreweave.cloud/predictions',
     body,
     {
       headers: {

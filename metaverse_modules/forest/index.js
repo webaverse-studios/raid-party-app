@@ -170,24 +170,17 @@ export default e => {
           } else {
             let prompt = biome.tiles[i];
             if (prompt.includes('stone')) {
-              prompt =
-                'Square uniform!!! ' + biomeInfo + ' rock tile with pebbles';
+              prompt = biomeInfo + ' rock tile with pebbles';
             } else if (prompt.includes('forest')) {
-              prompt =
-                'Square uniform!!! ' + biomeInfo + ' forest tile with grass';
+              prompt = biomeInfo + ' forest tile with grass';
             } else if (prompt.includes('deep forest')) {
-              prompt =
-                'Square uniform!!! ' +
-                biomeInfo +
-                ' deep forest tile with grass';
+              prompt = biomeInfo + ' deep forest tile with grass';
             } else if (prompt.includes('grass')) {
-              prompt =
-                'Square uniform!!! ' + biomeInfo + ' grass tile with flowers';
+              prompt = biomeInfo + ' grass tile with flowers';
             } else if (prompt.includes('water')) {
               prompt = 'Square uniform!!! ' + biomeInfo + ' water tile';
             } else if (prompt.includes('path')) {
-              prompt =
-                'Square uniform!!! ' + biomeInfo + ' path tile with grass';
+              prompt = biomeInfo + ' path tile with grass';
             }
 
             if (prompt.includes('path')) {

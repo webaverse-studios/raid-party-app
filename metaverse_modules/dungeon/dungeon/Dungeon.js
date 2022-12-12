@@ -71,18 +71,57 @@ export default class Dungeon {
     this.playerPosition = new THREE.Vector3();
   }
 
-  addCollider(x, y, setTrigger = false) {
+  colliders = [];
+  meshObjects = [];
+
+  colliderExists = (x, y) => {
+    for (let i = 0; i < this.colliders.length; i++) {
+      if (this.colliders[i].x === x && this.colliders[i].y === y) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  addCollider(x, y, group, direction, setTrigger = false) {
+    let px = 0;
+    let pz = 0;
+
+    switch (direction) {
+      case Direction.right:
+        px = this.oldGroup.position.x + this.dungeon.width * TILE_SIZE;
+        pz += this.oldGroup.position.z;
+        break;
+      case Direction.left:
+        px = this.oldGroup.position.x - this.dungeon.width * TILE_SIZE;
+        pz += this.oldGroup.position.z;
+        break;
+      case Direction.down:
+        pz = this.oldGroup.position.z + this.dungeon.height * TILE_SIZE;
+        px += this.oldGroup.position.x;
+        break;
+      case Direction.up:
+        pz = this.oldGroup.position.z - this.dungeon.height * TILE_SIZE;
+        px += this.oldGroup.position.x;
+        break;
+    }
+
+    const x1 = x * TILE_SIZE + px;
+    const y1 = y * TILE_SIZE + pz;
+
     const physicsObject = this.physics.addBoxGeometry(
-      new THREE.Vector3(x * TILE_SIZE, 0, y * TILE_SIZE),
+      new THREE.Vector3(x1, 0, y1),
       new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-      new THREE.Vector3(0.5, 0.5, 0.5),
+      new THREE.Vector3(0.3, 0.3, 0.3),
       false,
     );
     if (setTrigger) {
       physicsManager.getScene().setTrigger(physicsObject.physicsId);
     }
+
     this.app.add(physicsObject);
   }
+  removeCollider(x, y) {}
 
   randomString(length) {
     const chars =
@@ -95,33 +134,40 @@ export default class Dungeon {
   }
 
   async regenerateMap() {
-    const sprites = await generateTiles();
-    console.log('new tile count:', sprites);
+    await generateTiles();
+
+    const tiles = Textures.tilesTextures(this.assets);
+    const props = Textures.propsTextures(this.assets);
+
+    console.log('meshObjects:', this.meshObjects.length);
+    for (let i = 0; i < this.meshObjects.length; i++) {
+      const texture =
+        this.meshObjects[i].type === 'prop'
+          ? props[this.meshObjects[i]]
+          : tiles[this.meshObjects[i]];
+      this.meshObjects[i].sprite.material.map = texture;
+    }
+    console.log('map regenerated');
   }
 
   async waitForLoad() {
     document.addEventListener('keydown', e => {
       if (e.key == 'u') {
-        console.log('regenerating tiles');
         this.regenerateMap();
       }
     });
 
     const sprites = await generateTiles();
-    console.log('generated sprites:', sprites);
     //loop sprite keys, values
     for (const [key, value] of Object.entries(sprites)) {
       const _key = key.replace('_wall', '').trim();
-      console.log('key and value', key, _key, value);
       for (const [key2, value2] of Object.entries(TEXTURE_ASSET)) {
         if (key2 == _key || (_key == 'handcuff' && key2.includes(_key))) {
-          console.log('assigning file url to:', key, value);
           TEXTURE_ASSET[key2].file_url = value;
           break;
         }
       }
     }
-    console.log(TEXTURE_ASSET);
 
     const assetManager = new AssetManager();
     this.assets = await assetManager.load();
@@ -142,7 +188,7 @@ export default class Dungeon {
     this.drawDungeon(newDungeon);
   }
 
-  drawDungeon(dungeon) {
+  drawDungeon(dungeon, direction) {
     this.oldDungeon = JSON.parse(JSON.stringify(this.dungeon));
     this.dungeon = JSON.parse(JSON.stringify(dungeon));
 
@@ -172,15 +218,23 @@ export default class Dungeon {
     this.group.updateMatrixWorld();
 
     // Draw
-    this.drawTiles(dungeon.layers.tiles, Textures.tilesTextures(this.assets));
-    this.drawProps(dungeon.layers.props, Textures.propsTextures(this.assets));
+    this.drawTiles(
+      dungeon.layers.tiles,
+      Textures.tilesTextures(this.assets),
+      direction,
+    );
+    this.drawProps(
+      dungeon.layers.props,
+      Textures.propsTextures(this.assets),
+      direction,
+    );
     this.drawMonsters(
       dungeon.layers.monsters,
       Textures.monstersTextures(this.assets),
     );
   }
 
-  drawTiles = (tilemap, sprites) => {
+  drawTiles = (tilemap, sprites, direction) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
@@ -200,20 +254,22 @@ export default class Dungeon {
             layer: TileLayer.tiles,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
+          const oldPos = sprite.position;
           this.group.add(sprite);
           sprite.updateMatrixWorld();
-
-          if (id !== 0 && id !== 48) {
-            this.addCollider(x, y, false);
-          } else if (id === 48) {
-            this.addCollider(x, y, true);
+          if (texture) {
+            if (id !== 0 && id !== 46 && id !== 48) {
+              this.addCollider(x, y, this.group, direction);
+            } else if (id === 48) {
+              this.addCollider(x, y, this.group, direction, true);
+            }
           }
         }
       }
     }
   };
 
-  drawProps = (tilemap, sprites) => {
+  drawProps = (tilemap, sprites, direction) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
@@ -237,9 +293,10 @@ export default class Dungeon {
             layer: TileLayer.props,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
+          this.meshObjects.push({x, y, sprite, key: 'id', type: 'prop'});
           this.group.add(sprite);
           sprite.updateMatrixWorld();
-          this.addCollider(x, y);
+          this.addCollider(x, y, this.group, direction);
         }
       }
     }
@@ -283,7 +340,7 @@ export default class Dungeon {
       const newDungeon = generateNext(this.dungeon, detectedDoor.direction);
 
       // Draw next dungeon
-      this.drawDungeon(newDungeon);
+      this.drawDungeon(newDungeon, detectedDoor.direction);
 
       // Move group
       this.moveGroupByDoorDirection(detectedDoor.direction);

@@ -2,10 +2,9 @@ import {getAssetURL} from './asset_db';
 import axios from 'axios';
 import Agent from 'agentkeepalive';
 
-const CATEGORIZER_URL =
-  'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777';
+const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'https://cors-anywhere.herokuapp.com/https://stable-diffusion.webaverse.com/image';
+  'http://localhost:8080/https://stable-diffusion.webaverse.com/image';
 let agent = null;
 
 export const getBiomeType = async prompt => {
@@ -24,7 +23,7 @@ export const getBiomeType = async prompt => {
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'https://cors-anywhere.herokuapp.com/http://216.153.50.206:7777/completion',
+    'http://localhost:8080/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
     },
@@ -61,6 +60,7 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 
 export const generateImageNew = async (
   prompt,
+  label,
   strength = 0.85,
   guidance_scale = 7.5,
 ) => {
@@ -74,7 +74,7 @@ export const generateImageNew = async (
   }
 
   console.log('input prompt:', prompt);
-  const assetURL = getAssetURL(prompt);
+  const assetURL = null; // getAssetURL(label);
   if (!assetURL) {
     return null;
   }
@@ -90,7 +90,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'https://cors-anywhere.herokuapp.com/http://216.153.52.17/predictions',
+    'http://localhost:8080/http://sd-ingress.tenant-webaverse-prod-ord1.coreweave.cloud/predictions',
     body,
     {
       headers: {
@@ -115,78 +115,117 @@ export const generateImageNew = async (
 
 const prompts = ['Scary Dungeon', 'Candy Dungeon'];
 
-const makePrompt = i => {
+const makePrompt = (i, biomeInfo) => {
+  const res = {prompt: '', label: ''};
+
   if (i === 0) {
-    return 'ground';
+    res.prompt = biomeInfo + ' ground tile';
+    res.label = 'ground';
   } else if (i === 1) {
-    return 'w_wall';
+    res.prompt = biomeInfo + ' west wall tile';
+    res.label = 'w_wall';
   } else if (i === 2) {
-    return 's_e_wall';
+    res.prompt = biomeInfo + ' south east wall tile';
+    res.label = 's_e_wall';
   } else if (i === 3) {
-    return 'nw_wall';
+    res.prompt = biomeInfo + ' north west wall tile';
+    res.label = 'nw_wall';
   } else if (i === 4) {
-    return 'ne_wall';
+    res.prompt = biomeInfo + ' north east wall tile';
+    res.label = 'ne_wall';
   } else if (i === 5) {
-    return 'n_nw_w_wall';
+    res.prompt = biomeInfo + ' north west west wall tile';
+    res.label = 'n_nw_w_wall';
   } else if (i === 6) {
-    return 'w_e_wall';
+    res.prompt = biomeInfo + ' west east wall tile';
+    res.label = 'w_e_wall';
   } else if (i === 7) {
-    return 'n_wall';
+    res.prompt = biomeInfo + ' north wall tile';
+    res.label = 'n_wall';
   } else if (i === 8) {
-    return 'n_ne_e_wall';
+    res.prompt = biomeInfo + ' north east east wall tile';
+    res.label = 'n_ne_e_wall';
   } else if (i === 9) {
-    return 'e_wall';
+    res.prompt = biomeInfo + ' east wall tile';
+    res.label = 'e_wall';
   } else if (i === 10) {
-    return 's_wall';
+    res.prompt = biomeInfo + ' south wall tile';
+    res.label = 's_wall';
   } else if (i === 11) {
-    return 'all_wall';
+    res.prompt = biomeInfo + ' wall tile';
+    res.label = 'all_wall';
   } else if (i === 12) {
-    return 'door';
+    res.prompt = biomeInfo + ' door tile';
+    res.label = 'door';
   } else if (i === 13) {
-    return 'peak';
+    res.prompt = biomeInfo + ' peack';
+    res.label = 'peak';
   } else if (i === 14) {
-    return 'bone';
+    res.prompt = biomeInfo + ' bone';
+    res.label = 'bone';
   } else if (i === 15) {
-    return 'flag';
+    res.prompt = biomeInfo + ' flag';
+    res.label = 'flag';
   } else if (i === 16) {
-    return 'crate_silver';
+    res.prompt = biomeInfo + ' silver crate';
+    res.label = 'crate_silver';
   } else if (i === 17) {
-    return 'crate_wood';
+    res.prompt = biomeInfo + ' wooden crate';
+    res.label = 'crate_wood';
   } else if (i === 18) {
-    return 'handcuff';
+    res.prompt = biomeInfo + ' handcuff';
+    res.label = 'handcuff';
   } else if (i === 19) {
-    return 'skull';
+    res.prompt = biomeInfo + ' skull';
+    res.label = 'skull';
   } else if (i === 20) {
-    return 'lamp';
+    res.prompt = biomeInfo + ' lanp';
+    res.label = 'lamp';
   } else if (i === 21) {
-    return 'stones_large';
+    res.prompt = biomeInfo + ' large stone';
+    res.label = 'stones_large';
   } else if (i === 22) {
-    return 'stones_small';
+    res.prompt = biomeInfo + ' small stone';
+    res.label = 'stones_small';
   } else if (i === 23) {
-    return 'web_left';
+    res.prompt = biomeInfo + ' web';
+    res.label = 'web_left';
   } else if (i === 24) {
-    return 'web_right';
+    res.prompt = biomeInfo + ' web';
+    res.label = 'web_right';
   } else if (i === 25) {
-    return 'health_large';
+    res.prompt = biomeInfo + ' large health potion';
+    res.label = 'health_large';
   } else if (i === 26) {
-    return 'health_small';
+    res.prompt = biomeInfo + ' small health potion';
+    res.label = 'health_small';
   } else if (i === 27) {
-    return 'key_gold';
+    res.prompt = biomeInfo + ' golden key';
+    res.label = 'key_gold';
   } else if (i === 28) {
-    return 'key_silver';
+    res.prompt = biomeInfo + ' silver key';
+    res.label = 'key_silver';
   } else if (i === 29) {
-    return 'mana_small';
+    res.prompt = biomeInfo + ' small mana potion';
+    res.label = 'mana_small';
   } else if (i === 30) {
-    return 'mana_large';
+    res.prompt = biomeInfo + ' large mana potion';
+    res.label = 'mana_large';
   } else if (i === 31) {
-    return 'ladder';
+    res.prompt = biomeInfo + ' ladder';
+    res.label = 'ladder';
   } else if (i === 32) {
-    return 'torch';
+    res.prompt = biomeInfo + ' torch';
+    res.label = 'torch';
   } else if (i === 33) {
-    return 'edge';
+    res.prompt = biomeInfo + ' edge tile';
+    res.label = 'edge';
   } else if (i === 34) {
-    return 'hole';
+    res.prompt = biomeInfo + ' hole';
+    res.label = 'hole';
   }
+
+  return res;
 };
 
 export async function generateTiles() {
@@ -210,15 +249,15 @@ export async function generateTiles() {
   const start = Date.now();
 
   for (let i = 0; i < maxCount; i++) {
-    const prompt = `${biomeInfo} ${makePrompt(i)}`;
-
-    generateImageNew(makePrompt(i)).then(img => {
+    const data = makePrompt(i, biomeInfo);
+    generateImageNew(data.prompt, data.label).then(img => {
+      console.log('img:', img);
       currentCount++;
       if (!img) {
         return;
       }
 
-      sprites[makePrompt(i)] = img;
+      sprites[data.label] = img;
     });
   }
 

@@ -61,6 +61,7 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 export const generateImageNew = async (
   prompt,
   label,
+  req_type,
   strength = 0.85,
   guidance_scale = 7.5,
 ) => {
@@ -74,7 +75,7 @@ export const generateImageNew = async (
   }
 
   console.log('input prompt:', prompt);
-  const assetURL = null; // getAssetURL(label);
+  const assetURL = getAssetURL(label);
   if (!assetURL) {
     return null;
   }
@@ -86,11 +87,12 @@ export const generateImageNew = async (
       strength: strength,
       guidance_scale: guidance_scale,
       split: 'none',
+      req_type: req_type,
     },
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://localhost:8080/http://sd-ingress.tenant-webaverse-prod-ord1.coreweave.cloud/predictions',
+    'http://localhost:8080/http://216.153.51.45:5000/predictions',
     body,
     {
       headers: {
@@ -116,47 +118,60 @@ export const generateImageNew = async (
 const prompts = ['Scary Dungeon', 'Candy Dungeon'];
 
 const makePrompt = (i, biomeInfo) => {
-  const res = {prompt: '', label: ''};
+  const res = {prompt: '', label: '', req_type: 'none'};
 
   if (i === 0) {
     res.prompt = biomeInfo + ' ground tile';
     res.label = 'ground';
+    res.req_type = 'tile';
   } else if (i === 1) {
     res.prompt = biomeInfo + ' west wall tile';
     res.label = 'w_wall';
+    res.req_type = 'tile';
   } else if (i === 2) {
     res.prompt = biomeInfo + ' south east wall tile';
     res.label = 's_e_wall';
+    res.req_type = 'tile';
   } else if (i === 3) {
     res.prompt = biomeInfo + ' north west wall tile';
     res.label = 'nw_wall';
+    res.req_type = 'tile';
   } else if (i === 4) {
     res.prompt = biomeInfo + ' north east wall tile';
     res.label = 'ne_wall';
+    res.req_type = 'tile';
   } else if (i === 5) {
     res.prompt = biomeInfo + ' north west west wall tile';
     res.label = 'n_nw_w_wall';
+    res.req_type = 'tile';
   } else if (i === 6) {
     res.prompt = biomeInfo + ' west east wall tile';
     res.label = 'w_e_wall';
+    res.req_type = 'tile';
   } else if (i === 7) {
     res.prompt = biomeInfo + ' north wall tile';
     res.label = 'n_wall';
+    res.req_type = 'tile';
   } else if (i === 8) {
     res.prompt = biomeInfo + ' north east east wall tile';
     res.label = 'n_ne_e_wall';
+    res.req_type = 'tile';
   } else if (i === 9) {
     res.prompt = biomeInfo + ' east wall tile';
     res.label = 'e_wall';
+    res.req_type = 'tile';
   } else if (i === 10) {
     res.prompt = biomeInfo + ' south wall tile';
     res.label = 's_wall';
+    res.req_type = 'tile';
   } else if (i === 11) {
     res.prompt = biomeInfo + ' wall tile';
     res.label = 'all_wall';
+    res.req_type = 'tile';
   } else if (i === 12) {
     res.prompt = biomeInfo + ' door tile';
     res.label = 'door';
+    res.req_type = 'tile';
   } else if (i === 13) {
     res.prompt = biomeInfo + ' peack';
     res.label = 'peak';
@@ -228,21 +243,8 @@ const makePrompt = (i, biomeInfo) => {
   return res;
 };
 
-export async function generateTiles() {
-  const basePrompt = prompts[Math.floor(Math.random() * prompts.length)];
+export async function generateTiles(biomeType, biomeInfo) {
   const sprites = {};
-
-  const biomeType = (await getBiomeType(basePrompt)).trim();
-  const biomeInfo = (await getBiomeInfo(basePrompt)).trim();
-
-  console.log(
-    'base prompt:',
-    basePrompt,
-    'biome type:',
-    biomeType,
-    'biome info:',
-    biomeInfo,
-  );
 
   const maxCount = 35;
   let currentCount = 0;
@@ -250,7 +252,7 @@ export async function generateTiles() {
 
   for (let i = 0; i < maxCount; i++) {
     const data = makePrompt(i, biomeInfo);
-    generateImageNew(data.prompt, data.label).then(img => {
+    generateImageNew(data.prompt, data.label, data.req_type).then(img => {
       console.log('img:', img);
       currentCount++;
       if (!img) {

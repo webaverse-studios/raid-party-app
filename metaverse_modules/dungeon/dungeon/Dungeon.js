@@ -20,10 +20,14 @@ const {useLocalPlayer} = metaversefile;
 export default class Dungeon {
   app = null;
   physics = null;
+  biomeInfo = '';
+  biomeType = '';
 
-  constructor(app, physics, localPlayer) {
+  constructor(app, physics, localPlayer, biomeInfo, biomeType) {
     this.app = app;
     this.physics = physics;
+    this.biomeInfo = biomeInfo;
+    this.biomeType = biomeType;
 
     app.addEventListener('triggerin', async e => {
       if (
@@ -134,7 +138,7 @@ export default class Dungeon {
   }
 
   async regenerateMap() {
-    await generateTiles();
+    await generateTiles(this.biomeType, this.biomeInfo);
 
     const tiles = Textures.tilesTextures(this.assets);
     const props = Textures.propsTextures(this.assets);
@@ -157,7 +161,7 @@ export default class Dungeon {
       }
     });
 
-    const sprites = await generateTiles();
+    const sprites = await generateTiles(this.biomeType, this.biomeInfo);
     //loop sprite keys, values
     for (const [key, value] of Object.entries(sprites)) {
       const _key = key.replace('_wall', '').trim();

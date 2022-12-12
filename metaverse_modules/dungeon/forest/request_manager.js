@@ -98,7 +98,7 @@ const getInputImageFrom = prompt => {
 
   if (prompt.includes('house')) {
     return rnd < 0.5
-      ? 'https://cdn.discordapp.com/attachments/1042463989407416402/1047536541498626128/candy_shop_1.png'
+      ? 'https://cdn.discordapp.com/attachments/1050731480873193543/1051833026063114360/init_house.png'
       : 'https://cdn.discordapp.com/attachments/632242008148148225/1050749860447531098/treehouse.png';
   } else if (
     (prompt.includes('forest') || prompt.includes('grass')) &&

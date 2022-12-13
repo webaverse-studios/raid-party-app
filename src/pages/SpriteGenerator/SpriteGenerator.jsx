@@ -6,12 +6,12 @@ import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 
 import {AppContext} from '../../components/app';
+import Button from '../../components/Buttons/Button';
+import PageAnimation from '../../components/Animations/PageAnimation';
+import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
 
 import Title from './components/Title';
 import GeneratorTap from './components/GeneratorTap';
-import Button from './components/Buttons/Button';
-import PageAnimation from './components/Animations/PageAnimation';
-import RaiseFadeAnimation from './components/Animations/RaiseFadeAnimation';
 
 export default function SpriteGenerator() {
   const {setStartGame} = useContext(AppContext);

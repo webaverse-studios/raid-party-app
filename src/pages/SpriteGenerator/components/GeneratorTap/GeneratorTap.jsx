@@ -2,9 +2,9 @@ import React, {useCallback, useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import {ScrollMenu, VisibilityContext} from 'react-horizontal-scrolling-menu';
 import {nanoid} from 'nanoid';
-import BorderButton from '../Buttons/BorderButton';
 import './style.css';
 
+import BorderButton from '../../../../components/Buttons/BorderButton';
 import {generateAvatar} from '../../../../api/sprite';
 
 function saveSprites(sprites) {
@@ -86,7 +86,7 @@ export default function GeneratorTap() {
             setTabIndex(0);
           }}
         >
-          Describe
+          <span>Create</span>
         </Tab>
         <Tab
           active={tabIndex === 1}
@@ -94,7 +94,7 @@ export default function GeneratorTap() {
             setTabIndex(1);
           }}
         >
-          Pre-Rolled
+          <span>Choose</span>
         </Tab>
       </TabList>
       {tabIndex === 0 && (
@@ -112,7 +112,6 @@ export default function GeneratorTap() {
             </SpritePreview>
           )}
           <TabPanelFooter>
-            <BorderButton icon="/images/rp/sprite-gen/redo.svg" />
             <BorderButton
               icon="/images/rp/sprite-gen/wizard.svg"
               title="Generate"
@@ -136,7 +135,6 @@ export default function GeneratorTap() {
             ))}
           </ScrollMenu>
           <TabPanelFooter>
-            <BorderButton icon="/images/rp/sprite-gen/redo.svg" />
             <BorderButton
               icon="/images/rp/sprite-gen/check.svg"
               title="Select"
@@ -155,7 +153,7 @@ const Tabs = styled.div`
 const TabList = styled.div`
   display: flex;
   align-items: flex-end;
-  gap: 0.2em;
+  gap: 1.5em;
   padding: 0 1em;
 `;
 
@@ -163,21 +161,24 @@ const Tab = styled.div`
   width: fit-content;
   height: fit-content;
   padding: 1em 2em;
-  border-top: 0.5em solid #967296;
-  border-left: 0.5em solid #967296;
-  border-right: 0.5em solid #967296;
-  border-top-left-radius: 0.5em;
-  border-top-right-radius: 0.5em;
-  padding-bottom: ${props => (props.active ? '1.5em' : '1em')};
+  border-top: 0.4em solid #967296;
+  border-left: 0.4em solid #967296;
+  border-right: 0.4em solid #967296;
+  border-top-left-radius: 1.2em;
+  border-top-right-radius: 1.2em;
   background-color: ${props => (props.active ? '#a984a9' : '#6d607c')};
-  color: white;
+  color: ${props => (props.active ? '#ffffff' : '#c2afc2')};
   cursor: pointer;
   transition: background-color 0.3s ease-out;
+  box-shadow: inset 0px 0.2em 0px #c1a0b4;
+  > span {
+    text-shadow: 0px 4px 0px rgba(0, 0, 0, 0.25);
+  }
 `;
 
 const TabPanel = styled.div`
   position: relative;
-  background-color: #f5dfb8;
+  background-color: #f5e1b5;
   padding: 1em 1em 4em 1em;
   min-width: 40em;
   max-width: 40em;
@@ -186,6 +187,9 @@ const TabPanel = styled.div`
   display: flex;
   flex-direction: column;
   gap: 1em;
+  border: 0.4em solid #e0cbab;
+  box-shadow: 0px 1.2em 0px rgba(0, 0, 0, 0.14);
+  border-radius: 1.2em;
 `;
 
 const TabPanelFooter = styled.div`

@@ -281,7 +281,11 @@ export async function generateTiles(biomeType, biomeInfo) {
         sprites[data.label] = img;
       });*/
     } else {
-      generateImageNew(data.prompt, data.label, data.req_type).then(img => {
+      generateImageNew(
+        data.prompt,
+        data.label,
+        data.req_type ? data.req_type : 'asset',
+      ).then(img => {
         console.log('img:', img);
         currentCount++;
         if (!img) {

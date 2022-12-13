@@ -167,7 +167,7 @@ export const generateImageNew = async (
         : prompt.includes('house')
         ? 'splitImageTo9'
         : 'none',
-      req_type: is_tile ? 'tile' : 'none',
+      req_type: is_tile ? 'tile' : 'asset',
     },
   };
   console.log('body:', body);

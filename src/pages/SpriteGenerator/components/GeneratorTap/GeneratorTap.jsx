@@ -145,7 +145,7 @@ export default function GeneratorTap() {
       {tabIndex === 1 && (
         <TabPanel>
           <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-            {PreRolledTempData.map((item, index) => (
+            {preRolledSprites.map((item, index) => (
               <Card
                 key={index}
                 item={item}

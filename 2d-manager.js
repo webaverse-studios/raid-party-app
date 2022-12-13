@@ -41,7 +41,13 @@ class Scene2DManager {
         break;
       }
       case 'top-down': {
-        // nothing yet
+        this.zoomFactor = THREE.MathUtils.clamp(
+          (this.zoomFactor += e.deltaY * 0.01),
+          1,
+          1.5,
+        );
+        camera.zoom = this.zoomFactor;
+        camera.updateProjectionMatrix();
         break;
       }
       default: {

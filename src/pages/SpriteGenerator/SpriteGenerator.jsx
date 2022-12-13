@@ -45,7 +45,6 @@ const Holder = styled.div`
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   gap: 10em;
   background-color: #2c2539;
@@ -54,4 +53,5 @@ const Holder = styled.div`
   background-repeat: no-repeat;
   font-family: 'A Goblin Appears!';
   font-size: 1.7em;
+  padding: 12em 1em 1em 1em;
 `;

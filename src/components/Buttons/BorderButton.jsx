@@ -40,7 +40,7 @@ const Holder = styled.div`
   background-color: #fff9ee;
   color: #4c4c4c;
   padding: 1em;
-  border-radius: 0.5em;
+  border-radius: 1em;
   border: 0.3em solid #e0cbab;
   cursor: pointer;
   transition: all 0.3s ease-out;

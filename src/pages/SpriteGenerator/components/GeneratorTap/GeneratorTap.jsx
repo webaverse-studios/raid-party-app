@@ -30,6 +30,29 @@ function loadSprites() {
   return parsed;
 }
 
+const PreRolledTempData = [
+  {
+    id: 'a',
+    image: '',
+    name: 'a',
+  },
+  {
+    id: 'b',
+    image: '',
+    name: 'b',
+  },
+  {
+    id: 'c',
+    image: '',
+    name: 'c',
+  },
+  {
+    id: 'd',
+    image: '',
+    name: 'd',
+  },
+];
+
 export default function GeneratorTap() {
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -77,6 +100,8 @@ export default function GeneratorTap() {
     }
   }, [tabIndex]);
 
+  console.log(preRolledSprites);
+
   return (
     <Tabs>
       <TabList>
@@ -99,18 +124,14 @@ export default function GeneratorTap() {
       </TabList>
       {tabIndex === 0 && (
         <TabPanel>
+          <SpritePreview>{sprite && <img src={sprite} />}</SpritePreview>
           <TextArea
-            placeholder="Enter the description of your avatar to generate a sprite"
+            placeholder="User's Entered Description"
             value={describe}
             onChange={e => {
               setDescribe(e.target.value);
             }}
           />
-          {sprite && (
-            <SpritePreview>
-              <img src={sprite} />
-            </SpritePreview>
-          )}
           <TabPanelFooter>
             <BorderButton
               icon="/images/rp/sprite-gen/wizard.svg"
@@ -123,9 +144,8 @@ export default function GeneratorTap() {
       )}
       {tabIndex === 1 && (
         <TabPanel>
-          <Text>{selectedItem?.name}</Text>
           <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-            {preRolledSprites.map((item, index) => (
+            {PreRolledTempData.map((item, index) => (
               <Card
                 key={index}
                 item={item}
@@ -134,12 +154,6 @@ export default function GeneratorTap() {
               />
             ))}
           </ScrollMenu>
-          <TabPanelFooter>
-            <BorderButton
-              icon="/images/rp/sprite-gen/check.svg"
-              title="Select"
-            />
-          </TabPanelFooter>
         </TabPanel>
       )}
     </Tabs>
@@ -179,13 +193,8 @@ const Tab = styled.div`
 const TabPanel = styled.div`
   position: relative;
   background-color: #f5e1b5;
-  padding: 1em 1em 4em 1em;
-  min-width: 40em;
-  max-width: 40em;
-  min-height: 20em;
-  max-height: 20em;
+  padding: 2em 1em 4em 1em;
   display: flex;
-  flex-direction: column;
   gap: 1em;
   border: 0.4em solid #e0cbab;
   box-shadow: 0px 1.2em 0px rgba(0, 0, 0, 0.14);
@@ -207,18 +216,26 @@ const TextArea = styled.textarea`
   font-size: 0.9em;
   line-height: 2;
   padding: 1em;
-  width: 100%;
-  height: 100%;
+  width: 20em;
+  height: 7em;
+  background-color: #fff1d6;
+  border: 0.2em solid #e1cda8;
+  border-radius: 1em;
+  resize: none;
   &:focus {
     outline: none;
   }
-`;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
 
-const Text = styled.div`
-  background-color: #fff9ee;
-  color: #92724d;
-  padding: 1em;
-  line-height: 2;
+  &::-webkit-scrollbar-thumb {
+    background-color: #6b8fa3;
+    border-radius: 5px;
+  }
 `;
 
 const Arrow = ({direction, disabled, onClick}) => {
@@ -267,21 +284,27 @@ const Card = ({onClick, selected, item}) => {
   const visibility = useContext(VisibilityContext);
   const visible = visibility.isItemVisible(item.id);
   return (
-    <CardHolder active={selected} onClick={() => onClick(visibility)}>
-      <CardPreview src={item.image} alt="" />
+    <CardHolder onClick={() => onClick(visibility)}>
+      {selected && <CardCheck src="/images/rp/sprite-gen/check.svg" />}
+      {item.image && <CardPreview src={item.image} alt="" />}
     </CardHolder>
   );
 };
 
 const CardHolder = styled.div`
-  background-color: #fff9ee;
+  position: relative;
   color: black;
-  overflow: hidden;
-  border: 0.4em solid #a984a9;
-  border-radius: 0.3em;
-  border-color: ${props => (props.active ? '#a984a9' : '#e0cbab')};
-  user-select: none;
+  border: 0.2em solid #fffcf7;
+  border-radius: 0.8em;
+  background: #6e607e;
+  box-shadow: 0px 7px 0px rgba(0, 0, 0, 0.14);
   transition: all 0.3s ease-out;
+  user-select: none;
+  min-width: 5em;
+  min-height: 5em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const CardPreview = styled.img`
@@ -289,14 +312,28 @@ const CardPreview = styled.img`
   object-position: 0 0;
   width: 64px;
   height: 64px;
-  transform: scale(1.2);
+  transform: scale(1.3);
+`;
+
+const CardCheck = styled.img`
+  position: absolute;
+  top: 0.1em;
+  right: 0.2em;
+  z-index: 1;
+  width: 35px;
+  transform: translate(16px, -5px);
 `;
 
 const SpritePreview = styled.div`
-  flex: 1;
+  width: 15em;
+  height: 15em;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #434a61;
+  border: 0.2em solid #fffcf7;
+  box-shadow: 0px 0.3em 0px rgba(0, 0, 0, 0.14);
+  border-radius: 1.2em;
   > img {
     object-fit: none;
     object-position: 0 0;

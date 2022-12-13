@@ -1,7 +1,11 @@
 import * as THREE from 'three';
 import AssetManagerForest from './asset-manager';
 import generateForest from './forest';
-import {generateImage, generateImageNew} from './request_manager';
+import {
+  generateImage,
+  generateImageCache,
+  generateImageNew,
+} from './request_manager';
 
 // this file's base url
 const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -262,30 +266,14 @@ export default class Tiles extends THREE.Object3D {
           });
         } else {
           let prompt = tiles[i];
-          if (prompt.includes('stone')) {
-            prompt = biomeInfo + ' rock tile with pebbles';
-          } else if (prompt.includes('forest')) {
-            prompt = biomeInfo + ' forest tile with grass';
-          } else if (prompt.includes('deep forest')) {
-            prompt = biomeInfo + ' deep forest tileswith grass';
-          } else if (prompt.includes('grass')) {
-            prompt = biomeInfo + ' grass tile with flowers';
-          } else if (prompt.includes('water')) {
-            prompt = biomeInfo + ' water tile';
-          } else if (prompt.includes('path')) {
-            prompt = biomeInfo + ' path tile with grass';
-          }
-          prompt =
-            'top-down view of a ' +
-            prompt +
-            ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic';
+
           if (prompt.includes('path')) {
             if (pathImg) {
               continue;
             }
 
             pathImg = true;
-            generateImageNew(prompt).then(img => {
+            generateImageCache('path misc', biomeType).then(img => {
               console.log('generating path');
               currentTiles++;
               textures[tiles[20]].push(img);
@@ -304,10 +292,25 @@ export default class Tiles extends THREE.Object3D {
               textures[tiles[33]].push(img);
             });
           } else {
-            generateImageNew(prompt).then(img => {
-              textures[tiles[i]].push(img);
-              currentTiles++;
-            });
+            console.log('prompt:', prompt, typeof prompt);
+            if (
+              prompt.includes('bush') ||
+              prompt.includes('flower') ||
+              prompt.includes('rock') ||
+              prompt.includes('torch')
+            ) {
+              generateImageNew(prompt).then(img => {
+                console.log('generating biome.tiles[i]', tiles[i]);
+                currentTiles++;
+                textures[tiles[i]].push(img);
+              });
+            } else {
+              generateImageCache(prompt, biomeType).then(img => {
+                console.log('generating biome.tiles[i]', tiles[i]);
+                currentTiles++;
+                textures[tiles[i]].push(img);
+              });
+            }
           }
         }
       }

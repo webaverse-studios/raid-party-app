@@ -3,7 +3,10 @@ import metaversefile from 'metaversefile';
 import Dungeon from './dungeon/Dungeon.js';
 import {getBiomeInfo, getBiomeType} from './dungeon/generateTiles.js';
 import Tiles from './forest/tiles.js';
-import {generateImageNew} from './forest/request_manager.js';
+import {
+  generateImageCache,
+  generateImageNew,
+} from './forest/request_manager.js';
 
 const {
   useApp,
@@ -33,6 +36,8 @@ export default e => {
     'Rainbow Dungeon',
     'Dark Dungeon',
     'Blazing Dungeon',
+    'Desert Forest',
+    'Icy Forest',
   ];
 
   const app = useApp();
@@ -146,19 +151,6 @@ export default e => {
               });
             } else {
               let prompt = biome.tiles[i];
-              if (prompt.includes('stone')) {
-                prompt = biomeInfo + ' rock tile with pebbles';
-              } else if (prompt.includes('forest')) {
-                prompt = biomeInfo + ' forest tile with grass';
-              } else if (prompt.includes('deep forest')) {
-                prompt = biomeInfo + ' deep forest tile with grass';
-              } else if (prompt.includes('grass')) {
-                prompt = biomeInfo + ' grass tile with flowers';
-              } else if (prompt.includes('water')) {
-                prompt = 'Square uniform!!! ' + biomeInfo + ' water tile';
-              } else if (prompt.includes('path')) {
-                prompt = biomeInfo + ' path tile with grass';
-              }
 
               if (prompt.includes('path')) {
                 if (pathImg) {
@@ -166,7 +158,7 @@ export default e => {
                 }
 
                 pathImg = true;
-                generateImageNew(prompt).then(img => {
+                generateImageCache('path misc', biomeType).then(img => {
                   console.log('generating path');
                   currentTiles++;
                   textures[biome.tiles[20]].push(img);
@@ -185,11 +177,25 @@ export default e => {
                   textures[biome.tiles[33]].push(img);
                 });
               } else {
-                generateImageNew(prompt).then(img => {
-                  console.log('generating biome.tiles[i]', biome.tiles[i]);
-                  currentTiles++;
-                  textures[biome.tiles[i]].push(img);
-                });
+                console.log('prompt:', prompt, typeof prompt);
+                if (
+                  prompt.includes('bush') ||
+                  prompt.includes('flower') ||
+                  prompt.includes('rock') ||
+                  prompt.includes('torch')
+                ) {
+                  generateImageNew(prompt).then(img => {
+                    console.log('generating biome.tiles[i]', biome.tiles[i]);
+                    currentTiles++;
+                    textures[biome.tiles[i]].push(img);
+                  });
+                } else {
+                  generateImageCache(prompt, biomeType).then(img => {
+                    console.log('generating biome.tiles[i]', biome.tiles[i]);
+                    currentTiles++;
+                    textures[biome.tiles[i]].push(img);
+                  });
+                }
               }
             }
           }

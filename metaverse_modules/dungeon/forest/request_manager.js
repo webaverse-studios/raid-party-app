@@ -39,16 +39,17 @@ export const getBiomeInfo = async inputPrompt => {
   return resp.data.result;
 };
 
-export const generateImageCache = async prompt => {
+export const generateImageCache = async (prompt, biomeType) => {
   const resp = await axios.get(
     'http://localhost:8080/http://216.153.50.206:7778',
     {
       params: {
         imgType: prompt,
-        headers: {
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*',
-        },
+        biomeType,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       responseType: 'blob',
     },
@@ -105,7 +106,7 @@ const getInputImageFrom = prompt => {
     !prompt.includes('deep')
   ) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227184285421618/sprite_010.png';
-  } else if (prompt.includes('rock')) {
+  } else if (prompt.includes('stone')) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227226186530846/sprite_067.png';
   } else if (prompt.includes('water')) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227245383847956/sprite_192.png';
@@ -115,7 +116,7 @@ const getInputImageFrom = prompt => {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227265063526420/sprite_199.png';
   } else if (prompt.includes('path')) {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227296646635530/sprite_213.png';
-  } else if (prompt.includes('stone')) {
+  } else if (prompt.includes('rock')) {
     return rnd < 0.5
       ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747831637520454/big_rock.png'
       : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748907522625629/rock_pile.png';
@@ -144,6 +145,7 @@ export const generateImageNew = async (
   prompt,
   strength = 0.85,
   guidance_scale = 7.5,
+  is_tile = false,
 ) => {
   if (!agent) {
     agent = new Agent({
@@ -165,11 +167,12 @@ export const generateImageNew = async (
         : prompt.includes('house')
         ? 'splitImageTo9'
         : 'none',
+      req_type: is_tile ? 'tile' : 'none',
     },
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://localhost:8080/http://sd-ingress.tenant-webaverse-prod-ord1.coreweave.cloud/predictions',
+    'http://localhost:8080/http://216.153.51.45:5000/predictions',
     body,
     {
       headers: {

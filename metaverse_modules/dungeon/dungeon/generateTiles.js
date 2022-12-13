@@ -1,6 +1,7 @@
 import {getAssetURL} from './asset_db';
 import axios from 'axios';
 import Agent from 'agentkeepalive';
+import {generateImageCache} from '../forest/request_manager';
 
 const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
 const IMAGE_URL =
@@ -11,10 +12,10 @@ export const getBiomeType = async prompt => {
   const resp = await axios.get(CATEGORIZER_URL, {
     params: {
       prompt: prompt,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
+    },
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
     },
   });
 
@@ -115,63 +116,74 @@ export const generateImageNew = async (
   return blobs.length === 1 ? blobs[0] : blobs;
 };
 
-const prompts = ['Scary Dungeon', 'Candy Dungeon'];
-
 const makePrompt = (i, biomeInfo) => {
-  const res = {prompt: '', label: '', req_type: 'none'};
+  const res = {prompt: '', label: '', req_type: 'none', through_cache: false};
 
   if (i === 0) {
     res.prompt = biomeInfo + ' ground tile';
     res.label = 'ground';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 1) {
     res.prompt = biomeInfo + ' west wall tile';
     res.label = 'w_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 2) {
     res.prompt = biomeInfo + ' south east wall tile';
     res.label = 's_e_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 3) {
     res.prompt = biomeInfo + ' north west wall tile';
     res.label = 'nw_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 4) {
     res.prompt = biomeInfo + ' north east wall tile';
     res.label = 'ne_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 5) {
     res.prompt = biomeInfo + ' north west west wall tile';
     res.label = 'n_nw_w_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 6) {
     res.prompt = biomeInfo + ' west east wall tile';
     res.label = 'w_e_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 7) {
     res.prompt = biomeInfo + ' north wall tile';
     res.label = 'n_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 8) {
     res.prompt = biomeInfo + ' north east east wall tile';
     res.label = 'n_ne_e_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 9) {
     res.prompt = biomeInfo + ' east wall tile';
     res.label = 'e_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 10) {
     res.prompt = biomeInfo + ' south wall tile';
     res.label = 's_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 11) {
     res.prompt = biomeInfo + ' wall tile';
     res.label = 'all_wall';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 12) {
     res.prompt = biomeInfo + ' door tile';
     res.label = 'door';
     res.req_type = 'tile';
+    res.through_cache = true;
   } else if (i === 13) {
     res.prompt = biomeInfo + ' peack';
     res.label = 'peak';
@@ -235,9 +247,11 @@ const makePrompt = (i, biomeInfo) => {
   } else if (i === 33) {
     res.prompt = biomeInfo + ' edge tile';
     res.label = 'edge';
+    res.through_cache = true;
   } else if (i === 34) {
     res.prompt = biomeInfo + ' hole';
     res.label = 'hole';
+    res.through_cache = true;
   }
 
   return res;
@@ -252,15 +266,31 @@ export async function generateTiles(biomeType, biomeInfo) {
 
   for (let i = 0; i < maxCount; i++) {
     const data = makePrompt(i, biomeInfo);
-    generateImageNew(data.prompt, data.label, data.req_type).then(img => {
-      console.log('img:', img);
+    if (data.through_cache) {
       currentCount++;
-      if (!img) {
-        return;
-      }
+      /*generateImageCache(
+        (data.label === 'all_wall'
+          ? biomeInfo + ' all_wall'
+          : biomeInfo + ' ' + data.label) + ' ' + biomeTp,
+      ).then(img => {
+        currentCount++;
+        if (!img) {
+          return;
+        }
 
-      sprites[data.label] = img;
-    });
+        sprites[data.label] = img;
+      });*/
+    } else {
+      generateImageNew(data.prompt, data.label, data.req_type).then(img => {
+        console.log('img:', img);
+        currentCount++;
+        if (!img) {
+          return;
+        }
+
+        sprites[data.label] = img;
+      });
+    }
   }
 
   while (currentCount < maxCount) {

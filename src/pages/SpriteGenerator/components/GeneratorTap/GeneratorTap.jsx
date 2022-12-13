@@ -6,6 +6,7 @@ import BorderButton from '../Buttons/BorderButton';
 import './style.css';
 
 import {generateAvatar} from '../../../../api/sprite';
+import {playersManager} from '../../../../../players-manager.js';
 
 function saveSprites(sprites) {
   localStorage.setItem('sprites', JSON.stringify(sprites));
@@ -65,6 +66,7 @@ export default function GeneratorTap() {
       saveSprites(oldSprites);
 
       setSprite(url);
+      playersManager.getLocalPlayer().avatar.makeSpriteAvatar(image);
     } finally {
       setFetching(false);
     }

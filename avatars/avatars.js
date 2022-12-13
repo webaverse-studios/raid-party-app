@@ -64,6 +64,7 @@ import Nodder from './Nodder.js';
 import Looker from './Looker.js';
 
 import * as wind from './simulation/wind.js';
+import {SpriteAvatar} from '../sprite-avatar.js';
 
 const localVector = new THREE.Vector3();
 const localVector2 = new THREE.Vector3();
@@ -423,6 +424,7 @@ class Avatar {
     // this.retargetedAnimations = retargetedAnimations;
     this.vowels = Float32Array.from([1, 0, 0, 0, 0]);
     this.poseAnimation = null;
+    this.spriteAvatar = null;
 
     modelBones.Root.traverse(o => {
       o.savedPosition = o.position.clone();
@@ -1648,6 +1650,14 @@ class Avatar {
     await this.avatarRenderer.setQuality(quality);
   }
 
+  makeSpriteAvatar(blob) {
+    if (this.spriteAvatar) {
+      this.spriteAvatar.delete();
+    }
+    this.spriteAvatar = new SpriteAvatar();
+    this.spriteAvatar.makeSpriteAvatar(blob);
+  }
+
   lerpShoulderTransforms() {
     if (this.shoulderTransforms.handsEnabled[0]) {
       this.shoulderTransforms.nonIKLeftShoulderAnchor.quaternion.copy(
@@ -1759,6 +1769,10 @@ class Avatar {
   update(timestamp, timeDiff) {
     const now = timestamp;
     const timeDiffS = timeDiff / 1000;
+
+    if(this.spriteAvatar) {
+      this.spriteAvatar.update();
+    }
 
     this.setDirection(timestamp);
 

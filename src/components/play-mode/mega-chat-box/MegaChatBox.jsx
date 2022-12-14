@@ -1,11 +1,11 @@
 // import * as THREE from 'three';
 import React, {useState, useEffect} from 'react';
 import classnames from 'classnames';
-import {RpgText} from '../../../RpgText.jsx';
-import {LightArrow} from '../../../LightArrow.jsx';
-import {chatTextSpeed} from '../../../../constants.js';
-import {level} from '../../../../player-stats.js';
-import * as sounds from '../../../../sounds.js';
+import {RpgText} from 'components/RpgText.jsx';
+import {LightArrow} from 'components/LightArrow.jsx';
+import {chatTextSpeed} from 'engine/constants.js';
+import {level} from 'engine/player-stats.js';
+import * as sounds from 'engine/sounds.js';
 
 import styles from './MegaChatBox.module.css';
 

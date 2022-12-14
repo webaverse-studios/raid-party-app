@@ -6,7 +6,7 @@ import {TabControls} from './TabControls';
 import {TabAudio} from './TabAudio';
 import {TabGraphics} from './TabGraphics';
 import {TabAi} from './TabAi';
-import {AppContext} from '../../app';
+import {AppContext} from 'App';
 import {registerIoEventHandler, unregisterIoEventHandler} from '../io-handler';
 
 import styles from './settings.module.css';

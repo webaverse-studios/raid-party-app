@@ -1,10 +1,10 @@
 import React, {useState, useContext, useEffect} from 'react';
 import styles from './Location.module.css';
-import sceneNames from '../../../../scenes/scenes.json';
+import sceneNames from 'engine/scenes/scenes.json';
 import CustomButton from '../custom-button';
-import {AppContext} from '../../app';
-import universe from '../../../../universe';
-import {makeId} from '../../../../util.js';
+import {AppContext} from 'App';
+import universe from 'engine/universe';
+import {makeId} from 'engine/util.js';
 import classnames from 'classnames';
 
 //

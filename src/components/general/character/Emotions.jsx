@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from 'react';
 import classnames from 'classnames';
 
-import metaversefile from '../../../../metaversefile-api.js';
-import {avatarManager} from '../../../../avatar-manager.js';
+import metaversefile from 'engine/metaversefile-api.js';
+import {avatarManager} from 'engine/avatar-manager.js';
 
 import styles from './emotions.module.css';
 
@@ -49,7 +49,7 @@ export const Emotions = ({parentOpened}) => {
       const emotionsEl = emotionsRef.current;
 
       if (document.pointerLockElement === emotionsEl) {
-        const {/*movementX, */ movementY} = e;
+        const {/* movementX, */ movementY} = e;
 
         if (dragEmotionIndex !== -1) {
           const emotion = emotions[dragEmotionIndex];

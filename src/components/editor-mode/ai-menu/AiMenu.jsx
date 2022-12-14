@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import {
   registerIoEventHandler,
   unregisterIoEventHandler,
-} from '../../general/io-handler';
-import {AppContext} from '../../app';
+} from 'components/general/io-handler';
+import {AppContext} from 'App';
 
 import {ImageAiPanel} from './panels/image-ai-panel.jsx';
 import {AudioAiPanel} from './panels/audio-ai-panel.jsx';
@@ -15,9 +15,9 @@ import {CodeAiPanel} from './panels/code-ai-panel.jsx';
 
 import styles from './ai-menu.module.css';
 
-import * as sounds from '../../../../sounds';
-import game from '../../../../game';
-import cameraManager from '../../../../camera-manager';
+import * as sounds from 'engine/sounds';
+import game from 'engine/game';
+import cameraManager from 'engine/camera-manager';
 
 //
 

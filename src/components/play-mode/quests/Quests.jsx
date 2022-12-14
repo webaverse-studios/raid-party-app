@@ -1,11 +1,10 @@
-// import * as THREE from 'three';
 import React, {useState, useRef, useEffect} from 'react';
-import styles from './quests.module.css';
-import {scene} from '../../../../renderer.js';
-import {screenshotScene} from '../../../../scene-screenshotter.js';
-import questManager from '../../../../quest-manager.js';
-import {Spritesheet} from '../../general/spritesheet';
 import metaversefile from 'metaversefile';
+import styles from './quests.module.css';
+import {scene} from 'engine/renderer.js';
+import {screenshotScene} from 'engine/scene-screenshotter.js';
+import questManager from 'engine/quest-manager.js';
+import {Spritesheet} from 'components/general/spritesheet';
 
 const screenshotWidth = 150;
 const screenshotHeight = 100;

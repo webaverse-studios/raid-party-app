@@ -74,7 +74,7 @@ function makeId(length) {
     const o = url.parse(req.originalUrl, true);
     if (
       /^\/(?:@proxy|public)\//.test(o.pathname) &&
-      o.query['import'] === undefined
+      o.query.import === undefined
     ) {
       const u = o.pathname
         .replace(/^\/@proxy\//, '')
@@ -99,7 +99,7 @@ function makeId(length) {
         req.originalUrl = u;
         next();
       }
-    } else if (o.query['noimport'] !== undefined) {
+    } else if (o.query.noimport !== undefined) {
       const p = path.join(cwd, path.resolve(o.pathname));
       const rs = fs.createReadStream(p);
       rs.on('error', err => {
@@ -158,7 +158,7 @@ function makeId(length) {
     }
   })();
   const initialRoomState = (() => {
-    const s = fs.readFileSync('./scenes/gunroom.scn', 'utf8');
+    const s = fs.readFileSync('./src/engine/scenes/gunroom.scn', 'utf8');
     const j = JSON.parse(s);
     const {objects} = j;
 

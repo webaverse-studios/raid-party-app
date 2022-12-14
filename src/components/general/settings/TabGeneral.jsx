@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 
-import WebaWallet from '../../wallet';
+import WebaWallet from 'engine/wallet';
 import {Button} from './button';
 
 import styles from './settings.module.css';

@@ -7,19 +7,22 @@ import React, {
 } from 'react';
 import classnames from 'classnames';
 import styles from './equipment.module.css';
-import {AppContext} from '../../app';
-import {MegaHotBox} from '../../play-mode/mega-hotbox';
-import {CachedLoader} from '../../../CachedLoader.jsx';
-import {Spritesheet} from '../spritesheet/';
-import {createLandIcon} from '../../../../land-iconer.js';
-import game from '../../../../game.js';
-import {transparentPngUrl} from '../../../../constants.js';
-import * as sounds from '../../../../sounds.js';
-import {mod} from '../../../../util.js';
-import {ChainContext} from '../../../hooks/chainProvider';
-import dropManager from '../../../../drop-manager';
-import cardsManager from '../../../../cards-manager.js';
-import useSolanaNFTContract from '../../../hooks/useSolanaNFTContract';
+import {AppContext} from 'App';
+
+import {createLandIcon} from 'engine/land-iconer.js';
+import game from 'engine/game.js';
+import {transparentPngUrl} from 'engine/constants.js';
+import * as sounds from 'engine/sounds.js';
+import {mod} from 'engine/util.js';
+import dropManager from 'engine/drop-manager';
+import cardsManager from 'engine/cards-manager.js';
+
+import {MegaHotBox} from 'components/play-mode/mega-hotbox';
+import {CachedLoader} from 'components/CachedLoader.jsx';
+import {Spritesheet} from '../spritesheet';
+
+import useSolanaNFTContract from 'hooks/useSolanaNFTContract';
+import {ChainContext} from 'hooks/chainProvider';
 
 //
 

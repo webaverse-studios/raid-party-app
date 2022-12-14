@@ -30,29 +30,6 @@ function loadSprites() {
   return parsed;
 }
 
-const PreRolledTempData = [
-  {
-    id: 'a',
-    image: '',
-    name: 'a',
-  },
-  {
-    id: 'b',
-    image: '',
-    name: 'b',
-  },
-  {
-    id: 'c',
-    image: '',
-    name: 'c',
-  },
-  {
-    id: 'd',
-    image: '',
-    name: 'd',
-  },
-];
-
 export default function GeneratorTap() {
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -99,8 +76,6 @@ export default function GeneratorTap() {
       setPreRolledSprites(sprites.data);
     }
   }, [tabIndex]);
-
-  console.log(preRolledSprites);
 
   return (
     <Tabs>

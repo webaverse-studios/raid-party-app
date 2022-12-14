@@ -1,9 +1,10 @@
 import React, {useState, useRef, useEffect} from 'react';
-import minimapManager from '../../../../minimap.js';
 import classNames from 'classnames';
 
+import minimapManager from 'engine/minimap.js';
+import CustomButton from 'components/general/custom-button/index.jsx';
+
 import styles from './minimap.module.css';
-import CustomButton from '../../general/custom-button/index.jsx';
 
 //
 

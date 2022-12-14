@@ -3,7 +3,7 @@ import classnames from 'classnames';
 
 import {RenderMirror} from './RenderMirror';
 import {RainFx} from './RainFx';
-import {AppContext} from '../../app';
+import {AppContext} from 'App';
 
 import styles from './zone-title-card.module.css';
 

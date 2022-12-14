@@ -5,9 +5,8 @@ import {setFacePoseValue} from './Emotions';
 import styles from './poses.module.css';
 
 import metaversefile from 'metaversefile';
-import {emoteAnimations} from '../../../../avatars/animationHelpers.js';
+import {emoteAnimations} from 'engine/avatars/animationHelpers.js';
 import emotes from './emotes.json';
-import fallbackEmotes from './fallback_emotes.json';
 
 let emoteTimeout = null;
 export const triggerEmote = (emoteName, player = null) => {

@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
 
-import game from '../../../../game.js';
-import metaversefileApi from '../../../../metaversefile-api';
-import settingsManager from '../../../../settings-manager.js';
+import game from 'engine/game.js';
+import settingsManager from 'engine/settings-manager.js';
 import {Switch} from './switch';
 
 import styles from './settings.module.css';
@@ -47,19 +46,19 @@ export const TabGraphics = ({active}) => {
 
   function saveSettings() {
     const settings = {
-      resolution: resolution,
-      antialias: antialias,
-      viewRange: viewRange,
-      shadowQuality: shadowQuality,
+      resolution,
+      antialias,
+      viewRange,
+      shadowQuality,
       postprocessing: {
         enabled: postprocessing,
-        depthOfField: depthOfField,
-        hdr: hdr,
-        bloom: bloom,
+        depthOfField,
+        hdr,
+        bloom,
       },
       character: {
         details: characterDetails,
-        hairPhysics: hairPhysics,
+        hairPhysics,
       },
     };
 
@@ -95,7 +94,7 @@ export const TabGraphics = ({active}) => {
   function applySettings() {
     // set avatar style
 
-    let avatarStyle =
+    const avatarStyle =
       settingsManager.convertCharacterQualityToValue(characterDetails);
 
     function setAvatarQuality() {

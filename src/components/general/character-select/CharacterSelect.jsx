@@ -7,27 +7,27 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import {chatManager} from '../../../../chat-manager.js';
-import npcManager from '../../../../npc-manager.js';
-import * as sounds from '../../../../sounds.js';
+import {chatManager} from 'engine/chat-manager.js';
+import npcManager from 'engine/npc-manager.js';
+import * as sounds from 'engine/sounds.js';
 import {
   getVoiceEndpointUrl,
   VoiceEndpointVoicer,
-} from '../../../../voice-output/voice-endpoint-voicer.js';
-import * as voices from '../../../../voices.js';
-import {CachedLoader} from '../../../CachedLoader.jsx';
-import {LightArrow} from '../../../LightArrow.jsx';
-import {MegaHup} from '../../../MegaHup.jsx';
-import {AppContext} from '../../app';
+} from 'engine/voice-output/voice-endpoint-voicer.js';
+import * as voices from 'engine/voices.js';
+import {CachedLoader} from 'components/CachedLoader.jsx';
+import {LightArrow} from 'components/LightArrow.jsx';
+import {MegaHup} from 'components/MegaHup.jsx';
+import {PlaceholderImg} from 'components/PlaceholderImg';
+import {AppContext} from 'App';
 import styles from './character-select.module.css';
-import {PlaceholderImg} from '../../../PlaceholderImg';
 
 //
 import {
   cryptoavatarsCharactersUtil,
   tokensCharactersUtil,
   upstreetCharactersUtil,
-} from '../../../../utils';
+} from 'engine/utils';
 
 function typeContentToUrl(type, content) {
   if (typeof content === 'object') {

@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import React, {useContext, useEffect, useState} from 'react';
 
-import {AppContext} from '../../app';
+import {AppContext} from 'App';
 
 import styles from './component-editor.module.css';
 
@@ -272,10 +272,7 @@ export const ComponentEditor = () => {
                     )}
                     disabled={!isEditable}
                     onChange={e =>
-                      handleCheckboxChange(
-                        component.key,
-                        e.target.checked ? true : false,
-                      )
+                      handleCheckboxChange(component.key, !!e.target.checked)
                     }
                   />
                 ),

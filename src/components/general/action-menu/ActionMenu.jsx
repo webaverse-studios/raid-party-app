@@ -1,7 +1,7 @@
 import React, {useEffect, useContext, useState} from 'react';
 import classnames from 'classnames';
 import cameraManager from '../../../../camera-manager.js';
-import {AppContext} from '../../app';
+import {AppContext} from 'App';
 
 import styles from './action-menu.module.css';
 

@@ -1,34 +1,34 @@
 import {defineConfig} from 'vite';
-import pluginReact from '@vitejs/plugin-react';
-import metaversefilePlugin from 'metaversefile/plugins/rollup.js';
+import react from '@vitejs/plugin-react';
+import glsl from 'vite-plugin-glsl';
+import jsconfigPaths from 'vite-jsconfig-paths';
+import fs from 'fs/promises';
 
 // https://vitejs.dev/config/
-export default defineConfig(({command, mode, ssrBuild}) => {
-  // console.log('define config', {
-  //   command,
-  //   mode,
-  //   ssrBuild,
-  // });
-  return {
-    plugins: (command === 'build' ? [] : [metaversefilePlugin()]).concat([
-      pluginReact(),
-    ]),
-    optimizeDeps: {
-      entries: [
-        'src/*.js',
-        'src/*.jsx',
-        'avatars/*.js',
-        'avatars/vrarmik/*.js',
-        'src/components/*.js',
-        'src/components/*.jsx',
-        'src/tabs/*.jsx',
-        '*.js',
+export default defineConfig({
+  server: {
+    port: 4000,
+  },
+  esbuild: {
+    loader: 'jsx',
+    include: /src\/.*\.jsx?$/,
+    exclude: [],
+  },
+  assetsInclude: ['**/*.glb', '**/*.hdr'],
+  optimizeDeps: {
+    esbuildOptions: {
+      plugins: [
+        {
+          name: 'load-js-files-as-jsx',
+          setup(build) {
+            build.onLoad({filter: /src\\.*\.js$/}, async args => ({
+              loader: 'jsx',
+              contents: await fs.readFile(args.path, 'utf8'),
+            }));
+          },
+        },
       ],
     },
-    server: {
-      fs: {
-        strict: true,
-      },
-    },
-  };
+  },
+  plugins: [glsl(), react(), jsconfigPaths()],
 });

@@ -1,12 +1,12 @@
 import React, {useState, useEffect, useContext, useRef} from 'react';
 import classnames from 'classnames';
 
-import universe from '../../../../universe';
-import voiceInput from '../../../../voice-input/voice-input';
-import sceneNames from '../../../../scenes/scenes.json';
+import universe from 'engine/universe';
+import voiceInput from 'engine/voice-input/voice-input';
+import sceneNames from 'engine/scenes/scenes.json';
 
-import {AppContext} from '../../app';
-import {makeId} from '../../../../util.js';
+import {AppContext} from 'App';
+import {makeId} from 'engine/util.js';
 
 import styles from './scene-menu.module.css';
 

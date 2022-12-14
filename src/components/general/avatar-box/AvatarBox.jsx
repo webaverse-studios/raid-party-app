@@ -1,16 +1,17 @@
 import React, {useEffect, useRef, useContext, useState} from 'react';
 import classnames from 'classnames';
 
-import {AppContext} from '../../app';
-import {world} from '../../../../world.js';
-import {hp, mp, xp, level} from '../../../../player-stats.js';
+import {hp, mp, xp, level} from 'engine/player-stats.js';
+import {world} from 'engine/world.js';
+import {playersManager} from 'engine/players-manager.js';
+import {AvatarIconer} from 'engine/avatar-iconer.js';
+import cameraManager from 'engine/camera-manager.js';
+import * as sounds from 'engine/sounds.js';
+
+import {AppContext} from 'App';
+import {PlaceholderImg} from 'components/PlaceholderImg.jsx';
 
 import styles from './AvatarBox.module.css';
-import {PlaceholderImg} from '../../../PlaceholderImg.jsx';
-import {playersManager} from '../../../../players-manager.js';
-import {AvatarIconer} from '../../../../avatar-iconer.js';
-import cameraManager from '../../../../camera-manager.js';
-import * as sounds from '../../../../sounds.js';
 
 const characterIconSize = 100;
 const pixelRatio = window.devicePixelRatio;
@@ -20,7 +21,7 @@ const CharacterBox = () => {
   const {avatarLoaded, setAvatarLoaded} = useContext(AppContext);
   const [userData, setUserData] = useState({
     name: 'Anon',
-    level: level,
+    level,
     hp: 0,
     mp: 0,
     xp: 0,
@@ -32,10 +33,10 @@ const CharacterBox = () => {
     setTimeout(() => {
       setUserData({
         name: 'Anon',
-        level: level,
-        hp: hp,
-        mp: mp,
-        xp: xp,
+        level,
+        hp,
+        mp,
+        xp,
         limit: 67,
       });
     }, 600);

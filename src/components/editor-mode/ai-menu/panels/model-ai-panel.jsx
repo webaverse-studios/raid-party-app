@@ -1,11 +1,10 @@
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import classnames from 'classnames';
-import imageAI from '../../../../../ai/image/image-ai';
-import {canvasHasContent} from '../../../../../util';
+import imageAI from 'engine/ai/image/image-ai';
+import {canvasHasContent} from 'engine/util';
+import * as sounds from 'engine/sounds';
 
 import styles from './model-ai-panel.module.css';
-
-import * as sounds from '../../../../../sounds';
 
 //
 

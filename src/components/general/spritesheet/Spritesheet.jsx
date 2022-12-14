@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import classnames from 'classnames';
 import styles from './spritesheet.module.css';
-import spriteAnimationManager from '../../../../sprite-animation-manager.js';
+import spriteAnimationManager from 'engine/sprite-animation-manager.js';
 
 //
 
@@ -129,8 +129,8 @@ export const Spritesheet = ({
   return (
     <canvas
       className={classnames(className, styles.canvas)}
-      width={frameSize ? frameSize : 0}
-      height={frameSize ? frameSize : 0}
+      width={frameSize || 0}
+      height={frameSize || 0}
       ref={canvasRef}
       onMouseEnter={onMouseEnter}
       onMouseOut={onMouseOut}

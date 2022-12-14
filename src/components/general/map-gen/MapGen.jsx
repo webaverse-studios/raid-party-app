@@ -2,43 +2,32 @@ import * as THREE from 'three';
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import classnames from 'classnames';
 import metaversefile from 'metaversefile';
-// import {world} from '../../../../world.js';
-// import webaverse from '../../../../webaverse.js';
 import {registerIoEventHandler, unregisterIoEventHandler} from '../io-handler';
-import {MiniHup} from '../../../MiniHup.jsx';
-// import {RpgText} from '../../../RpgText.jsx';
+import {MiniHup} from 'components/MiniHup.jsx';
 import {
   getRenderer,
   rootScene,
   scene,
   sceneLowPriority,
-} from '../../../../renderer.js';
-import game from '../../../../game.js';
-import {world} from '../../../../world.js';
-import universe from '../../../../universe.js';
-import cameraManager from '../../../../camera-manager.js';
-import story from '../../../../story.js';
-// import raycastManager from '../../../../raycast-manager.js';
-import {snapshotMapChunk} from '../../../../scene-cruncher.js';
+} from 'engine/renderer.js';
+import game from 'engine/game.js';
+import {world} from 'engine/world.js';
+import cameraManager from 'engine/camera-manager.js';
+import story from 'engine/story.js';
+import {snapshotMapChunk} from 'engine/scene-cruncher.js';
 import {Text} from 'troika-three-text';
-// import alea from '../../../../alea.js';
-// import easing from '../../../../easing.js';
-import musicManager from '../../../../music-manager.js';
-import {buildMaterial} from '../../../../shaders.js';
-import {chatManager} from '../../../../chat-manager.js';
-import physicsManager from '../../../../physics-manager.js';
+import {buildMaterial} from 'engine/shaders.js';
+import physicsManager from 'engine/physics-manager.js';
 import {
   makeRng,
-  // numBlocksPerChunk,
-  // voxelPixelSize,
   chunkWorldSize,
   placeNames,
-  // MapBlock,
   createMapChunk,
   createMapChunkMesh,
-} from '../../../../procgen/procgen.js';
+} from 'engine/procgen/procgen.js';
 import styles from './map-gen.module.css';
-import {AppContext} from '../../app';
+import {AppContext} from 'App';
+
 const {useLocalPlayer, useLoreAIScene} = metaversefile;
 
 //

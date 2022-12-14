@@ -1,8 +1,8 @@
 import React, {useState, useRef, useEffect} from 'react';
 import classnames from 'classnames';
 import styles from './HotBox.module.css';
-import loadoutManager from '../../../../loadout-manager.js';
-import {TokenBox} from '../../general/token-box/TokenBox';
+import loadoutManager from 'engine/loadout-manager.js';
+import {TokenBox} from 'components/general/token-box/TokenBox';
 
 export const HotBox = ({
   index,
@@ -63,7 +63,7 @@ export const HotBox = ({
           width={size * pixelRatio}
           height={size * pixelRatio}
           ref={canvasRef}
-    />*/}
+    /> */}
     </div>
   );
 };

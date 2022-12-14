@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import classNames from 'classnames';
-// import game from '../../../../game';
+import * as voices from 'engine/voices';
+import overrides from 'engine/overrides';
+import audioManager from 'engine/audio-manager.js';
+
 import {Slider} from './slider';
-import * as voices from '../../../../voices';
-// import {localPlayer} from '../../../../players';
-import overrides from '../../../../overrides';
-
 import styles from './settings.module.css';
-
-import audioManager from '../../../../audio-manager.js';
 
 //
 

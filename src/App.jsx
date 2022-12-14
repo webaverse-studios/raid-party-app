@@ -9,8 +9,6 @@ import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
 
 import ThemeProvider from 'theme/ThemeProvider';
 
-import classnames from 'classnames';
-
 import game from 'engine/game.js';
 import sceneNames from 'engine/scenes/scenes.json';
 import {parseQuery} from 'engine/util.js';
@@ -128,6 +126,17 @@ const useWebaverseApp = (() => {
   };
 })();
 
+const StyledCanvas = styled.canvas`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: ${props => (props.domhover ? 'none' : 'all')};
+`;
+
 const Canvas = ({app}) => {
   const canvasRef = useRef(null);
   const [domHover, setDomHover] = useState(null);
@@ -156,12 +165,7 @@ const Canvas = ({app}) => {
     };
   }, []);
 
-  return (
-    <canvas
-      className={classnames(styles.canvas, domHover ? styles.domHover : null)}
-      ref={canvasRef}
-    />
-  );
+  return <StyledCanvas domhover={domHover} ref={canvasRef} />;
 };
 
 const App = () => {

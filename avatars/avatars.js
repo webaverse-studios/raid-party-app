@@ -8,6 +8,7 @@ import {scene} from '../renderer.js';
 import MicrophoneWorker from './microphone-worker.js';
 import {AudioRecognizer} from '../audio-recognizer.js';
 import audioManager from '../audio-manager.js';
+import {SpriteAvatar} from '../sprite-avatar.js';
 import {
   // angleDifference,
   // getVelocityDampingFactor,
@@ -423,6 +424,7 @@ class Avatar {
     // this.retargetedAnimations = retargetedAnimations;
     this.vowels = Float32Array.from([1, 0, 0, 0, 0]);
     this.poseAnimation = null;
+    this.spriteAvatar = null;
 
     modelBones.Root.traverse(o => {
       o.savedPosition = o.position.clone();
@@ -1648,6 +1650,14 @@ class Avatar {
     await this.avatarRenderer.setQuality(quality);
   }
 
+  makeSpriteAvatar(blob) {
+    if (this.spriteAvatar) {
+      this.spriteAvatar.delete();
+    }
+    this.spriteAvatar = new SpriteAvatar();
+    this.spriteAvatar.makeSpriteAvatar(blob);
+  }
+
   lerpShoulderTransforms() {
     if (this.shoulderTransforms.handsEnabled[0]) {
       this.shoulderTransforms.nonIKLeftShoulderAnchor.quaternion.copy(
@@ -1761,6 +1771,10 @@ class Avatar {
     const timeDiffS = timeDiff / 1000;
 
     this.setDirection(timestamp);
+
+    if (this.spriteAvatar) {
+      this.spriteAvatar.update();
+    }
 
     const currentSpeed = localVector
       .set(this.velocity.x, 0, this.velocity.z)

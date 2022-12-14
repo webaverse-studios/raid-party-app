@@ -56,6 +56,7 @@ import loadoutManager from '../../../loadout-manager';
 import Modals from '../modals';
 import {partyManager} from '../../../party-manager';
 import SpriteGenerator from '../../pages/SpriteGenerator';
+import {playersManager} from '../../../players-manager';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -69,6 +70,16 @@ const _startApp = async (weba, canvas) => {
   loadoutManager.initDefault();
   await universe.handleUrlUpdate();
   partyManager.inviteDefaultPlayer();
+
+  const sprites = _getSprites();
+
+  if (sprites) {
+    const selectedSprite = sprites.data[sprites.data.length - 1]; // hack
+    console.log(selectedSprite, 'selectedSprite');
+    playersManager
+      .getLocalPlayer()
+      .avatar.makeSpriteAvatar(selectedSprite.image);
+  }
 
   await weba.startLoop();
 };
@@ -88,6 +99,23 @@ const _getCurrentRoom = () => {
   const q = parseQuery(window.location.search);
   const {room} = q;
   return room || '';
+};
+
+const _getSprites = () => {
+  let parsed = [];
+
+  try {
+    const saved = localStorage.getItem('sprites');
+
+    if (!saved) {
+      return {data: []};
+    }
+
+    parsed = JSON.parse(saved);
+  } catch (error) {
+    console.warn('Error loading rooms from local storage.');
+  }
+  return parsed;
 };
 
 const AppContext = createContext();

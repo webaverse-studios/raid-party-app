@@ -23,7 +23,7 @@ class PhysicsWorkerManager {
         // create workers
         const workers = Array(this.numWorkers);
         for (let i = 0; i < this.numWorkers; i++) {
-          const worker = new Worker('./physx-worker.js?import', {
+          const worker = new Worker('src/engine/physx-worker.js?import', {
             type: 'module',
           });
           const cbs = new Map();

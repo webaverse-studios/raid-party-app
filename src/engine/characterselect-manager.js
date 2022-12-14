@@ -6,7 +6,7 @@ const loadNpc = async srcUrl => {
   return j;
 };
 
-const charactersDir = '../characters/';
+const charactersDir = './characters/';
 
 const getCharacterFullPath = filename => {
   return charactersDir + filename;

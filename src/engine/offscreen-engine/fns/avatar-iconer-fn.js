@@ -1,11 +1,11 @@
-import {fetchArrayBuffer} from '../../util.js';
-import {AvatarRenderer} from '../../avatars/avatar-renderer.js';
+import {fetchArrayBuffer} from 'engine/util.js';
+import {AvatarRenderer} from 'engine/avatars/avatar-renderer.js';
 import {
   createAvatarForScreenshot,
   screenshotAvatar,
-} from '../../avatar-screenshotter.js';
-import {maxAvatarQuality} from '../../constants.js';
-import {emotions} from '../../src/components/general/character/Emotions.jsx';
+} from 'engine/avatar-screenshotter.js';
+import {maxAvatarQuality} from 'engine/constants.js';
+import {emotions} from 'components/general/character/Emotions.jsx';
 
 const allEmotions = [''].concat(emotions);
 

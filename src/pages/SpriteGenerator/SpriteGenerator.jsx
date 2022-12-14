@@ -20,20 +20,20 @@ export default function SpriteGenerator() {
     <PageAnimation visible={visible}>
       <Holder>
         <Title />
-        <RaiseFadeAnimation delay={3500}>
-          <GeneratorTap />
-        </RaiseFadeAnimation>
-        <RaiseFadeAnimation delay={4000}>
-          <Button
-            title="Play"
-            onClick={() => {
-              setVisible(false);
-              setTimeout(() => {
-                setStartGame(true);
-              }, [1000]);
-            }}
-          />
-        </RaiseFadeAnimation>
+        {/* <RaiseFadeAnimation delay={3500}> */}
+        <GeneratorTap />
+        {/* </RaiseFadeAnimation> */}
+        {/* <RaiseFadeAnimation delay={4000}> */}
+        <Button
+          title="Play"
+          onClick={() => {
+            setVisible(false);
+            setTimeout(() => {
+              setStartGame(true);
+            }, [1000]);
+          }}
+        />
+        {/* </RaiseFadeAnimation> */}
       </Holder>
     </PageAnimation>
   );

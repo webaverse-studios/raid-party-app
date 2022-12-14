@@ -1,7 +1,11 @@
 import * as THREE from 'three';
-import AssetManager from './asset-manager';
+import AssetManagerForest from './asset-manager';
 import generateForest from './forest';
-import {generateImage, generateImageNew} from './request_manager';
+import {
+  generateImage,
+  generateImageCache,
+  generateImageNew,
+} from './request_manager';
 
 // this file's base url
 const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -44,6 +48,7 @@ export default class Tiles extends THREE.Object3D {
     const meshes = {};
     const data = {};
 
+    console.log('Textures:', textures);
     for (const [key, value] of Object.entries(textures)) {
       data[key] = [];
       for (let i = 0; i < value.length; i++) {
@@ -172,20 +177,27 @@ export default class Tiles extends THREE.Object3D {
 
     const start = new Date();
     console.log('OUTDATA:', data);
+    console.log(
+      data['Unicorn deep forest'],
+      '-',
+      data[info + ' deep forest'],
+      '-',
+      info,
+    );
     const output = generateForest(
       meshes,
-      data[info + ' deep forest'],
-      data[info + ' forest'],
-      data[info + ' stone ground'],
-      data[info + ' grass'],
-      data[info + ' sand'],
-      data[info + ' water'],
-      data[info + ' tree'],
-      data[info + ' rock'],
-      data[info + ' flower'],
-      data[info + ' bush'],
-      data[info + ' sand bush'],
-      data[info + ' torch'],
+      data[(info + ' deep forest').trim()],
+      data[(info + ' forest').trim()],
+      data[(info + ' stone ground').trim()],
+      data[(info + ' grass').trim()],
+      data[(info + ' sand').trim()],
+      data[(info + ' water').trim()],
+      data[(info + ' tree').trim()],
+      data[(info + ' rock').trim()],
+      data[(info + ' flower').trim()],
+      data[(info + ' bush').trim()],
+      data[(info + ' sand bush').trim()],
+      data[(info + ' torch').trim()],
       info,
       physics,
       app,
@@ -196,61 +208,6 @@ export default class Tiles extends THREE.Object3D {
 
     const timeDiff = new Date() - start;
     console.log('time ran:', timeDiff);
-    /*if (type === 'forest') {
-      const meshes = {};
-      for (let i = 0; i < assetManager.textures.length; i++) {
-        let material =
-          (i > 168 && i < 192) || i > 199
-            ? new THREE.MeshBasicMaterial({
-                map: assetManager.textures[i],
-                blending: 1,
-                transparent: true,
-              })
-            : new THREE.MeshBasicMaterial({
-                map: assetManager.textures[i],
-              });
-
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        geometry.rotateX(-Math.PI / 2);
-        const mesh = new THREE.Mesh(geometry, material);
-        const meshName = assetManager.textures[i].source.data.src
-          .split('/')
-          [
-            assetManager.textures[i].source.data.src.split('/').length - 1
-          ].split('.')[0];
-        meshes[meshName] = mesh;
-      }
-
-      generateForest(meshes).map(mesh => {
-        this.add(mesh);
-      });
-    } else {
-      const meshes = [];
-      for (let i = 0; i < assetManager.textures.length; i++) {
-        const material = new THREE.MeshBasicMaterial({
-          map: assetManager.textures[i],
-          side: THREE.DoubleSide,
-        });
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        geometry.rotateX(-Math.PI / 2);
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.position.set(0, 0, 0);
-        meshes.push(mesh);
-      }
-
-      for (let z = 0; z < TILE_AMOUNT; z++) {
-        for (let x = 0; x < TILE_AMOUNT; x++) {
-          const idx = randomIntFromInterval(0, meshes.length - 1);
-          const cloneMesh = meshes[idx].clone();
-          cloneMesh.position.set(
-            (x - TILE_AMOUNT / 2) * TILE_SIZE,
-            0,
-            (z - TILE_AMOUNT / 2) * TILE_SIZE,
-          );
-          this.add(cloneMesh);
-        }
-      }
-    }*/
   }
 
   sleep = ms => {
@@ -309,30 +266,14 @@ export default class Tiles extends THREE.Object3D {
           });
         } else {
           let prompt = tiles[i];
-          if (prompt.includes('stone')) {
-            prompt = biomeInfo + ' rock tile with pebbles';
-          } else if (prompt.includes('forest')) {
-            prompt = biomeInfo + ' forest tile with grass';
-          } else if (prompt.includes('deep forest')) {
-            prompt = biomeInfo + ' deep forest tileswith grass';
-          } else if (prompt.includes('grass')) {
-            prompt = biomeInfo + ' grass tile with flowers';
-          } else if (prompt.includes('water')) {
-            prompt = biomeInfo + ' water tile';
-          } else if (prompt.includes('path')) {
-            prompt = biomeInfo + ' path tile with grass';
-          }
-          prompt =
-            'top-down view of a ' +
-            prompt +
-            ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic';
+
           if (prompt.includes('path')) {
             if (pathImg) {
               continue;
             }
 
             pathImg = true;
-            generateImageNew(prompt).then(img => {
+            generateImageCache('path misc', biomeType).then(img => {
               console.log('generating path');
               currentTiles++;
               textures[tiles[20]].push(img);
@@ -351,10 +292,25 @@ export default class Tiles extends THREE.Object3D {
               textures[tiles[33]].push(img);
             });
           } else {
-            generateImageNew(prompt).then(img => {
-              textures[tiles[i]].push(img);
-              currentTiles++;
-            });
+            console.log('prompt:', prompt, typeof prompt);
+            if (
+              prompt.includes('bush') ||
+              prompt.includes('flower') ||
+              prompt.includes('rock') ||
+              prompt.includes('torch')
+            ) {
+              generateImageNew(prompt).then(img => {
+                console.log('generating biome.tiles[i]', tiles[i]);
+                currentTiles++;
+                textures[tiles[i]].push(img);
+              });
+            } else {
+              generateImageCache(prompt, biomeType).then(img => {
+                console.log('generating biome.tiles[i]', tiles[i]);
+                currentTiles++;
+                textures[tiles[i]].push(img);
+              });
+            }
           }
         }
       }
@@ -376,7 +332,7 @@ export default class Tiles extends THREE.Object3D {
       }
     }
 
-    const assetManager = await AssetManager.loadUrls(_tiles);
+    const assetManager = await AssetManagerForest.loadUrls(_tiles);
 
     for (const [key, value] of Object.entries(textures)) {
       for (let j = 0; j < value.length; j++) {
@@ -441,7 +397,7 @@ export default class Tiles extends THREE.Object3D {
         }
       }
     }
-    const assetManager = await AssetManager.loadUrls(_tiles);
+    const assetManager = await AssetManagerForest.loadUrls(_tiles);
 
     for (const [key, value] of Object.entries(textures)) {
       for (let j = 0; j < value.length; j++) {

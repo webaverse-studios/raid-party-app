@@ -20,7 +20,7 @@
       "content": {
         "perspective": "top-down",
         "cameraMode": "follow",
-        "viewSize": 8
+        "viewSize": 14
       }
     },
     {
@@ -37,7 +37,7 @@
         0,
         0
       ],
-      "start_url": "https://webaverse.github.io/tilemap/"
+      "start_url": "../metaverse_modules/dungeon/"
     }
   ]
 }

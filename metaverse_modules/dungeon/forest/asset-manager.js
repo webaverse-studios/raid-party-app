@@ -32,7 +32,7 @@ const _loadTexture = u =>
     }
   });
 
-export default class AssetManager {
+export default class AssetManagerForest {
   constructor(textures) {
     this.textures = textures;
   }
@@ -40,7 +40,7 @@ export default class AssetManager {
   static async loadUrls(urls) {
     const assets = await Promise.all(urls.map(_loadTexture));
     const d = assets[0].source.data.src.split('/');
-    const manager = new AssetManager(assets);
+    const manager = new AssetManagerForest(assets);
     return manager;
   }
 }

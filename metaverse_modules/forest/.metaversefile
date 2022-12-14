@@ -1,8 +1,0 @@
-{
-  "name": "tilemap",
-  "description": "tilemap",
-  "start_url": "index.js",
-  "components": {
-    "activate": true
-  }
-}

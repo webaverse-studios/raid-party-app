@@ -11,11 +11,41 @@ import {
 } from './libs/generate/index.js';
 import {Data, Textures} from './libs/utils/index.js';
 import {Grid, IDAStarFinder} from './libs/pathfinder/index.js';
+import {generateTiles} from './generateTiles.js';
+import {TEXTURE_ASSET} from './libs/utils/assets.js';
+import physicsManager from '../../../physics-manager.js';
 
 const {useLocalPlayer} = metaversefile;
 
 export default class Dungeon {
-  constructor() {
+  app = null;
+  physics = null;
+  biomeInfo = '';
+  biomeType = '';
+
+  constructor(app, physics, localPlayer, biomeInfo, biomeType) {
+    this.app = app;
+    this.physics = physics;
+    this.biomeInfo = biomeInfo;
+    this.biomeType = biomeType;
+
+    app.addEventListener('triggerin', async e => {
+      if (
+        e.oppositePhysicsId ===
+        localPlayer.characterPhysics.characterController.physicsId
+      ) {
+        console.log('local player trigger in');
+      }
+    });
+    app.addEventListener('triggerout', async e => {
+      if (
+        e.oppositePhysicsId ===
+        localPlayer.characterPhysics.characterController.physicsId
+      ) {
+        console.log('local player trigger out');
+      }
+    });
+
     this.assets = null;
 
     //
@@ -45,7 +75,104 @@ export default class Dungeon {
     this.playerPosition = new THREE.Vector3();
   }
 
+  colliders = [];
+  meshObjects = [];
+
+  colliderExists = (x, y) => {
+    for (let i = 0; i < this.colliders.length; i++) {
+      if (this.colliders[i].x === x && this.colliders[i].y === y) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  addCollider(x, y, group, direction, setTrigger = false) {
+    let px = 0;
+    let pz = 0;
+
+    switch (direction) {
+      case Direction.right:
+        px = this.oldGroup.position.x + this.dungeon.width * TILE_SIZE;
+        pz += this.oldGroup.position.z;
+        break;
+      case Direction.left:
+        px = this.oldGroup.position.x - this.dungeon.width * TILE_SIZE;
+        pz += this.oldGroup.position.z;
+        break;
+      case Direction.down:
+        pz = this.oldGroup.position.z + this.dungeon.height * TILE_SIZE;
+        px += this.oldGroup.position.x;
+        break;
+      case Direction.up:
+        pz = this.oldGroup.position.z - this.dungeon.height * TILE_SIZE;
+        px += this.oldGroup.position.x;
+        break;
+    }
+
+    const x1 = x * TILE_SIZE + px;
+    const y1 = y * TILE_SIZE + pz;
+
+    const physicsObject = this.physics.addBoxGeometry(
+      new THREE.Vector3(x1, 0, y1),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
+      new THREE.Vector3(0.3, 0.3, 0.3),
+      false,
+    );
+    if (setTrigger) {
+      physicsManager.getScene().setTrigger(physicsObject.physicsId);
+    }
+
+    this.app.add(physicsObject);
+  }
+  removeCollider(x, y) {}
+
+  randomString(length) {
+    const chars =
+      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let result = '';
+    for (let i = length; i > 0; --i) {
+      result += chars[Math.floor(Math.random() * chars.length)];
+    }
+    return result;
+  }
+
+  async regenerateMap() {
+    await generateTiles(this.biomeType, this.biomeInfo);
+
+    const tiles = Textures.tilesTextures(this.assets);
+    const props = Textures.propsTextures(this.assets);
+
+    console.log('meshObjects:', this.meshObjects.length);
+    for (let i = 0; i < this.meshObjects.length; i++) {
+      const texture =
+        this.meshObjects[i].type === 'prop'
+          ? props[this.meshObjects[i]]
+          : tiles[this.meshObjects[i]];
+      this.meshObjects[i].sprite.material.map = texture;
+    }
+    console.log('map regenerated');
+  }
+
   async waitForLoad() {
+    document.addEventListener('keydown', e => {
+      if (e.key == 'u') {
+        this.regenerateMap();
+      }
+    });
+
+    const sprites = await generateTiles(this.biomeType, this.biomeInfo);
+    //loop sprite keys, values
+    for (const [key, value] of Object.entries(sprites)) {
+      const _key = key.replace('_wall', '').trim();
+      for (const [key2, value2] of Object.entries(TEXTURE_ASSET)) {
+        if (key2 == _key || (_key == 'handcuff' && key2.includes(_key))) {
+          TEXTURE_ASSET[key2].file_url = value;
+          break;
+        }
+      }
+    }
+
     const assetManager = new AssetManager();
     this.assets = await assetManager.load();
     const newDungeon = generate({
@@ -58,14 +185,14 @@ export default class Dungeon {
       containerSplitRetries: 30,
       corridorWidth: 4,
       tileWidth: 32,
-      seed: '5ML3875MwgFzyejjoFV9i',
+      seed: this.randomString(21),
       debug: false,
       rooms: Data.loadRooms(),
     });
     this.drawDungeon(newDungeon);
   }
 
-  drawDungeon(dungeon) {
+  drawDungeon(dungeon, direction) {
     this.oldDungeon = JSON.parse(JSON.stringify(this.dungeon));
     this.dungeon = JSON.parse(JSON.stringify(dungeon));
 
@@ -95,15 +222,23 @@ export default class Dungeon {
     this.group.updateMatrixWorld();
 
     // Draw
-    this.drawTiles(dungeon.layers.tiles, Textures.tilesTextures(this.assets));
-    this.drawProps(dungeon.layers.props, Textures.propsTextures(this.assets));
+    this.drawTiles(
+      dungeon.layers.tiles,
+      Textures.tilesTextures(this.assets),
+      direction,
+    );
+    this.drawProps(
+      dungeon.layers.props,
+      Textures.propsTextures(this.assets),
+      direction,
+    );
     this.drawMonsters(
       dungeon.layers.monsters,
       Textures.monstersTextures(this.assets),
     );
   }
 
-  drawTiles = (tilemap, sprites) => {
+  drawTiles = (tilemap, sprites, direction) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
@@ -123,20 +258,29 @@ export default class Dungeon {
             layer: TileLayer.tiles,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
+          const oldPos = sprite.position;
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+          if (texture) {
+            if (id !== 0 && id !== 46 && id !== 48) {
+              this.addCollider(x, y, this.group, direction);
+            } else if (id === 48) {
+              this.addCollider(x, y, this.group, direction, true);
+            }
+          }
         }
       }
     }
   };
 
-  drawProps = (tilemap, sprites) => {
+  drawProps = (tilemap, sprites, direction) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
         if (id === 0) {
           continue;
         }
+
         const texture = sprites[id];
         if (texture) {
           const geometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 1, 1);
@@ -153,8 +297,10 @@ export default class Dungeon {
             layer: TileLayer.props,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
+          this.meshObjects.push({x, y, sprite, key: 'id', type: 'prop'});
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+          this.addCollider(x, y, this.group, direction);
         }
       }
     }
@@ -198,7 +344,7 @@ export default class Dungeon {
       const newDungeon = generateNext(this.dungeon, detectedDoor.direction);
 
       // Draw next dungeon
-      this.drawDungeon(newDungeon);
+      this.drawDungeon(newDungeon, detectedDoor.direction);
 
       // Move group
       this.moveGroupByDoorDirection(detectedDoor.direction);

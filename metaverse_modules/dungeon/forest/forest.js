@@ -3,7 +3,7 @@ import Perlin from './utils/perlinNoise';
 import {BufferedCubicNoise} from './utils/bufferedCubicNoise';
 import PF from 'pathfinding';
 import * as THREE from 'three';
-import physicsManager from '../../physics-manager.js';
+import physicsManager from '../../../physics-manager.js';
 
 //move the generation into a test script, to log 10s map
 //remove object spawn from the start that is random
@@ -141,7 +141,7 @@ export default function generateForest(
         prop2 = temp;
       }
 
-      console.log('Adding tree prop1:', prop, 'prop2:', prop2);
+      console.log('Adding tree prop1:', prop, 'prop2:', prop2, _meshes);
     }
 
     const cloneTreeMesh = _meshes[prop].clone();

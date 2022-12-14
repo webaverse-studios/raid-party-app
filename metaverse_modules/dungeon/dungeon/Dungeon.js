@@ -1,7 +1,7 @@
 import metaversefile from 'metaversefile';
 import * as THREE from 'three';
 import AssetManager from './AssetManager.js';
-import {SNAP_SIZE, TILE_SIZE} from './Constants.js';
+import {SNAP_SIZE, TILE_SIZE} from './constants.js';
 import {
   Direction,
   generate,

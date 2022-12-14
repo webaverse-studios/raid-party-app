@@ -1,0 +1,29 @@
+.react-horizontal-scrolling-menu--wrapper {
+    max-width: 26em;
+}
+
+.react-horizontal-scrolling-menu--scroll-container {
+    gap: 0.5em;
+    padding-bottom: 1em;
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar-track {
+    background-color: #e0cbab;
+    outline: none;
+    border: none;
+}
+
+.react-horizontal-scrolling-menu--scroll-container::-webkit-scrollbar-thumb {
+    background-color: #a984a9;
+    border-top: 2px solid #e0cbab;
+    border-bottom: 2px solid #e0cbab;
+    outline: none;
+}
+
+.react-horizontal-scrolling-menu--arrow-left, .react-horizontal-scrolling-menu--arrow-right {
+    align-items: flex-end;
+}

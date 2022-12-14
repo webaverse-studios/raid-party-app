@@ -5,6 +5,9 @@ import React, {
   useContext,
   createContext,
 } from 'react';
+import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
+import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+
 import classnames from 'classnames';
 
 import game from '../../../game';
@@ -52,11 +55,11 @@ import {ChainContext} from '../../hooks/chainProvider';
 import loadoutManager from '../../../loadout-manager';
 import Modals from '../modals';
 import {partyManager} from '../../../party-manager';
+import SpriteGenerator from '../../pages/SpriteGenerator';
+import {playersManager} from '../../../players-manager';
 
-//
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
-
   weba.bindInput();
   weba.bindInterface();
   weba.bindCanvas(canvas);
@@ -67,6 +70,16 @@ const _startApp = async (weba, canvas) => {
   loadoutManager.initDefault();
   await universe.handleUrlUpdate();
   partyManager.inviteDefaultPlayer();
+
+  const sprites = _getSprites();
+
+  if (sprites) {
+    const selectedSprite = sprites.data[sprites.data.length - 1]; // hack
+    console.log(selectedSprite, 'selectedSprite');
+    playersManager
+      .getLocalPlayer()
+      .avatar.makeSpriteAvatar(selectedSprite.image);
+  }
 
   await weba.startLoop();
 };
@@ -88,7 +101,26 @@ const _getCurrentRoom = () => {
   return room || '';
 };
 
-export const AppContext = createContext();
+const _getSprites = () => {
+  let parsed = [];
+
+  try {
+    const saved = localStorage.getItem('sprites');
+
+    if (!saved) {
+      return {data: []};
+    }
+
+    parsed = JSON.parse(saved);
+  } catch (error) {
+    console.warn('Error loading rooms from local storage.');
+  }
+  return parsed;
+};
+
+const AppContext = createContext();
+
+const queryClient = new QueryClient();
 
 const useWebaverseApp = (() => {
   let webaverse = null;
@@ -136,12 +168,11 @@ const Canvas = ({app}) => {
   );
 };
 
-export const App = () => {
+const App = () => {
   const [state, setState] = useState({openedPanel: null});
   const [uiMode, setUIMode] = useState('normal');
   const [avatarLoaded, setAvatarLoaded] = useState(false);
 
-  const canvasRef = useRef(null);
   const app = useWebaverseApp();
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedScene, setSelectedScene] = useState(_getCurrentSceneSrc());
@@ -149,8 +180,7 @@ export const App = () => {
   const [apps, setApps] = useState(world.appManager.getApps().slice());
   const account = useContext(AccountContext);
   const chain = useContext(ChainContext);
-
-  //
+  const [startGame, setStartGame] = useState(false);
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -278,13 +308,7 @@ export const App = () => {
   };
 
   return (
-    <div
-      className={styles.App}
-      id="app"
-      onDragStart={onDragStart}
-      onDragEnd={onDragEnd}
-      onDragOver={onDragOver}
-    >
+    <QueryClientProvider client={queryClient}>
       <AppContext.Provider
         value={{
           state,
@@ -301,36 +325,51 @@ export const App = () => {
           setSelectedRoom,
           avatarLoaded,
           setAvatarLoaded,
+          startGame,
+          setStartGame,
         }}
       >
-        <Modals />
-        <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
-        <DomRenderer />
-        <Canvas app={app} />
-        <Crosshair />
-        <ClaimsNotification />
-        <WorldObjectsList
-          setSelectedApp={setSelectedApp}
-          selectedApp={selectedApp}
-        />
-        <PlayMode />
-        <EditorMode
-          selectedScene={selectedScene}
-          setSelectedScene={setSelectedScene}
-          selectedRoom={selectedRoom}
-          setSelectedRoom={setSelectedRoom}
-        />
-        <IoHandler />
-        <QuickMenu />
-        <ZoneTitleCard />
-        <MapGen />
-        <Quests />
-        <LoadingBox />
-        <FocusBar />
-        <DragAndDrop />
-        <GrabKeyIndicators />
-        <Stats app={app} />
+        {startGame && (
+          <div
+            className={styles.App}
+            id="app"
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            onDragOver={onDragOver}
+          >
+            <Modals />
+            <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+            <DomRenderer />
+            <Canvas app={app} />
+            <Crosshair />
+            <ClaimsNotification />
+            <WorldObjectsList
+              setSelectedApp={setSelectedApp}
+              selectedApp={selectedApp}
+            />
+            <PlayMode />
+            <EditorMode
+              selectedScene={selectedScene}
+              setSelectedScene={setSelectedScene}
+              selectedRoom={selectedRoom}
+              setSelectedRoom={setSelectedRoom}
+            />
+            <IoHandler />
+            <QuickMenu />
+            <ZoneTitleCard />
+            <MapGen />
+            <Quests />
+            <LoadingBox />
+            <FocusBar />
+            <DragAndDrop />
+            <GrabKeyIndicators />
+            <Stats app={app} />
+          </div>
+        )}
+        <SpriteGenerator />
       </AppContext.Provider>
-    </div>
+    </QueryClientProvider>
   );
 };
+
+export {AppContext, App};

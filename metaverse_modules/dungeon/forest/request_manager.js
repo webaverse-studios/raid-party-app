@@ -2,10 +2,12 @@ import axios from 'axios';
 import JSZip from 'jszip';
 import Agent from 'agentkeepalive';
 
-const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
+const CATEGORIZER_URL =
+  'https://cors.webaverse.studio/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'http://localhost:8080/https://stable-diffusion.webaverse.com/image';
-const SPRITESHEET_URL = 'http://localhost:8080/http://216.153.52.56:7777';
+  'https://cors.webaverse.studio/https://stable-diffusion.webaverse.com/image';
+const SPRITESHEET_URL =
+  'https://cors.webaverse.studio/http://216.153.52.56:7777';
 let agent = null;
 
 export const getBiomeType = async prompt => {
@@ -24,7 +26,7 @@ export const getBiomeType = async prompt => {
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.50.206:7777/completion',
+    'https://cors.webaverse.studio/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
     },
@@ -41,7 +43,7 @@ export const getBiomeInfo = async inputPrompt => {
 
 export const generateImageCache = async (prompt, biomeType) => {
   const resp = await axios.get(
-    'http://localhost:8080/http://216.153.50.206:7778',
+    'https://cors.webaverse.studio/http://216.153.50.206:7778',
     {
       params: {
         imgType: prompt,
@@ -172,7 +174,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.51.45:5000/predictions',
+    'https://cors.webaverse.studio/http://216.153.51.45:5000/predictions',
     body,
     {
       headers: {

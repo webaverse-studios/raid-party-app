@@ -7,6 +7,8 @@ import React, {
 } from 'react';
 import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
 
+import ThemeProvider from 'theme/ThemeProvider';
+
 import classnames from 'classnames';
 
 import game from 'engine/game.js';
@@ -50,6 +52,7 @@ import {GrabKeyIndicators} from 'components/GrabKeyIndicators';
 import Modals from 'components/modals';
 
 import SpriteGenerator from 'pages/SpriteGenerator';
+import styled from 'styled-components';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -301,75 +304,82 @@ const App = () => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AccountProvider>
-        <ChainProvider>
-          <AppContext.Provider
-            value={{
-              state,
-              setState,
-              app,
-              setSelectedApp,
-              selectedApp,
-              uiMode,
-              account,
-              chain,
-              selectedScene,
-              setSelectedScene,
-              selectedRoom,
-              setSelectedRoom,
-              avatarLoaded,
-              setAvatarLoaded,
-              startGame,
-              setStartGame,
-            }}
-          >
-            {startGame && (
-              <div
-                className={styles.App}
-                id="app"
-                onDragStart={onDragStart}
-                onDragEnd={onDragEnd}
-                onDragOver={onDragOver}
-              >
-                <Modals />
-                <Header
-                  setSelectedApp={setSelectedApp}
-                  selectedApp={selectedApp}
-                />
-                <DomRenderer />
-                <Canvas app={app} />
-                <Crosshair />
-                <ClaimsNotification />
-                <WorldObjectsList
-                  setSelectedApp={setSelectedApp}
-                  selectedApp={selectedApp}
-                />
-                <PlayMode />
-                <EditorMode
-                  selectedScene={selectedScene}
-                  setSelectedScene={setSelectedScene}
-                  selectedRoom={selectedRoom}
-                  setSelectedRoom={setSelectedRoom}
-                />
-                <IoHandler />
-                <QuickMenu />
-                <ZoneTitleCard />
-                <MapGen />
-                <Quests />
-                <LoadingBox />
-                <FocusBar />
-                <DragAndDrop />
-                <GrabKeyIndicators />
-                <Stats app={app} />
-              </div>
-            )}
-            <SpriteGenerator />
-          </AppContext.Provider>
-        </ChainProvider>
-      </AccountProvider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AccountProvider>
+          <ChainProvider>
+            <AppContext.Provider
+              value={{
+                state,
+                setState,
+                app,
+                setSelectedApp,
+                selectedApp,
+                uiMode,
+                account,
+                chain,
+                selectedScene,
+                setSelectedScene,
+                selectedRoom,
+                setSelectedRoom,
+                avatarLoaded,
+                setAvatarLoaded,
+                startGame,
+                setStartGame,
+              }}
+            >
+              {startGame && (
+                <Holder
+                  id="app"
+                  onDragStart={onDragStart}
+                  onDragEnd={onDragEnd}
+                  onDragOver={onDragOver}
+                >
+                  <Modals />
+                  <Header
+                    setSelectedApp={setSelectedApp}
+                    selectedApp={selectedApp}
+                  />
+                  <DomRenderer />
+                  <Canvas app={app} />
+                  <Crosshair />
+                  <ClaimsNotification />
+                  <WorldObjectsList
+                    setSelectedApp={setSelectedApp}
+                    selectedApp={selectedApp}
+                  />
+                  <PlayMode />
+                  <EditorMode
+                    selectedScene={selectedScene}
+                    setSelectedScene={setSelectedScene}
+                    selectedRoom={selectedRoom}
+                    setSelectedRoom={setSelectedRoom}
+                  />
+                  <IoHandler />
+                  <QuickMenu />
+                  <ZoneTitleCard />
+                  <MapGen />
+                  <Quests />
+                  <LoadingBox />
+                  <FocusBar />
+                  <DragAndDrop />
+                  <GrabKeyIndicators />
+                  <Stats app={app} />
+                </Holder>
+              )}
+              <SpriteGenerator />
+            </AppContext.Provider>
+          </ChainProvider>
+        </AccountProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
+
+const Holder = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+`;
 
 export {AppContext, App};

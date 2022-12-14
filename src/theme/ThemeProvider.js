@@ -37,7 +37,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     color: 212121;
-    font-Size: 16px;
+    font-Size: 12px;
     font-family: "A Goblin Appears!";
     padding: 0;
     margin: 0;

@@ -3,9 +3,10 @@ import axios from 'axios';
 import Agent from 'agentkeepalive';
 import {generateImageCache} from '../forest/request_manager';
 
-const CATEGORIZER_URL = 'http://localhost:8080/http://216.153.50.206:7777';
+const CATEGORIZER_URL =
+  'https://cors.webaverse.studio/http://216.153.50.206:7777';
 const IMAGE_URL =
-  'http://localhost:8080/https://stable-diffusion.webaverse.com/image';
+  'https://cors.webaverse.studio/https://stable-diffusion.webaverse.com/image';
 let agent = null;
 
 export const getBiomeType = async prompt => {
@@ -24,7 +25,7 @@ export const getBiomeType = async prompt => {
 
 export const getBiomeInfo = async inputPrompt => {
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.50.206:7777/completion',
+    'https://cors.webaverse.studio/http://216.153.50.206:7777/completion',
     {
       prompt: inputPrompt,
     },
@@ -93,7 +94,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'http://localhost:8080/http://216.153.51.45:5000/predictions',
+    'https://cors.webaverse.studio/http://216.153.51.45:5000/predictions',
     body,
     {
       headers: {

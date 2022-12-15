@@ -25,6 +25,11 @@ const Holder = styled.div`
   display: flex;
   flex-direction: column;
   padding: 0.2em;
+  transition: all 0.2s ease-out;
+  &:hover {
+    background: #fcf0cd;
+    padding-top: 0.4em;
+  }
 `;
 
 const Preview = styled.div`

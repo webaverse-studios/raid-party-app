@@ -40,7 +40,5 @@ const Holder = styled.div`
   background-image: url('/images/rp/sprite-gen/bg.svg');
   background-size: cover;
   background-repeat: no-repeat;
-  font-family: 'A Goblin Appears!';
-  font-size: 1.7em;
   padding: 12em 1em 1em 1em;
 `;

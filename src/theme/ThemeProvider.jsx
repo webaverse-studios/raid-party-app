@@ -40,8 +40,8 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     color: 212121;
-    font-Size: 12px;
-    font-family: "Muli";
+    font-Size: 20px;
+    font-family: 'A Goblin Appears!';
     padding: 0;
     margin: 0;
     overflow-x: hidden;

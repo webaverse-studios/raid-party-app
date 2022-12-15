@@ -8,6 +8,12 @@ export default function Adventures() {
   return (
     <Holder>
       <ShadowButton
+        title="Back"
+        onClick={() => {
+          setPageIndex(0);
+        }}
+      />
+      <ShadowButton
         title="Play"
         onClick={() => {
           setPageIndex(2);

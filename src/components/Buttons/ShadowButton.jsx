@@ -15,14 +15,14 @@ const Holder = styled.div`
   gap: 0.5em;
   background-color: #aa85ab;
   color: white;
-  padding: 1em 4em;
+  padding: 1em;
   border-radius: 1.2em;
   cursor: pointer;
   transition: all 0.3s ease-out;
   user-select: none;
   border: 0.2em solid #977398;
   box-shadow: 0px 1em 4px rgba(0, 0, 0, 0.14), inset 0px 0.2em 0px #c1a0b4;
-  text-transform: uppercase;
+  width: fit-content;
   &:hover {
     background-color: #f5bff5;
   }
@@ -31,4 +31,7 @@ const Holder = styled.div`
   }
 `;
 
-const Icon = styled.img``;
+const Icon = styled.img`
+  width: 1.5em;
+  height: 1.5em;
+`;

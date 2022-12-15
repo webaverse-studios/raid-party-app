@@ -1,6 +1,6 @@
 import React, {useState, useContext, useRef, useEffect} from 'react';
 import classnames from 'classnames';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import styles from './hotbar.module.css';
 import {HotBox} from '../hotbox/HotBox.jsx';
 

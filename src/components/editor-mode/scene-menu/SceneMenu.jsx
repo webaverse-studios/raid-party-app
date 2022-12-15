@@ -5,7 +5,7 @@ import universe from '../../../../universe';
 import voiceInput from '../../../../voice-input/voice-input';
 import sceneNames from '../../../../scenes/scenes.json';
 
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import {makeId} from '../../../../util.js';
 
 import styles from './scene-menu.module.css';

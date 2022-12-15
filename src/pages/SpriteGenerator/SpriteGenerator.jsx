@@ -5,7 +5,7 @@ import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.css';
 import 'primeflex/primeflex.css';
 
-import {AppContext} from '../../components/app';
+import {AppContext} from '../../App';
 import Button from '../../components/Buttons/Button';
 import PageAnimation from '../../components/Animations/PageAnimation';
 import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';

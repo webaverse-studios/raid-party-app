@@ -1,15 +1,9 @@
-import React, {
-  forwardRef,
-  useEffect,
-  useState,
-  useRef,
-  useContext,
-} from 'react';
+import React, {useEffect, useState, useRef, useContext} from 'react';
 import classnames from 'classnames';
 import styles from './equipment.module.css';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import {MegaHotBox} from '../../play-mode/mega-hotbox';
-import {CachedLoader} from '../../../CachedLoader.jsx';
+import {CachedLoader} from '../../CachedLoader.jsx';
 import {Spritesheet} from '../spritesheet/';
 import {createLandIcon} from '../../../../land-iconer.js';
 import game from '../../../../game.js';

@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef, useContext} from 'react';
 import classnames from 'classnames';
-import {AppContext} from '../../../app';
+import {AppContext} from '../../../../App';
 
 import {
   registerIoEventHandler,

@@ -1,12 +1,10 @@
 import * as THREE from 'three';
 import React, {useState, useEffect, useRef} from 'react';
-import gameManager from '../game.js';
-import {camera} from '../renderer.js';
-import cameraManager from '../camera-manager.js';
-import {playersManager} from '../players-manager.js';
-
-// import {CharacterBanner} from './CharacterBanner.jsx';
-import domRenderEngine, {DomRenderEngine} from '../dom-renderer.jsx';
+import gameManager from '../../game.js';
+import {camera} from '../../renderer.js';
+import cameraManager from '../../camera-manager.js';
+import {playersManager} from '../../players-manager.js';
+import domRenderEngine, {DomRenderEngine} from '../../dom-renderer.jsx';
 
 const floatFactor = 0.05;
 const floatTime = 3000;
@@ -34,8 +32,8 @@ function epsilon(value) {
   // return Math.abs(value) < 1e-10 ? 0 : value;
 }
 function getObjectCSSMatrix(matrix, cameraCSSMatrix) {
-  var elements = matrix.elements;
-  var matrix3d =
+  const elements = matrix.elements;
+  const matrix3d =
     'matrix3d(' +
     epsilon(elements[0]) +
     ',' +
@@ -312,7 +310,7 @@ const DomRenderer = props => {
       setFov(_getFov());
     };
     window.addEventListener('resize', resize);
-    const fovchange = (/*e*/) => {
+    const fovchange = (/* e */) => {
       // const {fov} = e.data;
       setFov(_getFov());
     };

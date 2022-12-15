@@ -1,14 +1,15 @@
 // import * as THREE from 'three';
 import React, {useState, useEffect} from 'react';
 import classnames from 'classnames';
-import {RpgText} from '../../../RpgText.jsx';
-import {LightArrow} from '../../../LightArrow.jsx';
+
+import {RpgText} from '../../RpgText.jsx';
+import {LightArrow} from '../../LightArrow.jsx';
+
 import {chatTextSpeed} from '../../../../constants.js';
 import {level} from '../../../../player-stats.js';
 import * as sounds from '../../../../sounds.js';
 
 import styles from './MegaChatBox.module.css';
-
 export const MegaChatBox = ({
   message,
   options,

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {AppContext} from '../app';
+import {AppContext} from '../../App';
 import {Location} from '../general/location';
 import {Settings} from '../general/settings';
 import {Modal} from './modal';

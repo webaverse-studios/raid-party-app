@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
-import {App} from './components/app';
+import {App} from './App';
 import {ErrorPage} from './components/general/error-page';
 import {ChainProvider} from './hooks/chainProvider';
-import {AccountProvider} from './hooks/web3AccountProvider';
+import {AccountProvider} from './hooks/web3AccountProvider.jsx';
 
 //
 

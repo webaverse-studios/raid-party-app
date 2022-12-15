@@ -4,18 +4,17 @@ import classnames from 'classnames';
 import {
   registerIoEventHandler,
   unregisterIoEventHandler,
-} from './components/general/io-handler/IoHandler';
+} from './general/io-handler/IoHandler';
+import emotes from './general/character/emotes.json';
+import {triggerEmote} from './general/character/Poses';
 import {LightArrow} from './LightArrow';
 
 import styles from './QuickMenu.module.css';
 
-import emotes from './components/general/character/emotes.json';
-import {triggerEmote} from './components/general/character/Poses';
-
-import game from '../game.js';
-import cameraManager from '../camera-manager.js';
-import * as sounds from '../sounds.js';
-import {mod, loadImage, drawImageContain, imageToCanvas} from '../util.js';
+import game from '../../game.js';
+import cameraManager from '../../camera-manager.js';
+import * as sounds from '../../sounds.js';
+import {mod, loadImage, imageToCanvas} from '../../util.js';
 
 const modPi2 = angle => mod(angle, Math.PI * 2);
 

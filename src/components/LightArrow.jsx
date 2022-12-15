@@ -1,7 +1,5 @@
-// import * as THREE from 'three';
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import classnames from 'classnames';
-// import dioramaManager from '../diorama.js';
 import styles from './LightArrow.module.css';
 
 const frameSize = 64;

@@ -1,11 +1,8 @@
-/* eslint-disable camelcase */
-/* eslint-disable no-useless-escape */
-
 import React, {useContext, useEffect, useState} from 'react';
 import classnames from 'classnames';
 
 import {tokensHost} from '../../constants';
-import {AppContext} from '../components/app';
+import {AppContext} from '../../App';
 
 import styles from '../Header.module.css';
 

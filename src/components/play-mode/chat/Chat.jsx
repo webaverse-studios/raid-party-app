@@ -8,7 +8,7 @@ import {
   registerIoEventHandler,
   unregisterIoEventHandler,
 } from '../../general/io-handler';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 
 import storyManager from '../../../../story.js';
 

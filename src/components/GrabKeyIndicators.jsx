@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef, useContext} from 'react';
 import styles from './GrabKeyIndicators.module.css';
-import grabManager from '../grab-manager.js';
+import grabManager from '../../grab-manager.js';
 import {KeyIndicator} from './KeyIndicator';
 
 export const GrabKeyIndicators = () => {

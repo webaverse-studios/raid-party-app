@@ -5,7 +5,7 @@ import {CONTRACTS} from './web3-constants.js';
 import {FTABI, NFTABI, WebaverseABI} from '../abis/contract.jsx';
 import {ChainContext} from './chainProvider.jsx';
 import {handleBlobUpload} from '../../util.js';
-import {registerLoad} from '../LoadingBox.jsx';
+import {registerLoad} from '../components/LoadingBox.jsx';
 
 const FILE_ADDRESS = 'https://ipfs.webaverse.com/ipfs/';
 

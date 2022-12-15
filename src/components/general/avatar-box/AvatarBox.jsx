@@ -1,12 +1,12 @@
 import React, {useEffect, useRef, useContext, useState} from 'react';
 import classnames from 'classnames';
 
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import {world} from '../../../../world.js';
 import {hp, mp, xp, level} from '../../../../player-stats.js';
 
 import styles from './AvatarBox.module.css';
-import {PlaceholderImg} from '../../../PlaceholderImg.jsx';
+import {PlaceholderImg} from '../../PlaceholderImg.jsx';
 import {playersManager} from '../../../../players-manager.js';
 import {AvatarIconer} from '../../../../avatar-iconer.js';
 import cameraManager from '../../../../camera-manager.js';
@@ -20,7 +20,7 @@ const CharacterBox = () => {
   const {avatarLoaded, setAvatarLoaded} = useContext(AppContext);
   const [userData, setUserData] = useState({
     name: 'Anon',
-    level: level,
+    level,
     hp: 0,
     mp: 0,
     xp: 0,
@@ -32,10 +32,10 @@ const CharacterBox = () => {
     setTimeout(() => {
       setUserData({
         name: 'Anon',
-        level: level,
-        hp: hp,
-        mp: mp,
-        xp: xp,
+        level,
+        hp,
+        mp,
+        xp,
         limit: 67,
       });
     }, 600);

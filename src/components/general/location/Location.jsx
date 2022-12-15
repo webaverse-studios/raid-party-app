@@ -2,7 +2,7 @@ import React, {useState, useContext, useEffect} from 'react';
 import styles from './Location.module.css';
 import sceneNames from '../../../../scenes/scenes.json';
 import CustomButton from '../custom-button';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import universe from '../../../../universe';
 import {makeId} from '../../../../util.js';
 import classnames from 'classnames';

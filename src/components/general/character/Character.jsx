@@ -3,7 +3,6 @@ import classnames from 'classnames';
 
 import {defaultPlayerName} from '../../../../ai/lore/lore-model.js';
 import * as sounds from '../../../../sounds.js';
-// import cameraManager from '../../../../camera-manager.js';
 import {
   hp,
   mp,
@@ -16,11 +15,7 @@ import {
   xp,
 } from '../../../../player-stats.js';
 
-import {AppContext} from '../../app';
-
-import {Emotions} from './Emotions';
-import {Poses} from './Poses';
-import {BigButton} from '../../../BigButton';
+import {AppContext} from '../../../App';
 
 import styles from './character.module.css';
 import CustomButton from '../custom-button/index.jsx';
@@ -160,7 +155,7 @@ const AvatarEquipBox = ({dioramaCanvasRef, onClick}) => {
 
 //
 
-export const Character = ({game, /* wearActions,*/ dioramaCanvasRef}) => {
+export const Character = ({game, /* wearActions, */ dioramaCanvasRef}) => {
   const {state, setState} = useContext(AppContext);
   const [open, setOpen] = useState(false);
   const [characterSelectOpen, setCharacterSelectOpen] = useState(false);

@@ -2,7 +2,7 @@ import React, {useContext, useState} from 'react';
 import {ChainContext} from '../../hooks/chainProvider';
 import {isChainSupported} from '../../hooks/useChain';
 import classnames from 'classnames';
-import {AppContext} from '../app';
+import {AppContext} from '../../App';
 // import {CHAIN_TYPE} from '../../hooks/web3-constants';
 
 import styles from './chains.module.css';

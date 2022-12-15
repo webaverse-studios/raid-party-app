@@ -1,7 +1,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import styles from '../Header.module.css';
-import {Tab} from '../components/tab';
+import {Tab} from '../tab';
 
 export const Claims = ({claims, open, toggleOpen, panelsRef}) => {
   return (

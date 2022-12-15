@@ -4,7 +4,7 @@ import {
   registerIoEventHandler,
   unregisterIoEventHandler,
 } from '../../general/io-handler';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 
 import {ImageAiPanel} from './panels/image-ai-panel.jsx';
 import {AudioAiPanel} from './panels/audio-ai-panel.jsx';

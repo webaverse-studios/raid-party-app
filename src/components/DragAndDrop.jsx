@@ -1,33 +1,34 @@
 import * as THREE from 'three';
 import React, {useState, useEffect, useContext, useRef} from 'react';
 import classnames from 'classnames';
+import metaversefile from 'metaversefile';
 import style from './DragAndDrop.module.css';
-import {world} from '../world.js';
-import {getRandomString, handleBlobUpload, handleUpload} from '../util.js';
+
+import {world} from '../../world.js';
+import {getRandomString, handleBlobUpload, handleUpload} from '../../util.js';
+import game from '../../game.js';
+import {getRenderer} from '../../renderer.js';
+import cameraManager from '../../camera-manager.js';
+
 import {
   registerIoEventHandler,
   unregisterIoEventHandler,
-} from './components/general/io-handler/IoHandler.jsx';
+} from './general/io-handler/IoHandler.jsx';
+import CustomButton from './general/custom-button';
+import NFTDetailsForm from './web3/NFTDetailsForm';
 import {ObjectPreview} from './ObjectPreview.jsx';
-import game from '../game.js';
-import {getRenderer} from '../renderer.js';
-import cameraManager from '../camera-manager.js';
-import metaversefile from 'metaversefile';
-import {AppContext} from './components/app';
-import CustomButton from './components/general/custom-button';
-import useNFTContract from './hooks/useNFTContract';
-import useSolanaNFTContract from './hooks/useSolanaNFTContract';
-import NFTDetailsForm from './components/web3/NFTDetailsForm';
-import {isChainSupported} from './hooks/useChain';
-import {ChainContext} from './hooks/chainProvider';
-// import ioManager from '../io-manager.js';
-// import dropManager from '../drop-manager';
-// import { getVoucherFromUser } from './hooks/voucherHelpers'
 import {
   GenericLoadingMessage,
   LoadingIndicator,
   registerLoad,
 } from './LoadingBox.jsx';
+
+import {AppContext} from '../App';
+
+import useNFTContract from '../hooks/useNFTContract';
+import useSolanaNFTContract from '../hooks/useSolanaNFTContract';
+import {isChainSupported} from '../hooks/useChain';
+import {ChainContext} from '../hooks/chainProvider';
 
 const APP_3D_TYPES = ['glb', 'gltf', 'vrm'];
 const timeCount = 6000;

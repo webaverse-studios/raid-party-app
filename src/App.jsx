@@ -6,57 +6,51 @@ import React, {
   createContext,
 } from 'react';
 import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
-import {ReactQueryDevtools} from '@tanstack/react-query-devtools';
+import styled from 'styled-components';
 
-import classnames from 'classnames';
+import ThemeProvider from './theme/ThemeProvider';
 
-import game from '../../../game';
-import sceneNames from '../../../scenes/scenes.json';
-import {parseQuery} from '../../../util.js';
-import Webaverse from '../../../webaverse.js';
-import universe from '../../../universe.js';
-import cameraManager from '../../../camera-manager';
-import {world} from '../../../world';
+import game from '../game';
+import sceneNames from '../scenes/scenes.json';
+import {parseQuery} from '../util.js';
+import Webaverse from '../webaverse.js';
+import universe from '../universe.js';
+import cameraManager from '../camera-manager';
+import {world} from '../world';
+import {handleStoryKeyControls} from '../story';
+import raycastManager from '../raycast-manager';
+import npcManager from '../npc-manager';
+import loadoutManager from '../loadout-manager';
+import {partyManager} from '../party-manager';
+import {playersManager} from '../players-manager';
 
-import {ActionMenu} from '../general/action-menu';
-import {Crosshair} from '../general/crosshair';
-import {Settings} from '../general/settings';
-import {WorldObjectsList} from '../general/world-objects-list';
+import {Crosshair} from './components/general/crosshair';
+import {WorldObjectsList} from './components/general/world-objects-list';
 import {
   IoHandler,
   registerIoEventHandler,
   unregisterIoEventHandler,
-} from '../general/io-handler';
-import {ZoneTitleCard} from '../general/zone-title-card';
-import {Quests} from '../play-mode/quests';
-import {MapGen} from '../general/map-gen/MapGen.jsx';
-import {UIMode} from '../general/ui-mode';
-import {LoadingBox} from '../../LoadingBox.jsx';
-import {FocusBar} from '../../FocusBar.jsx';
-import {DragAndDrop} from '../../DragAndDrop.jsx';
-import {Stats} from '../../Stats.jsx';
-import {PlayMode} from '../play-mode';
-import {EditorMode} from '../editor-mode';
-import Header from '../../Header.jsx';
-import QuickMenu from '../../QuickMenu.jsx';
-import {ClaimsNotification} from '../../ClaimsNotification.jsx';
-import {DomRenderer} from '../../DomRenderer.jsx';
-import {BuildVersion} from '../general/build-version/BuildVersion.jsx';
-import {handleStoryKeyControls} from '../../../story';
-import {GrabKeyIndicators} from '../../GrabKeyIndicators';
+} from './components/general/io-handler';
+import {ZoneTitleCard} from './components/general/zone-title-card';
+import {Quests} from './components/play-mode/quests';
+import {MapGen} from './components/general/map-gen/MapGen.jsx';
+import {LoadingBox} from './components/LoadingBox.jsx';
+import {FocusBar} from './components/FocusBar.jsx';
+import {DragAndDrop} from './components/DragAndDrop.jsx';
+import {Stats} from './components/Stats.jsx';
+import {PlayMode} from './components/play-mode';
+import {EditorMode} from './components/editor-mode';
+import Header from './components/Header.jsx';
+import QuickMenu from './components/QuickMenu.jsx';
+import {ClaimsNotification} from './components/ClaimsNotification.jsx';
+import {DomRenderer} from './components/DomRenderer.jsx';
+import {GrabKeyIndicators} from './components/GrabKeyIndicators';
+import Modals from './components/modals';
 
-import styles from './App.module.css';
-import '../../fonts.css';
-import raycastManager from '../../../raycast-manager';
-import npcManager from '../../../npc-manager';
+import {AccountContext} from './hooks/web3AccountProvider';
+import {ChainContext} from './hooks/chainProvider';
 
-import {AccountContext} from '../../hooks/web3AccountProvider';
-import {ChainContext} from '../../hooks/chainProvider';
-import loadoutManager from '../../../loadout-manager';
-import Modals from '../modals';
-import {partyManager} from '../../../party-manager';
-import SpriteGenerator from '../../pages/SpriteGenerator';
-import {playersManager} from '../../../players-manager';
+import SpriteGenerator from './pages/SpriteGenerator';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -160,13 +154,19 @@ const Canvas = ({app}) => {
     };
   }, []);
 
-  return (
-    <canvas
-      className={classnames(styles.canvas, domHover ? styles.domHover : null)}
-      ref={canvasRef}
-    />
-  );
+  return <StyledCanvas domhover={domHover} ref={canvasRef} />;
 };
+
+const StyledCanvas = styled.canvas`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: ${props => (props.domhover ? 'none' : 'auto')};
+`;
 
 const App = () => {
   const [state, setState] = useState({openedPanel: null});
@@ -308,68 +308,77 @@ const App = () => {
   };
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <AppContext.Provider
-        value={{
-          state,
-          setState,
-          app,
-          setSelectedApp,
-          selectedApp,
-          uiMode,
-          account,
-          chain,
-          selectedScene,
-          setSelectedScene,
-          selectedRoom,
-          setSelectedRoom,
-          avatarLoaded,
-          setAvatarLoaded,
-          startGame,
-          setStartGame,
-        }}
-      >
-        {startGame && (
-          <div
-            className={styles.App}
-            id="app"
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            onDragOver={onDragOver}
-          >
-            <Modals />
-            <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
-            <DomRenderer />
-            <Canvas app={app} />
-            <Crosshair />
-            <ClaimsNotification />
-            <WorldObjectsList
-              setSelectedApp={setSelectedApp}
-              selectedApp={selectedApp}
-            />
-            <PlayMode />
-            <EditorMode
-              selectedScene={selectedScene}
-              setSelectedScene={setSelectedScene}
-              selectedRoom={selectedRoom}
-              setSelectedRoom={setSelectedRoom}
-            />
-            <IoHandler />
-            <QuickMenu />
-            <ZoneTitleCard />
-            <MapGen />
-            <Quests />
-            <LoadingBox />
-            <FocusBar />
-            <DragAndDrop />
-            <GrabKeyIndicators />
-            <Stats app={app} />
-          </div>
-        )}
-        <SpriteGenerator />
-      </AppContext.Provider>
-    </QueryClientProvider>
+    <ThemeProvider>
+      <QueryClientProvider client={queryClient}>
+        <AppContext.Provider
+          value={{
+            state,
+            setState,
+            app,
+            setSelectedApp,
+            selectedApp,
+            uiMode,
+            account,
+            chain,
+            selectedScene,
+            setSelectedScene,
+            selectedRoom,
+            setSelectedRoom,
+            avatarLoaded,
+            setAvatarLoaded,
+            startGame,
+            setStartGame,
+          }}
+        >
+          {startGame && (
+            <Holder
+              id="app"
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+              onDragOver={onDragOver}
+            >
+              <Modals />
+              <Header
+                setSelectedApp={setSelectedApp}
+                selectedApp={selectedApp}
+              />
+              <DomRenderer />
+              <Canvas app={app} />
+              <Crosshair />
+              <ClaimsNotification />
+              <WorldObjectsList
+                setSelectedApp={setSelectedApp}
+                selectedApp={selectedApp}
+              />
+              <PlayMode />
+              <EditorMode
+                selectedScene={selectedScene}
+                setSelectedScene={setSelectedScene}
+                selectedRoom={selectedRoom}
+                setSelectedRoom={setSelectedRoom}
+              />
+              <IoHandler />
+              <QuickMenu />
+              <ZoneTitleCard />
+              <MapGen />
+              <Quests />
+              <LoadingBox />
+              <FocusBar />
+              <DragAndDrop />
+              <GrabKeyIndicators />
+              <Stats app={app} />
+            </Holder>
+          )}
+          <SpriteGenerator />
+        </AppContext.Provider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 };
+
+const Holder = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 export {AppContext, App};

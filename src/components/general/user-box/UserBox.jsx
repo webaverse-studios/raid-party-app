@@ -1,21 +1,12 @@
 import React, {useState, useEffect, useContext} from 'react';
 import classnames from 'classnames';
 
-// import * as ceramicApi from '../../../../ceramic.js';
-import {discordClientId} from '../../../../constants';
-import {parseQuery} from '../../../../util.js';
-// import Modal from './components/modal';
-import WebaWallet from '../../../components/wallet';
-
-import blockchainManager from '../../../../blockchain-manager.js';
-import {AppContext} from '../../../components/app';
+import {AppContext} from '../../../App';
 
 import styles from './UserBox.module.css';
 
 import * as sounds from '../../../../sounds.js';
 import CustomButton from '../custom-button';
-import Chains from '../../web3/chains';
-//
 
 import cameraManager from '../../../../camera-manager.js';
 

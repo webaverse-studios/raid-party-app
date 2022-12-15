@@ -7,7 +7,7 @@ import metaversefile from '../../../../metaversefile-api.js';
 import cameraManager from '../../../../camera-manager.js';
 
 import {NumberInput} from '../number-input';
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 import {ObjectScreenshot} from '../object-screenshot';
 import {
   registerIoEventHandler,

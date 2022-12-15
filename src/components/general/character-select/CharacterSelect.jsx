@@ -15,12 +15,12 @@ import {
   VoiceEndpointVoicer,
 } from '../../../../voice-output/voice-endpoint-voicer.js';
 import * as voices from '../../../../voices.js';
-import {CachedLoader} from '../../../CachedLoader.jsx';
-import {LightArrow} from '../../../LightArrow.jsx';
-import {MegaHup} from '../../../MegaHup.jsx';
-import {AppContext} from '../../app';
+import {CachedLoader} from '../../CachedLoader.jsx';
+import {LightArrow} from '../../LightArrow.jsx';
+import {MegaHup} from '../../MegaHup.jsx';
+import {PlaceholderImg} from '../../PlaceholderImg';
+import {AppContext} from '../../../App';
 import styles from './character-select.module.css';
-import {PlaceholderImg} from '../../../PlaceholderImg';
 
 //
 import {

@@ -1,28 +1,27 @@
 import React, {useEffect, useRef, useContext, useState} from 'react';
 
-import CharacterHups from './CharacterHups.jsx';
-import game from '../game.js';
-// import * as hacks from '../hacks.js'
-import cameraManager from '../camera-manager.js';
-import metaversefile from '../metaversefile-api.js';
-import ioManager from '../io-manager.js';
+import game from '../../game.js';
+import cameraManager from '../../camera-manager.js';
+import metaversefile from '../../metaversefile-api.js';
+import ioManager from '../../io-manager.js';
 
-import {Character} from './components/general/character';
-import {CharacterSelect} from './components/general/character-select';
-import {Equipment} from './components/general/equipment';
-// import { Tokens } from './tabs/tokens';
+import {Character} from './general/character';
+import {CharacterSelect} from './general/character-select';
+import {Equipment} from './general/equipment';
+import {UIMode} from './general/ui-mode/index.jsx';
+import {AvatarBox} from './general/avatar-box/AvatarBox.jsx';
+import {UserBox} from './general/user-box';
+import {Inventory} from './general/inventory/index.jsx';
 import {
   registerIoEventHandler,
   unregisterIoEventHandler,
-} from './components/general/io-handler';
-import {AppContext} from './components/app';
+} from './general/io-handler';
+
+import {AppContext} from '../App';
 import {StoryTime} from './StoryTime';
+import CharacterHups from './CharacterHups.jsx';
 
 import styles from './Header.module.css';
-import {UIMode} from './components/general/ui-mode/index.jsx';
-import {AvatarBox} from './components/general/avatar-box/AvatarBox.jsx';
-import {UserBox} from './components/general/user-box';
-import {Inventory} from './components/general/inventory/index.jsx';
 
 //
 

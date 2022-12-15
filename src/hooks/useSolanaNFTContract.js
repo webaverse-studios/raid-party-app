@@ -1,5 +1,5 @@
 import {handleBlobUpload} from '../../util.js';
-import {registerLoad} from '../LoadingBox.jsx';
+import {registerLoad} from '../components/LoadingBox.jsx';
 import {useEffect, useState, useContext} from 'react';
 import {Buffer} from 'buffer';
 import SolanaNFTMintIdl from '../abis/SolanaNFTMint.json';

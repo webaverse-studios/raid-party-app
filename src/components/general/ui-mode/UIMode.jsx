@@ -1,7 +1,7 @@
 import React, {useContext, cloneElement, Children} from 'react';
 import classNames from 'classnames';
 
-import {AppContext} from '../../app';
+import {AppContext} from '../../../App';
 
 import styles from './ui-mode.module.css';
 

@@ -910,5 +910,5 @@ export default function generateForest(
     }
   }
 
-  return {meshes: meshes, allMeshes: allMeshes};
+  return {meshes: meshes, allMeshes: allMeshes, colliders: colliders};
 }

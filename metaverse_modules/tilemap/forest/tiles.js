@@ -17,6 +17,7 @@ export default class Tiles extends THREE.Object3D {
   ioManager = new EventTarget();
   tempTiles = [];
   allMeshes = [];
+  colliders = [];
   biomeInfo = '';
 
   constructor() {
@@ -208,6 +209,7 @@ export default class Tiles extends THREE.Object3D {
 
     const timeDiff = new Date() - start;
     console.log('time ran:', timeDiff);
+    this.colliders = output.colliders;
   }
 
   sleep = ms => {

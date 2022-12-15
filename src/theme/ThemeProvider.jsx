@@ -74,6 +74,10 @@ const GlobalStyle = createGlobalStyle`
     z-index: 1;
   }
 
+  iframe {
+    position: fixed;
+  }
+
   a {
     text-decoration: none;
   }

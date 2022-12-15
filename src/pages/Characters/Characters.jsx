@@ -13,10 +13,10 @@ export default function Characters() {
   return (
     <Holder>
       <Title />
-      <RaiseFadeAnimation delay={3500}>
+      <RaiseFadeAnimation delay={2500}>
         <GeneratorTap />
       </RaiseFadeAnimation>
-      <RaiseFadeAnimation delay={4000}>
+      <RaiseFadeAnimation delay={3000}>
         <ShadowButton
           title="Next"
           onClick={() => {

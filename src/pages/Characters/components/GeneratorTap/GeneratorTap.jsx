@@ -7,7 +7,24 @@ import './style.css';
 import BorderButton from '../../../../components/Buttons/BorderButton';
 import {generateAvatar} from '../../../../api/sprite';
 
-function saveSprites(sprites) {
+async function saveSprites(sprites) {
+  const len = sprites['data'].length;
+  let count = 0;
+  for (let i = 0; i < sprites['data'].length; i++) {
+    const img = sprites['data'][i]['image'];
+    const blob = await fetch(img).then(r => r.blob());
+    const reader = new FileReader();
+    reader.readAsDataURL(blob);
+    reader.onloadend = function () {
+      const base64data = reader.result;
+      sprites['data'][i]['image'] = base64data;
+      count++;
+    };
+  }
+  while (len !== count) {
+    await new Promise(resolve => setTimeout(resolve, 50));
+  }
+  console.log('sprites:', sprites);
   localStorage.setItem('sprites', JSON.stringify(sprites));
 }
 
@@ -22,11 +39,27 @@ function loadSprites() {
       return {data: []};
     }
 
+    console.log('saved:', saved);
     parsed = JSON.parse(saved);
+    for (let i = 0; i < parsed['data'].length; i++) {
+      console.log(parsed['data'][i]);
+      const img = parsed['data'][i]['image'];
+      const byteString = atob(img.split(',')[1]);
+      const mimeString = img.split(',')[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let j = 0; j < byteString.length; j++) {
+        ia[j] = byteString.charCodeAt(j);
+      }
+      const blob = new Blob([ab], {type: mimeString});
+      const url = URL.createObjectURL(blob);
+      parsed['data'][i]['image'] = url;
+    }
   } catch (error) {
     console.warn('Error loading rooms from local storage.');
   }
 
+  console.log('parsed:', parsed);
   return parsed;
 }
 

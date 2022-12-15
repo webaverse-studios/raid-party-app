@@ -123,6 +123,7 @@ export default class Dungeon {
       physicsManager.getScene().setTrigger(physicsObject.physicsId);
     }
 
+    this.colliders.push(physicsObject);
     this.app.add(physicsObject);
   }
   removeCollider(x, y) {}

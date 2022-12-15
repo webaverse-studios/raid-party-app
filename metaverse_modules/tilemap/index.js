@@ -21,6 +21,7 @@ const {
 } = metaversefile;
 
 export default e => {
+  console.log('SPAWNING TILEMAP APP');
   const prompts = [
     'Unicorn Forest',
     'Icy Forest',
@@ -35,9 +36,8 @@ export default e => {
     "Wizard's Dungeon",
     'Rainbow Dungeon',
     'Dark Dungeon',
-    'Blazing Dungeon',
     'Desert Forest',
-    'Icy Forest',
+    'Blazing Dungeon',
   ];
 
   const app = useApp();
@@ -45,6 +45,9 @@ export default e => {
   const procGenManager = useProcGenManager();
   const physics = usePhysics();
   const localPlayer = useLocalPlayer();
+
+  let forest = null;
+  let dungeon = null;
 
   // locals
 
@@ -210,12 +213,12 @@ export default e => {
         const timeDiff = new Date() - start;
         console.log('Execution time: %dms', timeDiff);
 
-        const tiles = new Tiles();
-        app.add(tiles);
+        forest = new Tiles();
+        app.add(forest);
 
         const _waitForLoad = async () => {
           await Promise.all([
-            tiles.waitForLoad(
+            forest.waitForLoad(
               'forest',
               230,
               textures,
@@ -229,13 +232,7 @@ export default e => {
         };
         await _waitForLoad();
       } else {
-        const dungeon = new Dungeon(
-          app,
-          physics,
-          localPlayer,
-          biomeInfo,
-          biomeType,
-        );
+        dungeon = new Dungeon(app, physics, localPlayer, biomeInfo, biomeType);
         app.add(dungeon.pivot);
         dungeon.pivot.updateMatrixWorld();
 
@@ -253,27 +250,23 @@ export default e => {
     })(),
   );
 
-  // add physics
-  const geometry = new THREE.PlaneGeometry(0.01, 0.01);
-  geometry.rotateY(Math.PI / 2); // note: match with physx' default plane rotation.
-  const material = new THREE.MeshStandardMaterial({color: 'red'});
-  const physicsPlane = new THREE.Mesh(geometry, material);
-  physicsPlane.rotation.set(0, 0, Math.PI / 2);
-  app.add(physicsPlane);
-  physicsPlane.updateMatrixWorld();
-
-  const physicsObject = physics.addPlaneGeometry(
-    new THREE.Vector3(0, 0, 0),
-    new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-    false,
-  );
-
   useFrame(() => {
     frameCb && frameCb();
   });
 
   useCleanup(() => {
-    physics.removeGeometry(physicsObject);
+    if (forest) {
+      console.log('cleaning forest colliders:', forest.colliders.length);
+      for (let i = 0; i < forest.colliders.length; i++) {
+        physics.removeGeometry(forest.colliders[i]);
+      }
+    }
+    if (dungeon) {
+      console.log('cleaning dungeon colliders:', dungeon.colliders.length);
+      for (let i = 0; i < dungeon.colliders.length; i++) {
+        physics.removeGeometry(dungeon.colliders[i]);
+      }
+    }
   });
 
   return app;

@@ -17,6 +17,7 @@ export default class Tiles extends THREE.Object3D {
   ioManager = new EventTarget();
   tempTiles = [];
   allMeshes = [];
+  colliders = [];
   biomeInfo = '';
 
   constructor() {
@@ -25,7 +26,7 @@ export default class Tiles extends THREE.Object3D {
     document.addEventListener('keydown', e => {
       if (e.key == 'u') {
         console.log('regenerating tiles');
-        this.regenerateTiles(this.tempTiles, this.biomeInfo);
+        this.regenerateTiles(this.tempTiles, this.biomeInfo, 'forest');
       }
     });
   }
@@ -208,13 +209,14 @@ export default class Tiles extends THREE.Object3D {
 
     const timeDiff = new Date() - start;
     console.log('time ran:', timeDiff);
+    this.colliders = output.colliders;
   }
 
   sleep = ms => {
     return new Promise(resolve => setTimeout(resolve, ms));
   };
 
-  async regenerateTiles(tiles, biomeInfo) {
+  async regenerateTiles(tiles, biomeInfo, biomeType) {
     const textures = {};
 
     const start = new Date();

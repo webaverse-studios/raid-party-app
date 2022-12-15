@@ -21,7 +21,7 @@ export default function Title() {
         stiffness: 350,
         // mass: 3,
         // damping: 1,
-        delay: 2,
+        delay: 0.6,
       }}
       initial="init"
       animate="show"

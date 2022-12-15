@@ -21,6 +21,7 @@ const {
 } = metaversefile;
 
 export default e => {
+  console.log('SPAWNING TILEMAP APP');
   const prompts = [
     'Unicorn Forest',
     'Icy Forest',

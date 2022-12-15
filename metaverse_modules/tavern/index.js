@@ -27,7 +27,7 @@ export default e => {
   let tiles = null;
   let generated = false;
 
-  document.addEventListener('keydown', e => {
+  document.addEventListener('keydown', async e => {
     if (e.key == 'i') {
       if (generated || !tiles) {
         return;
@@ -46,20 +46,21 @@ export default e => {
         },
       };
 
-      tilemapApp = metaversefile.addTrackedApp(
+      tilemapApp = await metaversefile.addTrackedApp(
         '../../metaverse_modules/tilemap/',
         new THREE.Vector3(0, 0, 0),
         new THREE.Quaternion(0, 0, 0, 1),
         new THREE.Vector3(1, 1, 1),
         [component],
       );
+      console.log(tilemapApp);
     } else if (e.key == 'k') {
       if (!generated || !tiles) {
         return;
       }
 
       console.log('removing tilemap tiles:', tiles);
-      metaversefile.removeTrackedApp(tilemapApp);
+      metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
       tiles.unclearMap();
       generated = false;
     }

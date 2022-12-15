@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Button({icon, title, onClick, className}) {
+export default function ShadowButton({icon, title, onClick, className}) {
   return (
     <Holder className={className} onClick={onClick}>
       {icon && <Icon src={icon} alt="" />}

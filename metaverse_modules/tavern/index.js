@@ -53,6 +53,15 @@ export default e => {
         new THREE.Vector3(1, 1, 1),
         [component],
       );
+    } else if (e.key == 'k') {
+      if (!generated || !tiles) {
+        return;
+      }
+
+      console.log('removing tilemap tiles:', tiles);
+      metaversefile.removeTrackedApp(tilemapApp);
+      tiles.unclearMap();
+      generated = false;
     }
   });
   // initialization

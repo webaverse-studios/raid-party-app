@@ -7,6 +7,7 @@ export default function PageAnimation({children, visible}) {
     <AnimatePresence>
       {visible && (
         <Holder
+          layout
           transition={{duration: 0.5}}
           initial={{opacity: 1, y: 0}}
           animate={{opacity: 1, y: 0}}

@@ -17,11 +17,11 @@ export default function Title() {
         },
       }}
       transition={{
-        // ease: 'easeInOut',
-        delay: 2,
-        // duration: 0.8,
         type: 'spring',
         stiffness: 350,
+        // mass: 3,
+        // damping: 1,
+        delay: 2,
       }}
       initial="init"
       animate="show"

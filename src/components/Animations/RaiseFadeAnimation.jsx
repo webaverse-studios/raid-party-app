@@ -28,8 +28,7 @@ export default function RaiseFadeAnimation({
         },
       }}
       transition={{
-        ease: 'easeOut',
-        delay: 0,
+        type: 'tween',
         duration: 0.8,
       }}
       initial="hide"

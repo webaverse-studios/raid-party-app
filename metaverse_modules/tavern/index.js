@@ -19,6 +19,7 @@ export default e => {
   const camera = useCamera();
   const procGenManager = useProcGenManager();
   const physics = usePhysics();
+  const localPlayer = useLocalPlayer();
 
   // locals
 
@@ -26,6 +27,8 @@ export default e => {
   let tilemapApp = null;
   let tiles = null;
   let generated = false;
+  const startingY = localPlayer.position.y;
+  console.log('startingY', startingY, localPlayer.position);
 
   document.addEventListener('keydown', async e => {
     if (e.key == 'i') {
@@ -33,7 +36,10 @@ export default e => {
         return;
       }
 
-      useLocalPlayer().position.set(0, 0, 0);
+      localPlayer.position.set(0, startingY, 0);
+      localPlayer.characterPhysics.setPosition(localPlayer.position);
+      localPlayer.characterPhysics.reset();
+      localPlayer.updateMatrixWorld();
 
       generated = true;
       tiles.clearMap();
@@ -59,6 +65,10 @@ export default e => {
         return;
       }
 
+      localPlayer.position.set(0, startingY, 0);
+      localPlayer.characterPhysics.setPosition(localPlayer.position);
+      localPlayer.characterPhysics.reset();
+      localPlayer.updateMatrixWorld();
       console.log('removing tilemap tiles:', tiles);
       metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
       tiles.unclearMap();

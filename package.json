@@ -1,6 +1,6 @@
 {
-  "name": "webaverse-app",
-  "version": "0.0.1",
+  "name": "raid-party-app",
+  "version": "0.1.0",
   "description": "",
   "main": "index.mjs",
   "type": "module",

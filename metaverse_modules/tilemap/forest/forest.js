@@ -5,6 +5,7 @@ import PF from 'pathfinding';
 import * as THREE from 'three';
 import physicsManager from '../../../physics-manager.js';
 
+let addedAroundColliders = false;
 //move the generation into a test script, to log 10s map
 //remove object spawn from the start that is random
 //get locations that are 2x2 or 3x3 and spawn trees
@@ -27,13 +28,20 @@ export default function generateForest(
   physics,
   app,
   localPlayer,
+  moveMap,
 ) {
+  let generatingMap = false;
   app.addEventListener('triggerin', async e => {
     if (
       e.oppositePhysicsId ===
       localPlayer.characterPhysics.characterController.physicsId
     ) {
       console.log('local player trigger in');
+      if (!generatingMap) {
+        generatingMap = true;
+        await moveMap();
+        generatingMap = false;
+      }
     }
   });
   app.addEventListener('triggerout', async e => {
@@ -140,8 +148,6 @@ export default function generateForest(
         prop = prop2;
         prop2 = temp;
       }
-
-      console.log('Adding tree prop1:', prop, 'prop2:', prop2, _meshes);
     }
 
     const cloneTreeMesh = _meshes[prop].clone();
@@ -921,6 +927,26 @@ export default function generateForest(
       }
     }
     return yx;
+  }
+
+  const addColliders = () => {
+    for (let z = 0; z < TILE_AMOUNT; z++) {
+      for (let x = 0; x < TILE_AMOUNT; x++) {
+        if (
+          z === 0 ||
+          z === TILE_AMOUNT - 1 ||
+          x === 0 ||
+          x === TILE_AMOUNT - 1
+        ) {
+          addCollider(z, x, true);
+        }
+      }
+    }
+  };
+
+  if (!addedAroundColliders) {
+    addColliders();
+    addedAroundColliders = true;
   }
 
   const spot = getRandomYXMiddle();

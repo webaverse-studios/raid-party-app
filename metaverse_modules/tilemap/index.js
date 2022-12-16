@@ -21,6 +21,24 @@ const {
 } = metaversefile;
 
 export default e => {
+  const prompts = [
+    'Unicorn Forest',
+    'Icy Forest',
+    'Haunted Forest',
+    "Wizard's Forest",
+    'Rainbow Forest',
+    'Dark Forest',
+    'Blazing Forest',
+    'Unicorn Dungeon',
+    'Icy Dungeon',
+    'Haunted Dungeon',
+    "Wizard's Dungeon",
+    'Rainbow Dungeon',
+    'Dark Dungeon',
+    'Desert Forest',
+    'Blazing Dungeon',
+  ];
+
   let starting_biome = 'forest';
   console.log('SPAWNING TILEMAP APP');
 

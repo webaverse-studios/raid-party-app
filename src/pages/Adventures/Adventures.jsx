@@ -1,11 +1,12 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
-import {AppContext} from '../../App';
-import Card from './components/Card';
-import {MiddleContainer} from '../../components/Containers';
-import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
-import Header from './components/Header';
 import {motion} from 'framer-motion';
+
+import {AppContext} from '../../App';
+import {MiddleContainer} from '../../components/Containers';
+
+import Header from './components/Header';
+import Card from './components/Card';
 
 const ADVENTURES_DATA = [
   {
@@ -56,7 +57,7 @@ export default function Adventures() {
           animate="open"
           variants={{
             open: {
-              transition: {staggerChildren: 0.09, delayChildren: 0.2},
+              transition: {staggerChildren: 0.09, delayChildren: 0.4},
             },
             closed: {
               transition: {staggerChildren: 0.05, staggerDirection: -1},

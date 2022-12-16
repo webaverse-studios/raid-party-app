@@ -43,8 +43,6 @@ export default function Header() {
           ];
           const prompt = prompts[Math.floor(Math.random() * prompts.length)];
 
-          console.log('opening adventure:', prompt);
-
           localPlayer.dispatchEvent({
             type: 'update_adventures',
             app,

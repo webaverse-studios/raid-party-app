@@ -2,11 +2,13 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
 
-import {AppContext} from '../../App';
+import metaversefile from '../../../metaversefile-api.js';
+
 import {MiddleContainer} from '../../components/Containers';
 
 import Header from './components/Header';
 import Card from './components/Card';
+import {AppContext} from '../../App';
 
 const ADVENTURES_DATA = [
   {
@@ -66,8 +68,10 @@ const ADVENTURES_DATA = [
 ];
 
 export default function Adventures() {
-  const {setPageIndex} = useContext(AppContext);
+  const localPlayer = metaversefile.useLocalPlayer();
+  const {app} = useContext(AppContext);
 
+  console.log('opening');
   return (
     <Holder>
       <Header />
@@ -90,7 +94,19 @@ export default function Adventures() {
               data={d}
               onClick={() => {
                 localStorage.setItem('adventure', JSON.stringify(d));
-                setPageIndex(2);
+                const prompt = d.name + ' ' + d.type;
+                console.log('opening adventure:', prompt);
+
+                localPlayer.dispatchEvent({
+                  type: 'update_adventures',
+                  app,
+                  open_adventures: false,
+                });
+                localPlayer.dispatchEvent({
+                  type: 'enter_adventure',
+                  app,
+                  prompt: prompt,
+                });
               }}
             />
           ))}

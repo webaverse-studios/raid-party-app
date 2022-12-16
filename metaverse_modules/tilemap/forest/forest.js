@@ -910,5 +910,24 @@ export default function generateForest(
     }
   }
 
-  return {meshes: meshes, allMeshes: allMeshes, colliders: colliders};
+  function getRandomYXMiddle() {
+    let yx = [];
+    while (true) {
+      const y = Math.floor(Math.random() * TILE_AMOUNT);
+      const x = Math.floor(Math.random() * TILE_AMOUNT);
+      if (mapArr[x][y] === 0 && y > 10 && y < 20 && x > 10 && x < 20) {
+        yx = [y, x];
+        break;
+      }
+    }
+    return yx;
+  }
+
+  const spot = getRandomYXMiddle();
+  return {
+    meshes: meshes,
+    allMeshes: allMeshes,
+    colliders: colliders,
+    spot: spot,
+  };
 }

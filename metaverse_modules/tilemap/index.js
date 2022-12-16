@@ -21,6 +21,7 @@ const {
 } = metaversefile;
 
 export default e => {
+  let starting_biome = 'forest';
   console.log('SPAWNING TILEMAP APP');
 
   const app = useApp();
@@ -31,6 +32,29 @@ export default e => {
 
   let forest = null;
   let dungeon = null;
+  const input_prompt = app.getComponent('prompt').prompt;
+
+  document.addEventListener('keydown', async e => {
+    if (e.key == 'x') {
+      console.log('regenerating tiles');
+      let isForest = false;
+      let biomeInfo = '';
+      let biomeType = '';
+
+      while (!isForest) {
+        const rndPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        biomeInfo = (await getBiomeInfo(rndPrompt)).trim();
+        biomeType = (await getBiomeType(rndPrompt)).trim();
+        isForest = biomeType === starting_biome;
+      }
+
+      if (forest) {
+        forest.regenerateWithPrompt(biomeInfo, biomeType);
+      } else if (dungeon) {
+        dungeon.regenerateMap(biomeInfo, biomeType);
+      }
+    }
+  });
 
   // locals
 
@@ -39,11 +63,12 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      const promptInfo = JSON.parse(localStorage.getItem('adventure'));
-      const prompt = promptInfo.name + ' ' + promptInfo.type;
+      const prompt = input_prompt;
+      console.log('prompt', prompt);
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
       const biomeType = (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
+      starting_biome = biomeType;
 
       if (biomeType === 'forest') {
         // Get the biome information from the prompt
@@ -215,6 +240,7 @@ export default e => {
           ]);
         };
         await _waitForLoad();
+        app.setComponent('spot', forest.spot);
       } else {
         dungeon = new Dungeon(app, physics, localPlayer, biomeInfo, biomeType);
         app.add(dungeon.pivot);
@@ -225,6 +251,8 @@ export default e => {
           await Promise.all([dungeon.waitForLoad()]);
         };
         await _waitForLoad();
+        console.log('dungeon.spot:', dungeon.spot);
+        app.setComponent('spot', dungeon.spot);
 
         // frame handling
         frameCb = () => {

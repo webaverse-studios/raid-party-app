@@ -1,16 +1,24 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
-import {AppContext} from '../../../../App';
 import ShadowButton from '../../../../components/Buttons/ShadowButton';
+import metaversefile from '../../../../../metaversefile-api.js';
+
+import {AppContext} from '../../../../App';
 
 export default function Header() {
-  const {setPageIndex} = useContext(AppContext);
+  const localPlayer = metaversefile.useLocalPlayer();
+  const {app} = useContext(AppContext);
+
   return (
     <Holder>
       <ShadowButton
         icon="/images/rp/back.svg"
         onClick={() => {
-          setPageIndex(0);
+          localPlayer.dispatchEvent({
+            type: 'update_adventures',
+            app,
+            open_adventures: false,
+          });
         }}
       />
       <ShadowButton title="Create New" onClick={() => {}} />

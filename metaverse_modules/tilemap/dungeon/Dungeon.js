@@ -22,6 +22,7 @@ export default class Dungeon {
   physics = null;
   biomeInfo = '';
   biomeType = '';
+  spot = null;
 
   constructor(app, physics, localPlayer, biomeInfo, biomeType) {
     this.app = app;
@@ -138,8 +139,8 @@ export default class Dungeon {
     return result;
   }
 
-  async regenerateMap() {
-    await generateTiles(this.biomeType, this.biomeInfo);
+  async regenerateMap(type, info) {
+    await generateTiles(type, info);
 
     const tiles = Textures.tilesTextures(this.assets);
     const props = Textures.propsTextures(this.assets);
@@ -158,7 +159,7 @@ export default class Dungeon {
   async waitForLoad() {
     document.addEventListener('keydown', e => {
       if (e.key == 'u') {
-        this.regenerateMap();
+        this.regenerateMap(this.biomeType, this.biomeInfo);
       }
     });
 
@@ -262,6 +263,12 @@ export default class Dungeon {
           const oldPos = sprite.position;
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+          if (!this.spot) {
+            const isFree = this.hasProp(tilemap, y, x) && id == 0;
+            if (isFree) {
+              this.spot = [y * TILE_SIZE, x * TILE_SIZE];
+            }
+          }
           if (texture) {
             if (id !== 0 && id !== 46 && id !== 48) {
               this.addCollider(x, y, this.group, direction);
@@ -274,10 +281,21 @@ export default class Dungeon {
     }
   };
 
+  hasProp = (tilemap, x, y) => {
+    try {
+      const id = tilemap[y][x];
+      console.log('id:', id);
+      return id !== 0;
+    } catch (e) {
+      return true;
+    }
+  };
+
   drawProps = (tilemap, sprites, direction) => {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
+        console.log('spawning propt:', id, 'at', x, y, '');
         if (id === 0) {
           continue;
         }

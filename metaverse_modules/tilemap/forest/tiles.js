@@ -19,6 +19,7 @@ export default class Tiles extends THREE.Object3D {
   allMeshes = [];
   colliders = [];
   biomeInfo = '';
+  spot = [0, 0];
 
   constructor() {
     super();
@@ -29,6 +30,10 @@ export default class Tiles extends THREE.Object3D {
         this.regenerateTiles(this.tempTiles, this.biomeInfo, 'forest');
       }
     });
+  }
+
+  regenerateWithPrompt(info, type) {
+    this.regenerateTiles(this.tempTiles, info, type);
   }
 
   loadTiles(type, length) {
@@ -210,6 +215,7 @@ export default class Tiles extends THREE.Object3D {
     const timeDiff = new Date() - start;
     console.log('time ran:', timeDiff);
     this.colliders = output.colliders;
+    this.spot = output.spot;
   }
 
   sleep = ms => {

@@ -34,10 +34,66 @@ export default e => {
   let generated = false;
   const startingY = localPlayer.position.y;
   console.log('startingY', startingY, localPlayer.position);
+  let mapMenuIsOpen = false;
+
+  const generateMap = async prompt => {
+    localPlayer.dispatchEvent({
+      type: 'loading_map',
+      app,
+      loading: true,
+    });
+
+    generated = true;
+    tiles.clearMap();
+    console.log('spawning tilemap tiles:', tiles);
+    const component = {
+      key: 'resolution',
+      value: {
+        width: 50,
+        height: 50,
+      },
+    };
+    const component2 = {
+      key: 'prompt',
+      value: {
+        prompt: prompt,
+      },
+    };
+
+    tilemapApp = await metaversefile.addTrackedApp(
+      '../../metaverse_modules/tilemap/',
+      new THREE.Vector3(0, 0, 0),
+      new THREE.Quaternion(0, 0, 0, 1),
+      new THREE.Vector3(1, 1, 1),
+      [component, component2],
+    );
+    console.log('tilemapApp', tilemapApp);
+    const spot = tilemapApp.getComponent('spot')
+      ? tilemapApp.getComponent('spot')
+      : [0, 0];
+    localPlayer.position.set(spot[1], startingY, spot[0]);
+    localPlayer.characterPhysics.setPosition(localPlayer.position);
+    localPlayer.characterPhysics.reset();
+    localPlayer.updateMatrixWorld();
+    localPlayer.dispatchEvent({
+      type: 'loading_map',
+      app,
+      loading: false,
+    });
+  };
+
+  localPlayer.addEventListener('enter_adventure', e => {
+    console.log('enter_adventure', e, e.prompt);
+    generateMap(e.prompt);
+  });
 
   document.addEventListener('keydown', async e => {
     if (e.key == 'i') {
       if (generated || !tiles) {
+        return;
+      }
+    } else if (e.key == 'k') {
+      if (!generated || !tiles || !tilemapApp) {
         return;
       }
 
@@ -51,50 +107,37 @@ export default e => {
       localPlayer.characterPhysics.setPosition(localPlayer.position);
       localPlayer.characterPhysics.reset();
       localPlayer.updateMatrixWorld();
+      console.log('removing tilemap tiles:', tiles);
+      metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
+      tiles.unclearMap();
+      generated = false;
 
-      generated = true;
-      tiles.clearMap();
-      console.log('spawning tilemap tiles:', tiles);
-      const component = {
-        key: 'resolution',
-        value: {
-          width: 50,
-          height: 50,
-        },
-      };
-
-      tilemapApp = await metaversefile.addTrackedApp(
-        '../../metaverse_modules/tilemap/',
-        new THREE.Vector3(0, 0, 0),
-        new THREE.Quaternion(0, 0, 0, 1),
-        new THREE.Vector3(1, 1, 1),
-        [component],
-      );
-      console.log(tilemapApp);
       localPlayer.dispatchEvent({
         type: 'loading_map',
         app,
         loading: false,
       });
-    } else if (e.key == 'k') {
-      if (!generated || !tiles) {
-        return;
-      }
 
-      localPlayer.position.set(0, startingY, 0);
-      localPlayer.characterPhysics.setPosition(localPlayer.position);
-      localPlayer.characterPhysics.reset();
-      localPlayer.updateMatrixWorld();
-      console.log('removing tilemap tiles:', tiles);
-      metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
-      tiles.unclearMap();
-      generated = false;
+      mapMenuIsOpen = false;
+      localPlayer.dispatchEvent({
+        type: 'update_adventures',
+        app,
+        open_adventures: false,
+      });
+    } else if (e.key === 'c') {
+      console.log('opening adventures');
+      mapMenuIsOpen = !mapMenuIsOpen;
+      localPlayer.dispatchEvent({
+        type: 'update_adventures',
+        app,
+        open_adventures: mapMenuIsOpen,
+      });
     }
   });
   // initialization
   e.waitUntil(
     (async () => {
-      tiles = new Tiles(app);
+      tiles = new Tiles(app, physics);
       app.add(tiles);
 
       // load

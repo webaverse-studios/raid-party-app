@@ -36,13 +36,9 @@ import {GrabKeyIndicators} from '../../components/GrabKeyIndicators';
 import Modals from '../../components/modals';
 import Loader from '../../components/Loader';
 
-import {
-  AppContext,
-  getCurrentRoom,
-  getCurrentSceneSrc,
-  useWebaverseApp,
-} from '../../App';
+import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
+import Adventures from '../Adventures';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -118,18 +114,30 @@ const Canvas = ({app}) => {
   return <StyledCanvas domhover={domHover} ref={canvasRef} />;
 };
 
-export default function Playground() {
-  const [state, setState] = useState({openedPanel: null});
-  const [uiMode, setUIMode] = useState('normal');
+const localPlayer = metaversefile.useLocalPlayer();
 
-  const app = useWebaverseApp();
-  const [selectedApp, setSelectedApp] = useState(null);
-  const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
-  const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
-  const [apps, setApps] = useState(world.appManager.getApps().slice());
-  const {avatarLoaded, setAvatarLoaded} = useContext(AppContext);
-  const {tilesLoaded, setTilesLoaded} = useContext(AppContext);
-  const localPlayer = metaversefile.useLocalPlayer();
+export default function Playground() {
+  const {
+    uiMode,
+    setUIMode,
+    state,
+    setState,
+    selectedScene,
+    setSelectedScene,
+    selectedRoom,
+    setSelectedRoom,
+    selectedApp,
+    setSelectedApp,
+    app,
+    apps,
+    setApps,
+    avatarLoaded,
+    setAvatarLoaded,
+    tilesLoaded,
+    setTilesLoaded,
+  } = useContext(AppContext);
+
+  const [openAdventures, setOpenAdventures] = useState(false);
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -249,6 +257,14 @@ export default function Playground() {
 
   useEffect(_loadUrlState, []);
 
+  useEffect(() => {
+    localPlayer.addEventListener('update_adventures', e => {
+      console.log('update_adventures', e, e.open_adventures);
+      setOpenAdventures(e.open_adventures);
+      console.log('openAdventures:', openAdventures);
+    });
+  }, []);
+
   //
 
   const onDragOver = e => {
@@ -270,37 +286,43 @@ export default function Playground() {
       onDragOver={onDragOver}
     >
       <Modals />
-      <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
       <DomRenderer />
       <Canvas app={app} />
-      <Crosshair />
       <ClaimsNotification />
       <WorldObjectsList
         setSelectedApp={setSelectedApp}
         selectedApp={selectedApp}
       />
-      <PlayMode />
       <EditorMode
         selectedScene={selectedScene}
         setSelectedScene={setSelectedScene}
         selectedRoom={selectedRoom}
         setSelectedRoom={setSelectedRoom}
       />
-      <IoHandler />
-      <QuickMenu />
-      <ZoneTitleCard />
-      <MapGen />
-      <Quests />
       <LoadingBox />
-      <FocusBar />
       <DragAndDrop />
-      <GrabKeyIndicators />
-      <Stats app={app} />
+      <MapGen />
       <StyledLoader
         visible={tilesLoaded || !avatarLoaded}
         label="Loading assets..."
         size={80}
       />
+      {openAdventures ? (
+        <Adventures />
+      ) : (
+        <div>
+          <IoHandler />
+          <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+          <Stats app={app} />
+          <Crosshair />
+          <QuickMenu />
+          <ZoneTitleCard />
+          <Quests />
+          <PlayMode />
+          <GrabKeyIndicators />
+          <FocusBar />
+        </div>
+      )}
     </Holder>
   );
 }

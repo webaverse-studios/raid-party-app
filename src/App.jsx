@@ -46,15 +46,18 @@ export const useWebaverseApp = (() => {
 })();
 
 export const App = () => {
+  const app = useWebaverseApp();
+
+  const account = useContext(AccountContext);
+  const chain = useContext(ChainContext);
+
   const [state, setState] = useState({openedPanel: null});
   const [uiMode, setUIMode] = useState('normal');
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const app = useWebaverseApp();
+  const [tilesLoaded, setTilesLoaded] = useState(false);
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
   const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
-  const account = useContext(AccountContext);
-  const chain = useContext(ChainContext);
   const [pageIndex, setPageIndex] = useState(0);
 
   return (
@@ -77,6 +80,8 @@ export const App = () => {
             setSelectedRoom,
             avatarLoaded,
             setAvatarLoaded,
+            tilesLoaded,
+            setTilesLoaded,
             pageIndex,
             setPageIndex,
           }}

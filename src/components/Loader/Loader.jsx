@@ -16,9 +16,14 @@ export default function Loader({
         <Holder
           {...props}
           className={className}
-          initial={{opacity: 0}}
-          animate={{opacity: 1}}
-          exit={{opacity: 0}}
+          initial={{opacity: 0, y: -30}}
+          animate={{opacity: 1, y: 0}}
+          exit={{opacity: 0, y: -30}}
+          transition={{
+            type: 'tween',
+            duration: 0.8,
+          }}
+          layout
         >
           <Container>
             <Spiner size={size} />

@@ -1,9 +1,33 @@
+import {motion} from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
 
 export default function Card({data, className, onClick}) {
   return (
-    <Holder className={className} onClick={onClick}>
+    <Holder
+      className={className}
+      onClick={onClick}
+      variants={{
+        open: {
+          opacity: 1,
+          y: 0,
+          transition: {
+            type: 'spring',
+            damping: 12,
+            stiffness: 200,
+          },
+        },
+        closed: {
+          opacity: 0,
+          y: 20,
+          transition: {
+            type: 'spring',
+            damping: 12,
+            stiffness: 200,
+          },
+        },
+      }}
+    >
       <Preview>
         <img src={data.preview} alt="" />
       </Preview>
@@ -15,7 +39,7 @@ export default function Card({data, className, onClick}) {
   );
 }
 
-const Holder = styled.div`
+const Holder = styled(motion.li)`
   width: 14em;
   height: 10em;
   background: #f5e1b5;

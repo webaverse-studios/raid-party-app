@@ -5,6 +5,7 @@ import Card from './components/Card';
 import {MiddleContainer} from '../../components/Containers';
 import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
 import Header from './components/Header';
+import {motion} from 'framer-motion';
 
 const ADVENTURES_DATA = [
   {
@@ -49,21 +50,30 @@ export default function Adventures() {
   return (
     <Holder>
       <Header />
-      <RaiseFadeAnimation delay={0.6}>
-        <MiddleContainer>
-          <Cards>
-            {ADVENTURES_DATA.map((d, index) => (
-              <Card
-                key={index}
-                data={d}
-                onClick={() => {
-                  setPageIndex(2);
-                }}
-              />
-            ))}
-          </Cards>
-        </MiddleContainer>
-      </RaiseFadeAnimation>
+      <MiddleContainer>
+        <Cards
+          initial="closed"
+          animate="open"
+          variants={{
+            open: {
+              transition: {staggerChildren: 0.09, delayChildren: 0.2},
+            },
+            closed: {
+              transition: {staggerChildren: 0.05, staggerDirection: -1},
+            },
+          }}
+        >
+          {ADVENTURES_DATA.map((d, index) => (
+            <Card
+              key={index}
+              data={d}
+              onClick={() => {
+                setPageIndex(2);
+              }}
+            />
+          ))}
+        </Cards>
+      </MiddleContainer>
     </Holder>
   );
 }
@@ -74,7 +84,7 @@ const Holder = styled.div`
   background-color: #30404e;
 `;
 
-const Cards = styled.div`
+const Cards = styled(motion.ul)`
   display: flex;
   gap: 1em;
   flex-wrap: wrap;

@@ -294,11 +294,8 @@ export default function Playground() {
         selectedRoom={selectedRoom}
         setSelectedRoom={setSelectedRoom}
       />
-      <IoHandler />
       <LoadingBox />
-      <FocusBar />
       <DragAndDrop />
-      <GrabKeyIndicators />
       <MapGen />
       <StyledLoader
         visible={tilesLoaded || !avatarLoaded}
@@ -309,6 +306,7 @@ export default function Playground() {
         <Adventures />
       ) : (
         <div>
+          <IoHandler />
           <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
           <Stats app={app} />
           <Crosshair />
@@ -316,6 +314,8 @@ export default function Playground() {
           <ZoneTitleCard />
           <Quests />
           <PlayMode />
+          <GrabKeyIndicators />
+          <FocusBar />
         </div>
       )}
     </Holder>

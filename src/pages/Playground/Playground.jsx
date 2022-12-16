@@ -280,7 +280,6 @@ export default function Playground() {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
       <Modals />
       <DomRenderer />
       <Canvas app={app} />
@@ -301,7 +300,6 @@ export default function Playground() {
       <DragAndDrop />
       <GrabKeyIndicators />
       <MapGen />
-      <Stats app={app} />
       <StyledLoader
         visible={tilesLoaded || !avatarLoaded}
         label="Loading assets..."
@@ -311,6 +309,8 @@ export default function Playground() {
         <Adventures />
       ) : (
         <div>
+          <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+          <Stats app={app} />
           <Crosshair />
           <QuickMenu />
           <ZoneTitleCard />

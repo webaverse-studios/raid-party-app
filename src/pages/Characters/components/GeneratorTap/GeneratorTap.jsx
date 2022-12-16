@@ -6,25 +6,24 @@ import './style.css';
 
 import BorderButton from '../../../../components/Buttons/BorderButton';
 import {generateAvatar} from '../../../../api/sprite';
+import {device} from '../../../../theme/device';
 
 async function saveSprites(sprites) {
-  const len = sprites['data'].length;
   let count = 0;
-  for (let i = 0; i < sprites['data'].length; i++) {
-    const img = sprites['data'][i]['image'];
+  for (let i = 0; i < sprites.data.length; i++) {
+    const img = sprites.data[i].image;
     const blob = await fetch(img).then(r => r.blob());
     const reader = new FileReader();
     reader.readAsDataURL(blob);
-    reader.onloadend = function () {
+    reader.onloadend = () => {
       const base64data = reader.result;
-      sprites['data'][i]['image'] = base64data;
+      sprites.data[i].image = base64data;
       count++;
     };
   }
-  while (len !== count) {
+  while (sprites.data.length !== count) {
     await new Promise(resolve => setTimeout(resolve, 50));
   }
-  console.log('sprites:', sprites);
   localStorage.setItem('sprites', JSON.stringify(sprites));
 }
 
@@ -39,11 +38,9 @@ function loadSprites() {
       return {data: []};
     }
 
-    console.log('saved:', saved);
     parsed = JSON.parse(saved);
-    for (let i = 0; i < parsed['data'].length; i++) {
-      console.log(parsed['data'][i]);
-      const img = parsed['data'][i]['image'];
+    for (let i = 0; i < parsed.data.length; i++) {
+      const img = parsed.data[i].image;
       const byteString = atob(img.split(',')[1]);
       const mimeString = img.split(',')[0].split(':')[1].split(';')[0];
       const ab = new ArrayBuffer(byteString.length);
@@ -53,38 +50,13 @@ function loadSprites() {
       }
       const blob = new Blob([ab], {type: mimeString});
       const url = URL.createObjectURL(blob);
-      parsed['data'][i]['image'] = url;
+      parsed.data[i].image = url;
     }
   } catch (error) {
     console.warn('Error loading rooms from local storage.');
   }
-
-  console.log('parsed:', parsed);
   return parsed;
 }
-
-const PreRolledTempData = [
-  {
-    id: 'a',
-    image: '',
-    name: 'a',
-  },
-  {
-    id: 'b',
-    image: '',
-    name: 'b',
-  },
-  {
-    id: 'c',
-    image: '',
-    name: 'c',
-  },
-  {
-    id: 'd',
-    image: '',
-    name: 'd',
-  },
-];
 
 export default function GeneratorTap() {
   const [tabIndex, setTabIndex] = useState(0);
@@ -132,8 +104,6 @@ export default function GeneratorTap() {
       setPreRolledSprites(sprites.data);
     }
   }, [tabIndex]);
-
-  console.log(preRolledSprites);
 
   return (
     <Tabs>
@@ -232,6 +202,10 @@ const TabPanel = styled.div`
   border: 0.4em solid #e0cbab;
   box-shadow: 0px 1.2em 0px rgba(0, 0, 0, 0.14);
   border-radius: 1.2em;
+  @media ${device.pad} {
+    flex-direction: column;
+    align-items: center;
+  }
 `;
 
 const TabPanelFooter = styled.div`

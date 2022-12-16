@@ -1,17 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {motion} from 'framer-motion';
 
-export default function RaiseFadeAnimation({
-  children,
-  className,
-  delay = 5000,
-}) {
+export default function RaiseFadeAnimation({children, className, delay = 0.5}) {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
       setVisible(true);
-    }, delay);
+    }, delay * 1000);
   }, []);
 
   return (

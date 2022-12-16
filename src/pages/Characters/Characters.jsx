@@ -13,10 +13,10 @@ export default function Characters() {
   return (
     <Holder>
       <Title />
-      <RaiseFadeAnimation delay={2500}>
+      <RaiseFadeAnimation delay={3}>
         <GeneratorTap />
       </RaiseFadeAnimation>
-      <RaiseFadeAnimation delay={3000}>
+      <RaiseFadeAnimation delay={3.7}>
         <ShadowButton
           title="Next"
           onClick={() => {
@@ -35,10 +35,12 @@ const Holder = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10em;
+  gap: 5em;
   background-color: #2c2539;
   background-image: url('/images/rp/sprite-gen/bg.svg');
   background-size: cover;
   background-repeat: no-repeat;
   padding: 12em 1em 1em 1em;
+  overflow: hidden;
+  overflow-y: auto;
 `;

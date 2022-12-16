@@ -26,9 +26,11 @@ const Holder = styled.div`
   flex-direction: column;
   padding: 0.2em;
   transition: all 0.2s ease-out;
+  cursor: pointer;
   &:hover {
     background: #fcf0cd;
     padding-top: 0.4em;
+    border-color: #475f74;
   }
 `;
 

@@ -21,7 +21,7 @@ export default function Title() {
         stiffness: 350,
         // mass: 3,
         // damping: 1,
-        delay: 0.6,
+        delay: 0.5,
       }}
       initial="init"
       animate="show"
@@ -53,4 +53,7 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   transform: translateX(-50%);
+  > span {
+    width: max-content;
+  }
 `;

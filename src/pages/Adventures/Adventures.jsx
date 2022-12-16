@@ -1,9 +1,10 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {AppContext} from '../../App';
-import ShadowButton from '../../components/Buttons/ShadowButton';
 import Card from './components/Card';
 import {MiddleContainer} from '../../components/Containers';
+import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
+import Header from './components/Header';
 
 const ADVENTURES_DATA = [
   {
@@ -47,28 +48,22 @@ export default function Adventures() {
   const {setPageIndex} = useContext(AppContext);
   return (
     <Holder>
-      <Header>
-        <ShadowButton
-          icon="/images/rp/back.svg"
-          onClick={() => {
-            setPageIndex(0);
-          }}
-        />
-        <ShadowButton title="Create New" onClick={() => {}} />
-      </Header>
-      <MiddleContainer>
-        <Cards>
-          {ADVENTURES_DATA.map((d, index) => (
-            <Card
-              key={index}
-              data={d}
-              onClick={() => {
-                setPageIndex(2);
-              }}
-            />
-          ))}
-        </Cards>
-      </MiddleContainer>
+      <Header />
+      <RaiseFadeAnimation delay={0.6}>
+        <MiddleContainer>
+          <Cards>
+            {ADVENTURES_DATA.map((d, index) => (
+              <Card
+                key={index}
+                data={d}
+                onClick={() => {
+                  setPageIndex(2);
+                }}
+              />
+            ))}
+          </Cards>
+        </MiddleContainer>
+      </RaiseFadeAnimation>
     </Holder>
   );
 }
@@ -76,15 +71,7 @@ export default function Adventures() {
 const Holder = styled.div`
   position: relative;
   width: 100%;
-  height: 100%;
   background-color: #30404e;
-`;
-
-const Header = styled.div`
-  background-color: #4e727d;
-  display: flex;
-  justify-content: space-between;
-  padding: 1.5em;
 `;
 
 const Cards = styled.div`
@@ -92,5 +79,4 @@ const Cards = styled.div`
   gap: 1em;
   flex-wrap: wrap;
   margin-top: 4em;
-  cursor: pointer;
 `;

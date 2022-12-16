@@ -48,6 +48,7 @@ const GlobalStyle = createGlobalStyle`
     touch-action: pan-x pan-y;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: #30404e;
 
     --color: #ec407a;
     --color2: #ffa726;
@@ -65,13 +66,12 @@ const GlobalStyle = createGlobalStyle`
   }
 
   *::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #00000022;
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: none;
-    outline: 1px solid slategrey;
-    z-index: 1;
+    background-color: #6a6c8d;
+    border-radius: 10px;
   }
 
   iframe {
@@ -85,7 +85,7 @@ const GlobalStyle = createGlobalStyle`
 
 const MobileContainer = styled(Div100vh)`
   width: 100vw;
-  font-size: 0.9em;
+  font-size: 0.8em;
 `;
 
 const DesktopContainer = styled.div`
@@ -98,9 +98,8 @@ const DesktopContainer = styled.div`
   @media ${device.pad} {
     font-size: 0.9em;
   }
-
-  @media (max-width: 768px) {
-    height: auto;
+  @media ${device.mobileL} {
+    font-size: 0.8em;
   }
 `;
 

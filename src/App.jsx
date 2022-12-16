@@ -6,15 +6,13 @@ import ThemeProvider from './theme/ThemeProvider';
 import sceneNames from '../scenes/scenes.json';
 import {parseQuery} from '../util.js';
 import Webaverse from '../webaverse.js';
+import {world} from '../world';
 
 import {AccountContext} from './hooks/web3AccountProvider';
 import {ChainContext} from './hooks/chainProvider';
 
 import Characters from './pages/Characters';
-import Adventures from './pages/Adventures';
 import Playground from './pages/Playground';
-import metaversefile from '../metaversefile-api.js';
-import {world} from '../world';
 
 export const getCurrentSceneSrc = () => {
   const q = parseQuery(window.location.search);

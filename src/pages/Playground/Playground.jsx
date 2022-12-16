@@ -114,6 +114,8 @@ const Canvas = ({app}) => {
   return <StyledCanvas domhover={domHover} ref={canvasRef} />;
 };
 
+const localPlayer = metaversefile.useLocalPlayer();
+
 export default function Playground() {
   const {
     uiMode,
@@ -135,7 +137,7 @@ export default function Playground() {
     setTilesLoaded,
   } = useContext(AppContext);
 
-  const localPlayer = metaversefile.useLocalPlayer();
+  const [openAdventures, setOpenAdventures] = useState(false);
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -254,8 +256,6 @@ export default function Playground() {
   }, []);
 
   useEffect(_loadUrlState, []);
-
-  const [openAdventures, setOpenAdventures] = useState(false);
 
   useEffect(() => {
     localPlayer.addEventListener('update_adventures', e => {

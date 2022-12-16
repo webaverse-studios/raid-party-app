@@ -139,8 +139,8 @@ export default class Dungeon {
     return result;
   }
 
-  async regenerateMap() {
-    await generateTiles(this.biomeType, this.biomeInfo);
+  async regenerateMap(type, info) {
+    await generateTiles(type, info);
 
     const tiles = Textures.tilesTextures(this.assets);
     const props = Textures.propsTextures(this.assets);
@@ -159,7 +159,7 @@ export default class Dungeon {
   async waitForLoad() {
     document.addEventListener('keydown', e => {
       if (e.key == 'u') {
-        this.regenerateMap();
+        this.regenerateMap(this.biomeType, this.biomeInfo);
       }
     });
 

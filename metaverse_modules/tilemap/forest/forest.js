@@ -910,21 +910,6 @@ export default function generateForest(
     }
   }
 
-  //get a random yx inside with 0
-  function getRandomYX() {
-    let yx = [];
-    while (true) {
-      const y = Math.floor(Math.random() * TILE_AMOUNT);
-      const x = Math.floor(Math.random() * TILE_AMOUNT);
-      if (mapArr[y][x] === 0) {
-        yx = [y, x];
-        break;
-      }
-    }
-    return yx;
-  }
-
-  //get a random yx inside with 0 in the middle of the map
   function getRandomYXMiddle() {
     let yx = [];
     while (true) {

@@ -21,6 +21,7 @@ const {
 } = metaversefile;
 
 export default e => {
+  let starting_biome = 'forest';
   console.log('SPAWNING TILEMAP APP');
   const prompts = [
     'Unicorn Forest',
@@ -49,6 +50,28 @@ export default e => {
   let forest = null;
   let dungeon = null;
 
+  document.addEventListener('keydown', async e => {
+    if (e.key == 'x') {
+      console.log('regenerating tiles');
+      let isForest = false;
+      let biomeInfo = '';
+      let biomeType = '';
+
+      while (!isForest) {
+        const rndPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+        biomeInfo = (await getBiomeInfo(rndPrompt)).trim();
+        biomeType = (await getBiomeType(rndPrompt)).trim();
+        isForest = biomeType === starting_biome;
+      }
+
+      if (forest) {
+        forest.regenerateWithPrompt(biomeInfo, biomeType);
+      } else if (dungeon) {
+        dungeon.regenerateMap(biomeInfo, biomeType);
+      }
+    }
+  });
+
   // locals
 
   let frameCb = null;
@@ -60,6 +83,7 @@ export default e => {
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
       const biomeType = (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
+      starting_biome = biomeType;
 
       if (biomeType === 'forest') {
         //Get the biome information from the prompt

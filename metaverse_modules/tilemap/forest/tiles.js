@@ -32,6 +32,10 @@ export default class Tiles extends THREE.Object3D {
     });
   }
 
+  regenerateWithPrompt(info, type) {
+    this.regenerateTiles(this.tempTiles, info, type);
+  }
+
   loadTiles(type, length) {
     const res = [];
 

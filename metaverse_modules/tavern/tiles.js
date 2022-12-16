@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import physicsManager from '../../physics-manager';
 import AssetManager from './asset-manager';
 
 // this file's base url
@@ -9,14 +10,18 @@ const TILE_AMOUNT = 25;
 
 export default class Tiles extends THREE.Object3D {
   app = null;
+  physics = null;
 
-  constructor(app) {
+  constructor(app, physics) {
     super();
     this.name = 'tiles';
     this.app = app;
+    this.physics = physics;
   }
 
   meshes = [];
+  colliders = [];
+
   loadTiles(length) {
     const res = [];
 
@@ -35,13 +40,35 @@ export default class Tiles extends THREE.Object3D {
     for (let i = 0; i < this.meshes.length; i++) {
       this.meshes[i].visible = false;
     }
+    for (let i = 0; i < this.colliders.length; i++) {
+      this.physics.removeGeometry(this.colliders[i]);
+    }
   };
 
   unclearMap = () => {
     for (let i = 0; i < this.meshes.length; i++) {
       this.meshes[i].visible = true;
     }
+    this.addColliders();
   };
+
+  addCollider(y, x, setTrigger = false) {
+    const physicsObject = this.physics.addBoxGeometry(
+      new THREE.Vector3(
+        (y - TILE_AMOUNT / 2) * TILE_SIZE,
+        0,
+        (x - TILE_AMOUNT / 2) * TILE_SIZE,
+      ),
+      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
+      new THREE.Vector3(0.5, 0.5, 0.5),
+      false,
+    );
+    if (setTrigger) {
+      physicsManager.getScene().setTrigger(physicsObject.physicsId);
+    }
+    this.app.add(physicsObject);
+    this.colliders.push(physicsObject);
+  }
 
   generate(assetManager) {
     const meshes = [];
@@ -67,6 +94,23 @@ export default class Tiles extends THREE.Object3D {
         );
         this.meshes.push(cloneMesh);
         this.add(cloneMesh);
+      }
+    }
+
+    this.addColliders();
+  }
+
+  addColliders() {
+    for (let z = 0; z < TILE_AMOUNT; z++) {
+      for (let x = 0; x < TILE_AMOUNT; x++) {
+        if (
+          z === 0 ||
+          z === TILE_AMOUNT - 1 ||
+          x === 0 ||
+          x === TILE_AMOUNT - 1
+        ) {
+          this.addCollider(x, z);
+        }
       }
     }
   }

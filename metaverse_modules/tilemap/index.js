@@ -231,6 +231,7 @@ export default e => {
           ]);
         };
         await _waitForLoad();
+        app.setComponent('spot', forest.spot);
       } else {
         dungeon = new Dungeon(app, physics, localPlayer, biomeInfo, biomeType);
         app.add(dungeon.pivot);
@@ -241,6 +242,8 @@ export default e => {
           await Promise.all([dungeon.waitForLoad()]);
         };
         await _waitForLoad();
+        console.log('dungeon.spot:', dungeon.spot);
+        app.setComponent('spot', dungeon.spot);
 
         // frame handling
         frameCb = () => {

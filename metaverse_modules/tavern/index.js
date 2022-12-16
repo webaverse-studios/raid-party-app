@@ -47,11 +47,6 @@ export default e => {
         loading: true,
       });
 
-      localPlayer.position.set(0, startingY, 0);
-      localPlayer.characterPhysics.setPosition(localPlayer.position);
-      localPlayer.characterPhysics.reset();
-      localPlayer.updateMatrixWorld();
-
       generated = true;
       tiles.clearMap();
       console.log('spawning tilemap tiles:', tiles);
@@ -70,16 +65,29 @@ export default e => {
         new THREE.Vector3(1, 1, 1),
         [component],
       );
-      console.log(tilemapApp);
+      console.log('tilemapApp', tilemapApp);
+      const spot = tilemapApp.getComponent('spot')
+        ? tilemapApp.getComponent('spot')
+        : [0, 0];
+      localPlayer.position.set(spot[1], startingY, spot[0]);
+      localPlayer.characterPhysics.setPosition(localPlayer.position);
+      localPlayer.characterPhysics.reset();
+      localPlayer.updateMatrixWorld();
       localPlayer.dispatchEvent({
         type: 'loading_map',
         app,
         loading: false,
       });
     } else if (e.key == 'k') {
-      if (!generated || !tiles) {
+      if (!generated || !tiles || !tilemapApp) {
         return;
       }
+
+      localPlayer.dispatchEvent({
+        type: 'loading_map',
+        app,
+        loading: true,
+      });
 
       localPlayer.position.set(0, startingY, 0);
       localPlayer.characterPhysics.setPosition(localPlayer.position);
@@ -89,12 +97,18 @@ export default e => {
       metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
       tiles.unclearMap();
       generated = false;
+
+      localPlayer.dispatchEvent({
+        type: 'loading_map',
+        app,
+        loading: false,
+      });
     }
   });
   // initialization
   e.waitUntil(
     (async () => {
-      tiles = new Tiles(app);
+      tiles = new Tiles(app, physics);
       app.add(tiles);
 
       // load

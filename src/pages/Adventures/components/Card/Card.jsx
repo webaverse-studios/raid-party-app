@@ -32,7 +32,10 @@ export default function Card({data, className, onClick}) {
         <img src={data.preview} alt="" />
       </Preview>
       <Caption>
-        <Title>{data.name}</Title>
+        <div>
+          <Title>{data.name}</Title>
+          <Type>{data.type}</Type>
+        </div>
         <Time>{data.time}</Time>
       </Caption>
     </Holder>
@@ -40,8 +43,8 @@ export default function Card({data, className, onClick}) {
 }
 
 const Holder = styled(motion.li)`
-  width: 14em;
-  height: 10em;
+  width: 17em;
+  height: 12em;
   background: #f5e1b5;
   border: 5px solid #e1cda8;
   box-shadow: 0px 22px 0px rgba(0, 0, 0, 0.14);
@@ -73,17 +76,19 @@ const Caption = styled.div`
 `;
 
 const Title = styled.div`
-  font-style: normal;
   font-weight: 400;
-  font-size: 15px;
-  line-height: 156%;
+  font-size: 1em;
   color: rgba(56, 26, 21, 0.93);
 `;
 
+const Type = styled.div`
+  font-weight: 100;
+  font-size: 0.8em;
+  color: #988355;
+`;
+
 const Time = styled.div`
-  font-style: normal;
   font-weight: 400;
-  font-size: 11px;
-  line-height: 156%;
+  font-size: 0.7em;
   color: #988355;
 `;

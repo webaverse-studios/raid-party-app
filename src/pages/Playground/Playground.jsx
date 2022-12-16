@@ -262,8 +262,6 @@ export default function Playground() {
     // console.log('drag end', e);
   };
 
-  console.log(tilesLoaded, avatarLoaded);
-
   return (
     <Holder
       id="app"

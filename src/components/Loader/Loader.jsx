@@ -16,7 +16,7 @@ export default function Loader({
         <Holder
           {...props}
           className={className}
-          initial={{opacity: 0, y: -30}}
+          initial={{opacity: 1, y: 0}}
           animate={{opacity: 1, y: 0}}
           exit={{opacity: 0, y: -30}}
           transition={{

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useContext} from 'react';
 import styled from 'styled-components';
 
 import game from '../../../game';
@@ -34,8 +34,15 @@ import {ClaimsNotification} from '../../components/ClaimsNotification.jsx';
 import {DomRenderer} from '../../components/DomRenderer.jsx';
 import {GrabKeyIndicators} from '../../components/GrabKeyIndicators';
 import Modals from '../../components/modals';
+import Loader from '../../components/Loader';
 
-import {getCurrentRoom, getCurrentSceneSrc, useWebaverseApp} from '../../App';
+import {
+  AppContext,
+  getCurrentRoom,
+  getCurrentSceneSrc,
+  useWebaverseApp,
+} from '../../App';
+import metaversefile from '../../../metaversefile-api';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -120,6 +127,9 @@ export default function Playground() {
   const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
   const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
   const [apps, setApps] = useState(world.appManager.getApps().slice());
+  const {avatarLoaded, setAvatarLoaded} = useContext(AppContext);
+  const {tilesLoaded, setTilesLoaded} = useContext(AppContext);
+  const localPlayer = metaversefile.useLocalPlayer();
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -132,6 +142,12 @@ export default function Playground() {
     const roomName = getCurrentRoom();
     setSelectedRoom(roomName);
   };
+
+  useEffect(() => {
+    localPlayer.addEventListener('loading_map', e => {
+      setTilesLoaded(e.loading);
+    });
+  }, []);
 
   useEffect(() => {
     if (
@@ -246,6 +262,8 @@ export default function Playground() {
     // console.log('drag end', e);
   };
 
+  console.log(tilesLoaded, avatarLoaded);
+
   return (
     <Holder
       id="app"
@@ -280,6 +298,11 @@ export default function Playground() {
       <DragAndDrop />
       <GrabKeyIndicators />
       <Stats app={app} />
+      <StyledLoader
+        visible={tilesLoaded || !avatarLoaded}
+        label="Loading assets..."
+        size={80}
+      />
     </Holder>
   );
 }
@@ -297,4 +320,9 @@ const StyledCanvas = styled.canvas`
   width: 100%;
   height: 100%;
   pointer-events: ${props => (props.domhover ? 'none' : 'auto')};
+`;
+
+const StyledLoader = styled(Loader)`
+  background-color: #2c293d;
+  z-index: 99999;
 `;

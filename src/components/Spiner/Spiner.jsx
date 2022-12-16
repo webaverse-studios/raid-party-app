@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, {keyframes} from 'styled-components';
 
-export default function Spiner({size = 50, color = '#ff0000'}) {
+export default function Spiner({size = 50, color = '#a984a9'}) {
   return (
     <Holder size={size}>
       <Spin viewBox="0 0 50 50">

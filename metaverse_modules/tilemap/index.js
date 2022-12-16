@@ -22,23 +22,6 @@ const {
 
 export default e => {
   console.log('SPAWNING TILEMAP APP');
-  const prompts = [
-    'Unicorn Forest',
-    'Icy Forest',
-    'Haunted Forest',
-    "Wizard's Forest",
-    'Rainbow Forest',
-    'Dark Forest',
-    'Blazing Forest',
-    'Unicorn Dungeon',
-    'Icy Dungeon',
-    'Haunted Dungeon',
-    "Wizard's Dungeon",
-    'Rainbow Dungeon',
-    'Dark Dungeon',
-    'Desert Forest',
-    'Blazing Dungeon',
-  ];
 
   const app = useApp();
   const camera = useCamera();
@@ -56,13 +39,14 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+      const promptInfo = JSON.parse(localStorage.getItem('adventure'));
+      const prompt = promptInfo.name + ' ' + promptInfo.type;
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
       const biomeType = (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
 
       if (biomeType === 'forest') {
-        //Get the biome information from the prompt
+        // Get the biome information from the prompt
         const biome = {
           name: 'forest',
           tiles: [
@@ -104,7 +88,7 @@ export default e => {
           ],
         };
 
-        //Update the tile names of the selected biome based on the prompt
+        // Update the tile names of the selected biome based on the prompt
         for (let i = 0; i < biome.tiles.length; i++) {
           biome.tiles[i] = biomeInfo.trim() + ' ' + biome.tiles[i];
         }
@@ -117,7 +101,7 @@ export default e => {
           textures[biome.tiles[i]] = [];
         }
 
-        //generate the new tiles
+        // generate the new tiles
         const start = new Date();
         let houseDone = false;
         let pathImg = null;
@@ -153,7 +137,7 @@ export default e => {
                 textures[biome.tiles[19]].push(imgs[8]);
               });
             } else {
-              let prompt = biome.tiles[i];
+              const prompt = biome.tiles[i];
 
               if (prompt.includes('path')) {
                 if (pathImg) {

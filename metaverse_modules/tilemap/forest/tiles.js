@@ -19,6 +19,7 @@ export default class Tiles extends THREE.Object3D {
   allMeshes = [];
   colliders = [];
   biomeInfo = '';
+  cMeshes = [];
   spot = [0, 0];
 
   constructor() {
@@ -190,6 +191,27 @@ export default class Tiles extends THREE.Object3D {
       '-',
       info,
     );
+
+    this.generateMapFull(meshes, data, info, physics, app, localPlayer);
+  }
+
+  async generateMapFull(meshes, data, info, physics, app, localPlayer) {
+    if (this.colliders) {
+      this.colliders.forEach(collider => {
+        physics.removeGeometry(collider);
+        app.remove(collider);
+      });
+      this.colliders = [];
+    }
+    if (this.cMeshes) {
+      this.cMeshes.forEach(cMesh => {
+        this.remove(cMesh);
+      });
+      this.cMeshes = [];
+    }
+
+    console.log('SPAWNING MAP:');
+
     const output = generateForest(
       meshes,
       data[(info + ' deep forest').trim()],
@@ -208,12 +230,23 @@ export default class Tiles extends THREE.Object3D {
       physics,
       app,
       localPlayer,
+      async () => {
+        await this.generateMapFull(
+          meshes,
+          data,
+          info,
+          physics,
+          app,
+          localPlayer,
+        );
+      },
     );
-    output.meshes.map(f => this.add(f));
+    output.meshes.map(f => {
+      this.add(f);
+      this.cMeshes.push(f);
+    });
     this.allMeshes = output.allMeshes;
 
-    const timeDiff = new Date() - start;
-    console.log('time ran:', timeDiff);
     this.colliders = output.colliders;
     this.spot = output.spot;
   }

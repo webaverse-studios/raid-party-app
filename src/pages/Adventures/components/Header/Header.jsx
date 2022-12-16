@@ -21,7 +21,42 @@ export default function Header() {
           });
         }}
       />
-      <ShadowButton title="Create New" onClick={() => {}} />
+      <ShadowButton
+        title="Create New"
+        onClick={() => {
+          const prompts = [
+            'Unicorn Forest',
+            'Icy Forest',
+            'Haunted Forest',
+            "Wizard's Forest",
+            'Rainbow Forest',
+            'Dark Forest',
+            'Blazing Forest',
+            'Unicorn Dungeon',
+            'Icy Dungeon',
+            'Haunted Dungeon',
+            "Wizard's Dungeon",
+            'Rainbow Dungeon',
+            'Dark Dungeon',
+            'Desert Forest',
+            'Blazing Dungeon',
+          ];
+          const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+
+          console.log('opening adventure:', prompt);
+
+          localPlayer.dispatchEvent({
+            type: 'update_adventures',
+            app,
+            open_adventures: false,
+          });
+          localPlayer.dispatchEvent({
+            type: 'enter_adventure',
+            app,
+            prompt: prompt,
+          });
+        }}
+      />
     </Holder>
   );
 }

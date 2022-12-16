@@ -259,7 +259,7 @@ export default class Dungeon {
             type: id,
             layer: TileLayer.tiles,
           };
-          sprite.position.set(x * TILE_SIZE, 0.05, y * TILE_SIZE);
+          sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
           const oldPos = sprite.position;
           this.group.add(sprite);
           sprite.updateMatrixWorld();
@@ -295,6 +295,7 @@ export default class Dungeon {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
+        console.log('spawning propt:', id, 'at', x, y, '');
         if (id === 0) {
           continue;
         }

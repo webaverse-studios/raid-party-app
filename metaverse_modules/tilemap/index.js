@@ -32,6 +32,7 @@ export default e => {
 
   let forest = null;
   let dungeon = null;
+  const input_prompt = app.getComponent('prompt').prompt;
 
   document.addEventListener('keydown', async e => {
     if (e.key == 'x') {
@@ -62,8 +63,8 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      const promptInfo = JSON.parse(localStorage.getItem('adventure'));
-      const prompt = promptInfo.name + ' ' + promptInfo.type;
+      const prompt = input_prompt;
+      console.log('prompt', prompt);
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
       const biomeType = (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);

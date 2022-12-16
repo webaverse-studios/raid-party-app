@@ -1,4 +1,4 @@
-import React, {useState, useContext, createContext} from 'react';
+import React, {useState, useContext, createContext, useEffect} from 'react';
 import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
 
 import ThemeProvider from './theme/ThemeProvider';
@@ -13,6 +13,7 @@ import {ChainContext} from './hooks/chainProvider';
 import Characters from './pages/Characters';
 import Adventures from './pages/Adventures';
 import Playground from './pages/Playground';
+import metaversefile from '../metaversefile-api.js';
 
 export const getCurrentSceneSrc = () => {
   const q = parseQuery(window.location.search);
@@ -47,6 +48,7 @@ export const useWebaverseApp = (() => {
 
 export const App = () => {
   const app = useWebaverseApp();
+  const localPlayer = metaversefile.useLocalPlayer();
 
   const account = useContext(AccountContext);
   const chain = useContext(ChainContext);
@@ -87,8 +89,7 @@ export const App = () => {
           }}
         >
           {pageIndex === 0 && <Characters />}
-          {pageIndex === 1 && <Adventures />}
-          {pageIndex === 2 && <Playground />}
+          {pageIndex === 1 && <Playground />}
         </AppContext.Provider>
       </QueryClientProvider>
     </ThemeProvider>

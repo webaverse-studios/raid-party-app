@@ -43,6 +43,7 @@ import {
   useWebaverseApp,
 } from '../../App';
 import metaversefile from '../../../metaversefile-api';
+import Adventures from '../Adventures';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -249,6 +250,16 @@ export default function Playground() {
 
   useEffect(_loadUrlState, []);
 
+  const [openAdventures, setOpenAdventures] = useState(false);
+
+  useEffect(() => {
+    localPlayer.addEventListener('update_adventures', e => {
+      console.log('update_adventures', e, e.open_adventures);
+      setOpenAdventures(e.open_adventures);
+      console.log('openAdventures:', openAdventures);
+    });
+  }, []);
+
   //
 
   const onDragOver = e => {
@@ -269,17 +280,15 @@ export default function Playground() {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <Modals />
       <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
+      <Modals />
       <DomRenderer />
       <Canvas app={app} />
-      <Crosshair />
       <ClaimsNotification />
       <WorldObjectsList
         setSelectedApp={setSelectedApp}
         selectedApp={selectedApp}
       />
-      <PlayMode />
       <EditorMode
         selectedScene={selectedScene}
         setSelectedScene={setSelectedScene}
@@ -287,20 +296,28 @@ export default function Playground() {
         setSelectedRoom={setSelectedRoom}
       />
       <IoHandler />
-      <QuickMenu />
-      <ZoneTitleCard />
-      <MapGen />
-      <Quests />
       <LoadingBox />
       <FocusBar />
       <DragAndDrop />
       <GrabKeyIndicators />
+      <MapGen />
       <Stats app={app} />
       <StyledLoader
         visible={tilesLoaded || !avatarLoaded}
         label="Loading assets..."
         size={80}
       />
+      {openAdventures ? (
+        <Adventures />
+      ) : (
+        <div>
+          <Crosshair />
+          <QuickMenu />
+          <ZoneTitleCard />
+          <Quests />
+          <PlayMode />
+        </div>
+      )}
     </Holder>
   );
 }

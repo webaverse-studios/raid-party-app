@@ -10,37 +10,56 @@ import Card from './components/Card';
 
 const ADVENTURES_DATA = [
   {
-    name: 'Forest',
+    name: 'Haunt of the Nightmare Knight',
+    type: 'dungeon',
     preview: '/images/rp/adventure.jpg',
     time: '8h ago',
   },
   {
-    name: 'Dungeon',
+    name: 'Quarters of the Silver Morass',
+    type: 'dungeon',
     preview: '/images/rp/adventure.jpg',
     time: '10h ago',
   },
   {
-    name: 'Forest 1',
+    name: 'Haunt of the Shunned Giant',
+    type: 'dungeon',
     preview: '/images/rp/adventure.jpg',
     time: '12h ago',
   },
   {
-    name: 'Forest 2',
+    name: 'Cells of the Ruthless Monk',
+    type: 'dungeon',
     preview: '/images/rp/adventure.jpg',
     time: '13h ago',
   },
   {
-    name: 'Dungeon 1',
+    name: 'The Deadly Point',
+    type: 'dungeon',
     preview: '/images/rp/adventure.jpg',
     time: '15h ago',
   },
   {
-    name: 'Dungeon 2',
+    name: 'Bronze Spring Grove',
+    type: 'forest',
     preview: '/images/rp/adventure.jpg',
     time: '20h ago',
   },
   {
-    name: 'Dungeon 3',
+    name: 'Unique Field Timberland',
+    type: 'forest',
+    preview: '/images/rp/adventure.jpg',
+    time: '22h ago',
+  },
+  {
+    name: 'Deep Grove',
+    type: 'forest',
+    preview: '/images/rp/adventure.jpg',
+    time: '22h ago',
+  },
+  {
+    name: 'Lonely Grove',
+    type: 'forest',
     preview: '/images/rp/adventure.jpg',
     time: '22h ago',
   },
@@ -48,6 +67,7 @@ const ADVENTURES_DATA = [
 
 export default function Adventures() {
   const {setPageIndex} = useContext(AppContext);
+
   return (
     <Holder>
       <Header />
@@ -69,6 +89,7 @@ export default function Adventures() {
               key={index}
               data={d}
               onClick={() => {
+                localStorage.setItem('adventure', JSON.stringify(d));
                 setPageIndex(2);
               }}
             />

@@ -13,6 +13,7 @@ import {ChainContext} from './hooks/chainProvider';
 import Characters from './pages/Characters';
 import Adventures from './pages/Adventures';
 import Playground from './pages/Playground';
+import Loading from './pages/MapGen/Loading';
 
 export const getCurrentSceneSrc = () => {
   const q = parseQuery(window.location.search);
@@ -84,6 +85,7 @@ export const App = () => {
           {pageIndex === 0 && <Characters />}
           {pageIndex === 1 && <Adventures />}
           {pageIndex === 2 && <Playground />}
+          {<Loading />}
         </AppContext.Provider>
       </QueryClientProvider>
     </ThemeProvider>

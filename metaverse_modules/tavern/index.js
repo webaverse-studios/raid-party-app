@@ -20,6 +20,11 @@ export default e => {
   const procGenManager = useProcGenManager();
   const physics = usePhysics();
   const localPlayer = useLocalPlayer();
+  localPlayer.dispatchEvent({
+    type: 'loading_map',
+    app,
+    loading: true,
+  });
 
   // locals
 
@@ -35,6 +40,12 @@ export default e => {
       if (generated || !tiles) {
         return;
       }
+
+      localPlayer.dispatchEvent({
+        type: 'loading_map',
+        app,
+        loading: true,
+      });
 
       localPlayer.position.set(0, startingY, 0);
       localPlayer.characterPhysics.setPosition(localPlayer.position);
@@ -60,6 +71,11 @@ export default e => {
         [component],
       );
       console.log(tilemapApp);
+      localPlayer.dispatchEvent({
+        type: 'loading_map',
+        app,
+        loading: false,
+      });
     } else if (e.key == 'k') {
       if (!generated || !tiles) {
         return;
@@ -86,7 +102,11 @@ export default e => {
         await Promise.all([tiles.waitForLoad()]);
       };
       await _waitForLoad();
-
+      localPlayer.dispatchEvent({
+        type: 'loading_map',
+        app,
+        loading: false,
+      });
       // frame handling
       frameCb = () => {};
     })(),

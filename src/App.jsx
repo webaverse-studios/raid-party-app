@@ -14,6 +14,7 @@ import Characters from './pages/Characters';
 import Adventures from './pages/Adventures';
 import Playground from './pages/Playground';
 import metaversefile from '../metaversefile-api.js';
+import {world} from '../world';
 
 export const getCurrentSceneSrc = () => {
   const q = parseQuery(window.location.search);
@@ -48,7 +49,7 @@ export const useWebaverseApp = (() => {
 
 export const App = () => {
   const app = useWebaverseApp();
-  const localPlayer = metaversefile.useLocalPlayer();
+  const [apps, setApps] = useState(world.appManager.getApps().slice());
 
   const account = useContext(AccountContext);
   const chain = useContext(ChainContext);
@@ -70,8 +71,10 @@ export const App = () => {
             state,
             setState,
             app,
-            setSelectedApp,
+            apps,
+            setApps,
             selectedApp,
+            setSelectedApp,
             uiMode,
             setUIMode,
             account,

@@ -36,12 +36,7 @@ import {GrabKeyIndicators} from '../../components/GrabKeyIndicators';
 import Modals from '../../components/modals';
 import Loader from '../../components/Loader';
 
-import {
-  AppContext,
-  getCurrentRoom,
-  getCurrentSceneSrc,
-  useWebaverseApp,
-} from '../../App';
+import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
 
@@ -120,16 +115,26 @@ const Canvas = ({app}) => {
 };
 
 export default function Playground() {
-  const [state, setState] = useState({openedPanel: null});
-  const [uiMode, setUIMode] = useState('normal');
+  const {
+    uiMode,
+    setUIMode,
+    state,
+    setState,
+    selectedScene,
+    setSelectedScene,
+    selectedRoom,
+    setSelectedRoom,
+    selectedApp,
+    setSelectedApp,
+    app,
+    apps,
+    setApps,
+    avatarLoaded,
+    setAvatarLoaded,
+    tilesLoaded,
+    setTilesLoaded,
+  } = useContext(AppContext);
 
-  const app = useWebaverseApp();
-  const [selectedApp, setSelectedApp] = useState(null);
-  const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
-  const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
-  const [apps, setApps] = useState(world.appManager.getApps().slice());
-  const {avatarLoaded, setAvatarLoaded} = useContext(AppContext);
-  const {tilesLoaded, setTilesLoaded} = useContext(AppContext);
   const localPlayer = metaversefile.useLocalPlayer();
 
   const selectApp = (app, physicsId, position) => {

@@ -36,7 +36,7 @@ export default e => {
   console.log('startingY', startingY, localPlayer.position);
   let mapMenuIsOpen = false;
 
-  const generateMap = async prompt => {
+  const generateMap = async (prompt, is_pregenerated, prompt_id) => {
     localPlayer.dispatchEvent({
       type: 'loading_map',
       app,
@@ -57,6 +57,8 @@ export default e => {
       key: 'prompt',
       value: {
         prompt: prompt,
+        is_pregenerated: is_pregenerated,
+        prompt_id: prompt_id,
       },
     };
 
@@ -84,7 +86,7 @@ export default e => {
 
   localPlayer.addEventListener('enter_adventure', e => {
     console.log('enter_adventure', e, e.prompt);
-    generateMap(e.prompt);
+    generateMap(e.prompt, e.is_pregenerated, e.prompt_id);
   });
 
   document.addEventListener('keydown', async e => {

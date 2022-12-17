@@ -51,7 +51,16 @@ export default class Tiles extends THREE.Object3D {
     return res;
   }
 
-  generate(type, assetManager, textures, info, physics, app, localPlayer) {
+  generate(
+    type,
+    assetManager,
+    textures,
+    info,
+    physics,
+    app,
+    localPlayer,
+    _data,
+  ) {
     const meshes = {};
     const data = {};
 
@@ -192,10 +201,10 @@ export default class Tiles extends THREE.Object3D {
       info,
     );
 
-    this.generateMapFull(meshes, data, info, physics, app, localPlayer);
+    this.generateMapFull(meshes, data, info, physics, app, localPlayer, _data);
   }
 
-  async generateMapFull(meshes, data, info, physics, app, localPlayer) {
+  async generateMapFull(meshes, data, info, physics, app, localPlayer, _data) {
     if (this.colliders) {
       this.colliders.forEach(collider => {
         physics.removeGeometry(collider);
@@ -238,8 +247,10 @@ export default class Tiles extends THREE.Object3D {
           physics,
           app,
           localPlayer,
+          _data,
         );
       },
+      _data,
     );
     output.meshes.map(f => {
       this.add(f);
@@ -426,6 +437,7 @@ export default class Tiles extends THREE.Object3D {
     physics,
     app,
     localPlayer,
+    data,
   ) {
     this.tempTiles = tempTiles;
     this.biomeInfo = info;
@@ -458,6 +470,7 @@ export default class Tiles extends THREE.Object3D {
       physics,
       app,
       localPlayer,
+      data,
     );
   }
 }

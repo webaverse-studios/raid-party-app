@@ -7,6 +7,7 @@ import {
   generateImageCache,
   generateImageNew,
 } from './forest/request_manager.js';
+import Papa from 'papaparse';
 
 const {
   useApp,
@@ -50,7 +51,10 @@ export default e => {
 
   let forest = null;
   let dungeon = null;
-  const input_prompt = app.getComponent('prompt').prompt;
+  const promptComponent = app.getComponent('prompt');
+  const input_prompt = promptComponent.prompt;
+  const is_pregenerated = promptComponent.is_pregenerated;
+  const prompt_id = promptComponent.prompt_id;
 
   document.addEventListener('keydown', async e => {
     if (e.key == 'x') {
@@ -81,10 +85,29 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
+      let data = [];
+      if (is_pregenerated) {
+        console.log(is_pregenerated, prompt_id);
+        const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
+        const csv_url =
+          BASE_URL + `assets/${prompt_id === 1 ? 'desert' : 'desert'}.csv`;
+        const response = await fetch(csv_url);
+        const csv = await response.text();
+        data = Papa.parse(csv, {header: false}).data;
+        for (let i = 0; i < data.length; i++) {
+          for (let j = 0; j < data[i].length; j++) {
+            data[i][j] = parseInt(data[i][j].trim());
+          }
+        }
+        console.log(data);
+      }
+
       const prompt = input_prompt;
       console.log('prompt', prompt);
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
-      const biomeType = (await getBiomeType(prompt)).trim();
+      const biomeType = is_pregenerated
+        ? 'forest'
+        : (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
       starting_biome = biomeType;
 
@@ -144,96 +167,117 @@ export default e => {
           textures[biome.tiles[i]] = [];
         }
 
-        // generate the new tiles
         const start = new Date();
-        let houseDone = false;
-        let pathImg = null;
-        const maxCount = 14;
-        let currentTiles = 0;
-        for (let i = 0; i < biome.tiles.length; i++) {
-          for (let j = 0; j < 1; j++) {
-            if (biome.tiles[i].includes('tree')) {
-              generateImageNew(biomeInfo + ' tree').then(imgs => {
-                console.log('generating tree');
-                currentTiles++;
-                textures[biome.tiles[i]].push(imgs[0]);
-                textures[biome.tiles[i]].push(imgs[1]);
-              });
-            } else if (biome.tiles[i].includes('house')) {
-              if (houseDone) {
-                continue;
+        console.log('IS PREGENERATED:', is_pregenerated);
+        if (is_pregenerated == true) {
+          const unique_ids = [];
+          for (let i = 0; i < data.length; i++) {
+            for (let j = 0; j < data[i].length; j++) {
+              if (!unique_ids.includes(data[i][j])) {
+                unique_ids.push(data[i][j]);
               }
-
-              houseDone = true;
-              generateImageNew(biomeInfo + ' house').then(imgs => {
-                console.log('generating house');
-                currentTiles++;
-                console.log('images:', imgs.length);
-                textures[biome.tiles[11]].push(imgs[0]);
-                textures[biome.tiles[12]].push(imgs[1]);
-                textures[biome.tiles[13]].push(imgs[2]);
-                textures[biome.tiles[14]].push(imgs[3]);
-                textures[biome.tiles[15]].push(imgs[4]);
-                textures[biome.tiles[16]].push(imgs[5]);
-                textures[biome.tiles[17]].push(imgs[6]);
-                textures[biome.tiles[18]].push(imgs[7]);
-                textures[biome.tiles[19]].push(imgs[8]);
-              });
-            } else {
-              const prompt = biome.tiles[i];
-
-              if (prompt.includes('path')) {
-                if (pathImg) {
+            }
+          }
+          console.log('UNIQUE_IDS:', unique_ids);
+          for (let i = 0; i < 1; i++) {
+            const BASE_URL =
+              import.meta.url.replace(/(\/)[^\/\\]*$/, '$1') +
+              'assets/map1/sprite_0000.png';
+            for (let j = 0; j < biome.tiles.length; j++) {
+              textures[biome.tiles[i]].push(BASE_URL);
+            }
+          }
+        } else {
+          // generate the new tiles
+          let houseDone = false;
+          let pathImg = null;
+          const maxCount = 14;
+          let currentTiles = 0;
+          for (let i = 0; i < biome.tiles.length; i++) {
+            for (let j = 0; j < 1; j++) {
+              if (biome.tiles[i].includes('tree')) {
+                generateImageNew(biomeInfo + ' tree').then(imgs => {
+                  console.log('generating tree');
+                  currentTiles++;
+                  textures[biome.tiles[i]].push(imgs[0]);
+                  textures[biome.tiles[i]].push(imgs[1]);
+                });
+              } else if (biome.tiles[i].includes('house')) {
+                if (houseDone) {
                   continue;
                 }
 
-                pathImg = true;
-                generateImageCache('path misc', biomeType).then(img => {
-                  console.log('generating path');
+                houseDone = true;
+                generateImageNew(biomeInfo + ' house').then(imgs => {
+                  console.log('generating house');
                   currentTiles++;
-                  textures[biome.tiles[20]].push(img);
-                  textures[biome.tiles[21]].push(img);
-                  textures[biome.tiles[22]].push(img);
-                  textures[biome.tiles[23]].push(img);
-                  textures[biome.tiles[24]].push(img);
-                  textures[biome.tiles[25]].push(img);
-                  textures[biome.tiles[26]].push(img);
-                  textures[biome.tiles[27]].push(img);
-                  textures[biome.tiles[28]].push(img);
-                  textures[biome.tiles[29]].push(img);
-                  textures[biome.tiles[30]].push(img);
-                  textures[biome.tiles[31]].push(img);
-                  textures[biome.tiles[32]].push(img);
-                  textures[biome.tiles[33]].push(img);
+                  console.log('images:', imgs.length);
+                  textures[biome.tiles[11]].push(imgs[0]);
+                  textures[biome.tiles[12]].push(imgs[1]);
+                  textures[biome.tiles[13]].push(imgs[2]);
+                  textures[biome.tiles[14]].push(imgs[3]);
+                  textures[biome.tiles[15]].push(imgs[4]);
+                  textures[biome.tiles[16]].push(imgs[5]);
+                  textures[biome.tiles[17]].push(imgs[6]);
+                  textures[biome.tiles[18]].push(imgs[7]);
+                  textures[biome.tiles[19]].push(imgs[8]);
                 });
               } else {
-                console.log('prompt:', prompt, typeof prompt);
-                if (
-                  prompt.includes('bush') ||
-                  prompt.includes('flower') ||
-                  prompt.includes('rock') ||
-                  prompt.includes('torch')
-                ) {
-                  generateImageNew(prompt).then(img => {
-                    console.log('generating biome.tiles[i]', biome.tiles[i]);
+                const prompt = biome.tiles[i];
+
+                if (prompt.includes('path')) {
+                  if (pathImg) {
+                    continue;
+                  }
+
+                  pathImg = true;
+                  generateImageCache('path misc', biomeType).then(img => {
+                    console.log('generating path');
                     currentTiles++;
-                    textures[biome.tiles[i]].push(img);
+                    textures[biome.tiles[20]].push(img);
+                    textures[biome.tiles[21]].push(img);
+                    textures[biome.tiles[22]].push(img);
+                    textures[biome.tiles[23]].push(img);
+                    textures[biome.tiles[24]].push(img);
+                    textures[biome.tiles[25]].push(img);
+                    textures[biome.tiles[26]].push(img);
+                    textures[biome.tiles[27]].push(img);
+                    textures[biome.tiles[28]].push(img);
+                    textures[biome.tiles[29]].push(img);
+                    textures[biome.tiles[30]].push(img);
+                    textures[biome.tiles[31]].push(img);
+                    textures[biome.tiles[32]].push(img);
+                    textures[biome.tiles[33]].push(img);
                   });
                 } else {
-                  generateImageCache(prompt, biomeType).then(img => {
-                    console.log('generating biome.tiles[i]', biome.tiles[i]);
-                    currentTiles++;
-                    textures[biome.tiles[i]].push(img);
-                  });
+                  console.log('prompt:', prompt, typeof prompt);
+                  if (
+                    prompt.includes('bush') ||
+                    prompt.includes('flower') ||
+                    prompt.includes('rock') ||
+                    prompt.includes('torch')
+                  ) {
+                    generateImageNew(prompt).then(img => {
+                      console.log('generating biome.tiles[i]', biome.tiles[i]);
+                      currentTiles++;
+                      textures[biome.tiles[i]].push(img);
+                    });
+                  } else {
+                    generateImageCache(prompt, biomeType).then(img => {
+                      console.log('generating biome.tiles[i]', biome.tiles[i]);
+                      currentTiles++;
+                      textures[biome.tiles[i]].push(img);
+                    });
+                  }
                 }
               }
             }
           }
-        }
 
-        while (currentTiles < maxCount) {
-          console.log('current tiles:', currentTiles, '/', maxCount);
-          await new Promise(resolve => setTimeout(resolve, 50));
+          while (currentTiles < maxCount) {
+            console.log('current tiles:', currentTiles, '/', maxCount);
+            await new Promise(resolve => setTimeout(resolve, 50));
+          }
         }
 
         console.log('generated images:', textures);
@@ -254,6 +298,7 @@ export default e => {
               physics,
               app,
               localPlayer,
+              data,
             ),
           ]);
         };

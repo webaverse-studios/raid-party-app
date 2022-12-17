@@ -106,6 +106,8 @@ export default function Adventures() {
                   type: 'enter_adventure',
                   app,
                   prompt: prompt,
+                  is_pregenerated: true,
+                  prompt_id: index,
                 });
               }}
             />

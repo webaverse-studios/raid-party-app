@@ -29,7 +29,9 @@ export default function generateForest(
   app,
   localPlayer,
   moveMap,
+  _data,
 ) {
+  console.log('_DATA:', _data, _meshes);
   let generatingMap = false;
   app.addEventListener('triggerin', async e => {
     if (
@@ -86,7 +88,25 @@ export default function generateForest(
   const range = 100;
 
   const meshes = [];
-  run();
+  if (_data && _data.length > 0) {
+    console.log('spawning precombiled map');
+    for (let i = 0; i < _data.length; i++) {
+      mapArr[i] = {};
+      for (let j = 0; j < _data[i].length; j++) {
+        console.log(_meshes);
+        const mesh = _meshes[Object.keys(_meshes)[0]].clone();
+        mesh.position.set(
+          (j - TILE_AMOUNT / 2) * TILE_SIZE,
+          0.05,
+          (i - TILE_AMOUNT / 2) * TILE_SIZE,
+        );
+        mapArr[i][j] = 0;
+        meshes.push(mesh);
+      }
+    }
+  } else {
+    run();
+  }
 
   function run() {
     init(0);
@@ -949,7 +969,12 @@ export default function generateForest(
     addedAroundColliders = true;
   }
 
-  const spot = getRandomYXMiddle();
+  let spot = [0, 0];
+
+  try {
+    spot = getRandomYXMiddle();
+  } catch (e) {}
+
   return {
     meshes: meshes,
     allMeshes: allMeshes,

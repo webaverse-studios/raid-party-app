@@ -39,6 +39,7 @@ import Loader from '../../components/Loader';
 import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
+import ShadowButton from '../../components/Buttons/ShadowButton';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -285,8 +286,6 @@ export default function Playground() {
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
     >
-      <Modals />
-      <DomRenderer />
       <Canvas app={app} />
       <ClaimsNotification />
       <WorldObjectsList
@@ -306,11 +305,19 @@ export default function Playground() {
         visible={tilesLoaded || !avatarLoaded}
         label="Loading assets..."
         size={80}
+      />{' '}
+      <ShadowButton
+        title="Next"
+        onClick={() => {
+          console.log('dada');
+        }}
       />
       {openAdventures ? (
         <Adventures />
       ) : (
         <div>
+          <DomRenderer />
+          <Modals />
           <IoHandler />
           <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
           <Stats app={app} />

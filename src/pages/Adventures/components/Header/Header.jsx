@@ -52,6 +52,7 @@ export default function Header() {
             type: 'enter_adventure',
             app,
             prompt: prompt,
+            is_pregenerated: true,
           });
         }}
       />

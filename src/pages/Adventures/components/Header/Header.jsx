@@ -5,7 +5,7 @@ import metaversefile from '../../../../../metaversefile-api.js';
 
 import {AppContext} from '../../../../App';
 
-export default function Header() {
+export default function Header(props) {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app} = useContext(AppContext);
 
@@ -22,37 +22,9 @@ export default function Header() {
         }}
       />
       <ShadowButton
-        title="Create New"
+        title={props.showCards ? 'Create New' : 'Back'}
         onClick={() => {
-          const prompts = [
-            'Unicorn Forest',
-            'Icy Forest',
-            'Haunted Forest',
-            "Wizard's Forest",
-            'Rainbow Forest',
-            'Dark Forest',
-            'Blazing Forest',
-            'Unicorn Dungeon',
-            'Icy Dungeon',
-            'Haunted Dungeon',
-            "Wizard's Dungeon",
-            'Rainbow Dungeon',
-            'Dark Dungeon',
-            'Desert Forest',
-            'Blazing Dungeon',
-          ];
-          const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-
-          localPlayer.dispatchEvent({
-            type: 'update_adventures',
-            app,
-            open_adventures: false,
-          });
-          localPlayer.dispatchEvent({
-            type: 'enter_adventure',
-            app,
-            prompt: prompt,
-          });
+          props.changeMenu();
         }}
       />
     </Holder>

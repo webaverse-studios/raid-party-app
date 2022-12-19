@@ -6,7 +6,7 @@ import metaversefile from '../../../metaversefile-api';
 
 export default function Toolbar() {
   const localPlayer = metaversefile.useLocalPlayer();
-  const {setOpenAdventures} = useContext(AppContext);
+  const {app, setOpenAdventures} = useContext(AppContext);
 
   return (
     <Holder>

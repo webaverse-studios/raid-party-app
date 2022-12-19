@@ -192,13 +192,13 @@ export default function Adventures() {
             />
             <TabPanelFooter>
               <BorderButton
-                icon="/images/rp/sprite-gen/wizard.svg"
+                icon="/images/rp/wizard.svg"
                 title="Generate"
                 onClick={createNew}
                 loading={false}
               />
               <BorderButton
-                icon="/images/rp/sprite-gen/wizard.svg"
+                icon="/images/rp/wizard.svg"
                 title="Randomize"
                 onClick={setRandomPrompt}
                 loading={false}

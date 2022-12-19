@@ -43,7 +43,7 @@ const Holder = styled(motion.div)`
 
 const Content = styled.div`
   position: relative;
-  background-image: url('/images/rp/sprite-gen/title-bg.svg');
+  background-image: url('/images/rp/title-bg.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;

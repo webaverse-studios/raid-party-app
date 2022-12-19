@@ -37,7 +37,7 @@ const Holder = styled.div`
   align-items: center;
   gap: 5em;
   background-color: #2c2539;
-  background-image: url('/images/rp/sprite-gen/bg.svg');
+  background-image: url('/images/rp/bg.svg');
   background-size: cover;
   background-repeat: no-repeat;
   padding: 12em 1em 1em 1em;

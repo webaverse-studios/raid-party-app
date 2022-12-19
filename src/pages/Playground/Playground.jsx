@@ -39,6 +39,7 @@ import Loader from '../../components/Loader';
 import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
+import Toolbar from '../../components/Toolbar';
 
 const _startApp = async (weba, canvas) => {
   weba.setContentLoaded();
@@ -135,9 +136,9 @@ export default function Playground() {
     setAvatarLoaded,
     tilesLoaded,
     setTilesLoaded,
+    openAdventures,
+    setOpenAdventures,
   } = useContext(AppContext);
-
-  const [openAdventures, setOpenAdventures] = useState(false);
 
   const selectApp = (app, physicsId, position) => {
     game.setMouseSelectedObject(app, physicsId, position);
@@ -259,13 +260,9 @@ export default function Playground() {
 
   useEffect(() => {
     localPlayer.addEventListener('update_adventures', e => {
-      console.log('update_adventures', e, e.open_adventures);
       setOpenAdventures(e.open_adventures);
-      console.log('openAdventures:', openAdventures);
     });
   }, []);
-
-  //
 
   const onDragOver = e => {
     e.preventDefault();
@@ -296,6 +293,7 @@ export default function Playground() {
       <Quests />
       <GrabKeyIndicators />
       <FocusBar />
+      <Toolbar />
       {openAdventures ? <Adventures /> : <IoHandler />}
       <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
     </Holder>

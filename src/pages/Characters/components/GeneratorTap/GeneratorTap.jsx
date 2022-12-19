@@ -137,7 +137,7 @@ export default function GeneratorTap() {
           />
           <TabPanelFooter>
             <BorderButton
-              icon="/images/rp/sprite-gen/wizard.svg"
+              icon="/images/rp/wizard.svg"
               title="Generate"
               onClick={fetchSprite}
               loading={fetching}
@@ -248,7 +248,7 @@ const TextArea = styled.textarea`
 const Arrow = ({direction, disabled, onClick}) => {
   return (
     <img
-      src="/images/rp/sprite-gen/arrow.svg"
+      src="/images/rp/arrow.svg"
       onClick={onClick}
       style={{
         margin: '0em 0.2em',
@@ -292,7 +292,7 @@ const Card = ({onClick, selected, item}) => {
   const visible = visibility.isItemVisible(item.id);
   return (
     <CardHolder onClick={() => onClick(visibility)}>
-      {selected && <CardCheck src="/images/rp/sprite-gen/check.svg" />}
+      {selected && <CardCheck src="/images/rp/check.svg" />}
       {item.image && <CardPreview src={item.image} alt="" />}
     </CardHolder>
   );

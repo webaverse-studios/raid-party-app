@@ -291,13 +291,13 @@ export default function Playground() {
       <ClaimsNotification />
       <LoadingBox />
       <DragAndDrop />
-      <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
       <Stats app={app} />
       <Crosshair />
       <Quests />
       <GrabKeyIndicators />
       <FocusBar />
       {openAdventures ? <Adventures /> : <IoHandler />}
+      <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
     </Holder>
   );
 }

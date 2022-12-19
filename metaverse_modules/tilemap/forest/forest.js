@@ -30,17 +30,16 @@ export default function generateForest(
   localPlayer,
   moveMap,
 ) {
-  let generatingMap = false;
+  let triggered = false;
+  addedAroundColliders = false;
   app.addEventListener('triggerin', async e => {
     if (
       e.oppositePhysicsId ===
       localPlayer.characterPhysics.characterController.physicsId
     ) {
-      console.log('local player trigger in');
-      if (!generatingMap) {
-        generatingMap = true;
-        await moveMap();
-        generatingMap = false;
+      if (!triggered) {
+        triggered = true;
+        moveMap();
       }
     }
   });
@@ -944,12 +943,17 @@ export default function generateForest(
     }
   };
 
+  const spot = getRandomYXMiddle();
+  localPlayer.position.set(spot[1], localPlayer.position.y, spot[0]);
+  localPlayer.characterPhysics.setPosition(localPlayer.position);
+  localPlayer.characterPhysics.reset();
+  localPlayer.updateMatrixWorld();
+
   if (!addedAroundColliders) {
     addColliders();
     addedAroundColliders = true;
   }
 
-  const spot = getRandomYXMiddle();
   return {
     meshes: meshes,
     allMeshes: allMeshes,

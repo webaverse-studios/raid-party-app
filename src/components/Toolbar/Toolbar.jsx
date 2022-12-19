@@ -2,9 +2,12 @@ import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {AppContext} from '../../App';
 import BorderButton from '../Buttons/BorderButton';
+import metaversefile from '../../../metaversefile-api';
 
 export default function Toolbar() {
+  const localPlayer = metaversefile.useLocalPlayer();
   const {setOpenAdventures} = useContext(AppContext);
+
   return (
     <Holder>
       <Content>
@@ -16,8 +19,24 @@ export default function Toolbar() {
             e.stopPropagation();
           }}
         />
-        <BorderButton icon="/images/rp/edit.svg" />
-        <BorderButton icon="/images/rp/alarm.svg" />
+        <BorderButton
+          icon="/images/rp/edit.svg"
+          onClick={() => {
+            localPlayer.dispatchEvent({
+              type: 'reroll_map',
+              app,
+            });
+          }}
+        />
+        <BorderButton
+          icon="/images/rp/alarm.svg"
+          onClick={() => {
+            localPlayer.dispatchEvent({
+              type: 'back_map',
+              app,
+            });
+          }}
+        />
       </Content>
     </Holder>
   );

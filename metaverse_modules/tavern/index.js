@@ -86,54 +86,40 @@ export default e => {
     console.log('enter_adventure', e, e.prompt);
     generateMap(e.prompt);
   });
-
-  document.addEventListener('keydown', async e => {
-    if (e.key == 'i') {
-      if (generated || !tiles) {
-        return;
-      }
-    } else if (e.key == 'k') {
-      if (!generated || !tiles || !tilemapApp) {
-        return;
-      }
-
-      localPlayer.dispatchEvent({
-        type: 'loading_map',
-        app,
-        loading: true,
-      });
-
-      localPlayer.position.set(0, startingY, 0);
-      localPlayer.characterPhysics.setPosition(localPlayer.position);
-      localPlayer.characterPhysics.reset();
-      localPlayer.updateMatrixWorld();
-      console.log('removing tilemap tiles:', tiles);
-      metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
-      tiles.unclearMap();
-      generated = false;
-
-      localPlayer.dispatchEvent({
-        type: 'loading_map',
-        app,
-        loading: false,
-      });
-
-      mapMenuIsOpen = false;
-      localPlayer.dispatchEvent({
-        type: 'update_adventures',
-        app,
-        open_adventures: false,
-      });
-    } else if (e.key === 'c') {
-      console.log('opening adventures');
-      mapMenuIsOpen = !mapMenuIsOpen;
-      localPlayer.dispatchEvent({
-        type: 'update_adventures',
-        app,
-        open_adventures: mapMenuIsOpen,
-      });
+  localPlayer.addEventListener('back_map', e => {
+    if (!generated || !tiles || !tilemapApp) {
+      return;
     }
+
+    localPlayer.dispatchEvent({
+      type: 'loading_map',
+      app,
+      loading: true,
+    });
+
+    localPlayer.position.set(0, startingY, 0);
+    localPlayer.characterPhysics.setPosition(localPlayer.position);
+    localPlayer.characterPhysics.reset();
+    localPlayer.updateMatrixWorld();
+    console.log('removing tilemap tiles:', tiles);
+    metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
+    tiles.unclearMap();
+    generated = false;
+
+    localPlayer.dispatchEvent({
+      type: 'loading_map',
+      app,
+      loading: false,
+    });
+
+    mapMenuIsOpen = false;
+    localPlayer.dispatchEvent({
+      type: 'update_adventures',
+      app,
+      open_adventures: false,
+    });
   });
+
   // initialization
   e.waitUntil(
     (async () => {

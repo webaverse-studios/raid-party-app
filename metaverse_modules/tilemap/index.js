@@ -51,27 +51,32 @@ export default e => {
   let forest = null;
   let dungeon = null;
   const input_prompt = app.getComponent('prompt').prompt;
+  let rerolling = false;
 
-  document.addEventListener('keydown', async e => {
-    if (e.key == 'x') {
-      console.log('regenerating tiles');
-      let isForest = false;
-      let biomeInfo = '';
-      let biomeType = '';
-
-      while (!isForest) {
-        const rndPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-        biomeInfo = (await getBiomeInfo(rndPrompt)).trim();
-        biomeType = (await getBiomeType(rndPrompt)).trim();
-        isForest = biomeType === starting_biome;
-      }
-
-      if (forest) {
-        forest.regenerateWithPrompt(biomeInfo, biomeType);
-      } else if (dungeon) {
-        dungeon.regenerateMap(biomeInfo, biomeType);
-      }
+  localPlayer.addEventListener('reroll_map', async e => {
+    if (rerolling || (!forest && !dungeon)) {
+      return;
     }
+
+    rerolling = true;
+    console.log('regenerating tiles');
+    let isForest = false;
+    let biomeInfo = '';
+    let biomeType = '';
+
+    while (!isForest) {
+      const rndPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+      biomeInfo = (await getBiomeInfo(rndPrompt)).trim();
+      biomeType = (await getBiomeType(rndPrompt)).trim();
+      isForest = biomeType === starting_biome;
+    }
+
+    if (forest) {
+      forest.regenerateWithPrompt(biomeInfo, biomeType);
+    } else if (dungeon) {
+      dungeon.regenerateMap(biomeInfo, biomeType);
+    }
+    rerolling = false;
   });
 
   // locals

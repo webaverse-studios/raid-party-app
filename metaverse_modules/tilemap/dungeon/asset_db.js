@@ -38,7 +38,7 @@ export const getAssetURL = prompt => {
   } else if (prompt === 'skull') {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1050328292621811742/skull.png';
   } else if (prompt === 'peak') {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1050328292219162634/peak.png';
+    return 'https://cdn.discordapp.com/attachments/1046461392913440789/1054399510702473246/sprite_0.png';
   } else if (prompt === 'mana_small') {
     return 'https://cdn.discordapp.com/attachments/632242008148148225/1050328291694870588/mana_small.png';
   } else if (prompt === 'mana_large') {

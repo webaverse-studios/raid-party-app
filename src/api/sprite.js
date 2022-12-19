@@ -7,12 +7,15 @@ import axios from 'axios';
  * @returns
  */
 export async function generateAvatar(describe) {
-  const res = await axios.get('http://localhost:8080/216.153.52.56:7777', {
-    params: {
-      s: describe,
+  const res = await axios.get(
+    'https://cors.webaverse.studio/http://localhost:8080/216.153.52.56:7777',
+    {
+      params: {
+        s: describe,
+      },
+      responseType: 'blob',
     },
-    responseType: 'blob',
-  });
+  );
 
   return res.data;
 }

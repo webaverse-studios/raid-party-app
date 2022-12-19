@@ -7,6 +7,7 @@ import './style.css';
 import BorderButton from '../../../../components/Buttons/BorderButton';
 import {generateAvatar} from '../../../../api/sprite';
 import {device} from '../../../../theme/device';
+import {AppContext} from '../../../../App';
 
 async function saveSprites(sprites) {
   let count = 0;
@@ -59,6 +60,7 @@ function loadSprites() {
 }
 
 export default function GeneratorTap() {
+  const {setCurrentSprite} = useContext(AppContext);
   const [tabIndex, setTabIndex] = useState(0);
   const [selectedItem, setSelectedItem] = useState(null);
   const [describe, setDescribe] = useState('');

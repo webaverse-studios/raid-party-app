@@ -5,9 +5,9 @@ import metaversefile from '../../../../../metaversefile-api.js';
 
 import {AppContext} from '../../../../App';
 
-export default function Header(props) {
+export default function Header() {
   const localPlayer = metaversefile.useLocalPlayer();
-  const {app} = useContext(AppContext);
+  const {app, setOpenCreateAdventure} = useContext(AppContext);
 
   return (
     <Holder>
@@ -22,9 +22,9 @@ export default function Header(props) {
         }}
       />
       <ShadowButton
-        title={props.showCards ? 'Create New' : 'Back'}
+        title="Create New"
         onClick={() => {
-          props.changeMenu();
+          setOpenCreateAdventure(true);
         }}
       />
     </Holder>

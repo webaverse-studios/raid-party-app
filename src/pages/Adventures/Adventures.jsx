@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext} from 'react';
 import styled from 'styled-components';
 import {motion} from 'framer-motion';
 
@@ -9,7 +9,7 @@ import {MiddleContainer} from '../../components/Containers';
 import Header from './components/Header';
 import Card from './components/Card';
 import {AppContext} from '../../App';
-import BorderButton from '../../components/Buttons/BorderButton.jsx';
+import CreateAdventureDialog from './components/CreateAdventureDialog/CreateAdventureDialog.jsx';
 
 const ADVENTURES_DATA = [
   {
@@ -72,181 +72,49 @@ export default function Adventures() {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app} = useContext(AppContext);
 
-  const [showCards, setShowCards] = useState(true);
-  const [mapPrompt, setMapPrompt] = useState('');
-
-  const changeMenu = () => {
-    setShowCards(!showCards);
-  };
-
-  const createNew = () => {
-    const prompt = mapPrompt;
-    if (!prompt) {
-      return;
-    }
-
-    localPlayer.dispatchEvent({
-      type: 'update_adventures',
-      app,
-      open_adventures: false,
-    });
-    localPlayer.dispatchEvent({
-      type: 'enter_adventure',
-      app,
-      prompt,
-      is_pregenerated: true,
-    });
-  };
-
-  const setRandomPrompt = () => {
-    const prompts = [
-      'Unicorn Forest',
-      'Icy Forest',
-      'Haunted Forest',
-      "Wizard's Forest",
-      'Rainbow Forest',
-      'Dark Forest',
-      'Blazing Forest',
-      'Unicorn Dungeon',
-      'Icy Dungeon',
-      'Haunted Dungeon',
-      "Wizard's Dungeon",
-      'Rainbow Dungeon',
-      'Dark Dungeon',
-      'Desert Forest',
-      'Blazing Dungeon',
-    ];
-    const prompt = prompts[Math.floor(Math.random() * prompts.length)];
-
-    setMapPrompt(prompt);
-  };
-
-  console.log('opening');
   return (
     <Holder>
-      <Header
-        changeMenu={changeMenu}
-        showCards={showCards}
-        onClick={e => {
-          e.stopPropagation();
-        }}
-      />
+      <Header />
       <MiddleContainer>
-        {showCards ? (
-          <Cards
-            initial="closed"
-            animate="open"
-            variants={{
-              open: {
-                transition: {staggerChildren: 0.09, delayChildren: 0.4},
-              },
-              closed: {
-                transition: {staggerChildren: 0.05, staggerDirection: -1},
-              },
-            }}
-          >
-            {ADVENTURES_DATA.map((d, index) => (
-              <Card
-                key={index}
-                data={d}
-                onClick={() => {
-                  localStorage.setItem('adventure', JSON.stringify(d));
-                  const prompt = d.name + ' ' + d.type;
-                  console.log('opening adventure:', prompt);
-
-                  localPlayer.dispatchEvent({
-                    type: 'update_adventures',
-                    app,
-                    open_adventures: false,
-                  });
-                  localPlayer.dispatchEvent({
-                    type: 'enter_adventure',
-                    app,
-                    prompt,
-                    is_pregenerated: true,
-                    prompt_id: index,
-                  });
-                }}
-              />
-            ))}
-          </Cards>
-        ) : (
-          <Cards
-            initial="closed"
-            animate="open"
-            variants={{
-              open: {
-                transition: {staggerChildren: 0.09, delayChildren: 0.4},
-              },
-              closed: {
-                transition: {staggerChildren: 0.05, staggerDirection: -1},
-              },
-            }}
-          >
-            <TextArea
-              placeholder="Map Prompt"
-              value={mapPrompt}
-              onChange={e => {
-                setMapPrompt(e.target.value);
+        <Cards
+          initial="closed"
+          animate="open"
+          variants={{
+            open: {
+              transition: {staggerChildren: 0.09, delayChildren: 0.4},
+            },
+            closed: {
+              transition: {staggerChildren: 0.05, staggerDirection: -1},
+            },
+          }}
+        >
+          {ADVENTURES_DATA.map((d, index) => (
+            <Card
+              key={index}
+              data={d}
+              onClick={() => {
+                const prompt = d.name + ' ' + d.type;
+                localPlayer.dispatchEvent({
+                  type: 'update_adventures',
+                  app,
+                  open_adventures: false,
+                });
+                localPlayer.dispatchEvent({
+                  type: 'enter_adventure',
+                  app,
+                  prompt,
+                  is_pregenerated: true,
+                  prompt_id: index,
+                });
               }}
             />
-            <TabPanelFooter>
-              <BorderButton
-                icon="/images/rp/wizard.svg"
-                title="Generate"
-                onClick={createNew}
-                loading={false}
-              />
-              <BorderButton
-                icon="/images/rp/wizard.svg"
-                title="Randomize"
-                onClick={setRandomPrompt}
-                loading={false}
-              />
-            </TabPanelFooter>
-          </Cards>
-        )}
+          ))}
+        </Cards>
       </MiddleContainer>
+      <CreateAdventureDialog />
     </Holder>
   );
 }
-
-const TabPanelFooter = styled.div`
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  display: flex;
-  gap: 0.5em;
-  transform: translate(-50%, 55%);
-`;
-
-const TextArea = styled.textarea`
-  font-family: 'A Goblin Appears!';
-  color: #92724d;
-  font-size: 0.9em;
-  line-height: 2;
-  padding: 1em;
-  width: 20em;
-  height: 7em;
-  background-color: #fff1d6;
-  border: 0.2em solid #e1cda8;
-  border-radius: 1em;
-  resize: none;
-  &:focus {
-    outline: none;
-  }
-  &::-webkit-scrollbar {
-    width: 0;
-  }
-  &::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: #6b8fa3;
-    border-radius: 5px;
-  }
-`;
 
 const Holder = styled.div`
   position: fixed;

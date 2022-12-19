@@ -61,6 +61,7 @@ export const App = () => {
   const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
   const [pageIndex, setPageIndex] = useState(0);
   const [openAdventures, setOpenAdventures] = useState(false);
+  const [openCreateAdventure, setOpenCreateAdventure] = useState(false);
 
   return (
     <ThemeProvider>
@@ -90,6 +91,8 @@ export const App = () => {
             setPageIndex,
             openAdventures,
             setOpenAdventures,
+            openCreateAdventure,
+            setOpenCreateAdventure,
           }}
         >
           {pageIndex === 0 && <Characters />}

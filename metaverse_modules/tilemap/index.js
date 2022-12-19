@@ -4,6 +4,7 @@ import Dungeon from './dungeon/Dungeon.js';
 import {getBiomeInfo, getBiomeType} from './dungeon/generateTiles.js';
 import Tiles from './forest/tiles.js';
 import {
+  forestExists,
   generateImageCache,
   generateImageNew,
 } from './forest/request_manager.js';
@@ -94,6 +95,8 @@ export default e => {
       starting_biome = biomeType;
 
       if (biomeType === 'forest') {
+        const fe = await forestExists(biomeInfo, biomeType);
+        console.log('fe:', fe);
         // Get the biome information from the prompt
         const biome = {
           name: 'forest',
@@ -153,17 +156,32 @@ export default e => {
         const start = new Date();
         let houseDone = false;
         let pathImg = null;
-        const maxCount = 14;
+        const maxCount = fe ? 15 : 14;
         let currentTiles = 0;
         for (let i = 0; i < biome.tiles.length; i++) {
           for (let j = 0; j < 1; j++) {
             if (biome.tiles[i].includes('tree')) {
-              generateImageNew(biomeInfo + ' tree').then(imgs => {
-                console.log('generating tree');
-                currentTiles++;
-                textures[biome.tiles[i]].push(imgs[0]);
-                textures[biome.tiles[i]].push(imgs[1]);
-              });
+              if (fe) {
+                generateImageCache(biomeInfo + ' tree1', 'forest').then(
+                  imgs => {
+                    currentTiles++;
+                    textures[biome.tiles[i]].push(imgs);
+                  },
+                );
+                generateImageCache(biomeInfo + ' tree0', 'forest').then(
+                  imgs => {
+                    currentTiles++;
+                    textures[biome.tiles[i]].push(imgs);
+                  },
+                );
+              } else {
+                generateImageNew(biomeInfo + ' tree').then(imgs => {
+                  console.log('generating tree');
+                  currentTiles++;
+                  textures[biome.tiles[i]].push(imgs[0]);
+                  textures[biome.tiles[i]].push(imgs[1]);
+                });
+              }
             } else if (biome.tiles[i].includes('house')) {
               if (houseDone) {
                 continue;
@@ -214,10 +232,11 @@ export default e => {
               } else {
                 console.log('prompt:', prompt, typeof prompt);
                 if (
-                  prompt.includes('bush') ||
-                  prompt.includes('flower') ||
-                  prompt.includes('rock') ||
-                  prompt.includes('torch')
+                  !fe &&
+                  (prompt.includes('bush') ||
+                    prompt.includes('flower') ||
+                    prompt.includes('rock') ||
+                    prompt.includes('torch'))
                 ) {
                   generateImageNew(prompt).then(img => {
                     console.log('generating biome.tiles[i]', biome.tiles[i]);

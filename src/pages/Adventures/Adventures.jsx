@@ -93,7 +93,7 @@ export default function Adventures() {
     localPlayer.dispatchEvent({
       type: 'enter_adventure',
       app,
-      prompt: prompt,
+      prompt,
       is_pregenerated: true,
     });
   };
@@ -124,7 +124,13 @@ export default function Adventures() {
   console.log('opening');
   return (
     <Holder>
-      <Header changeMenu={changeMenu} showCards={showCards} />
+      <Header
+        changeMenu={changeMenu}
+        showCards={showCards}
+        onClick={e => {
+          e.stopPropagation();
+        }}
+      />
       <MiddleContainer>
         {showCards ? (
           <Cards
@@ -156,7 +162,7 @@ export default function Adventures() {
                   localPlayer.dispatchEvent({
                     type: 'enter_adventure',
                     app,
-                    prompt: prompt,
+                    prompt,
                     is_pregenerated: true,
                     prompt_id: index,
                   });
@@ -243,8 +249,12 @@ const TextArea = styled.textarea`
 `;
 
 const Holder = styled.div`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
   width: 100%;
+  height: 100%;
   background-color: #30404e;
 `;
 

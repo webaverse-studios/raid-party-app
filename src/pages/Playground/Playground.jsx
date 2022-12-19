@@ -292,18 +292,12 @@ export default function Playground() {
       <LoadingBox />
       <DragAndDrop />
       <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
-      {openAdventures ? (
-        <Adventures />
-      ) : (
-        <div>
-          <IoHandler />
-          <Stats app={app} />
-          <Crosshair />
-          <Quests />
-          <GrabKeyIndicators />
-          <FocusBar />
-        </div>
-      )}
+      <Stats app={app} />
+      <Crosshair />
+      <Quests />
+      <GrabKeyIndicators />
+      <FocusBar />
+      {openAdventures ? <Adventures /> : <IoHandler />}
     </Holder>
   );
 }

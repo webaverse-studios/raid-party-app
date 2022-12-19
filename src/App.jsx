@@ -55,7 +55,7 @@ export const App = () => {
   const [state, setState] = useState({openedPanel: null});
   const [uiMode, setUIMode] = useState('normal');
   const [avatarLoaded, setAvatarLoaded] = useState(false);
-  const [tilesLoaded, setTilesLoaded] = useState(false);
+  const [tilesLoaded, setTilesLoaded] = useState(true);
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
   const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());

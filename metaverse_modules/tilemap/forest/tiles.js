@@ -195,7 +195,8 @@ export default class Tiles extends THREE.Object3D {
     this.generateMapFull(meshes, data, info, physics, app, localPlayer);
   }
 
-  async generateMapFull(meshes, data, info, physics, app, localPlayer) {
+  generating = false;
+  generateMapFull(meshes, data, info, physics, app, localPlayer) {
     if (this.colliders) {
       this.colliders.forEach(collider => {
         physics.removeGeometry(collider);
@@ -212,6 +213,7 @@ export default class Tiles extends THREE.Object3D {
 
     console.log('SPAWNING MAP:');
 
+    const start = new Date();
     const output = generateForest(
       meshes,
       data[(info + ' deep forest').trim()],
@@ -230,20 +232,29 @@ export default class Tiles extends THREE.Object3D {
       physics,
       app,
       localPlayer,
-      async () => {
-        await this.generateMapFull(
-          meshes,
-          data,
-          info,
-          physics,
-          app,
-          localPlayer,
-        );
+      () => {
+        console.log('moving map:', this.generating);
+        if (this.generating) {
+          return;
+        }
+
+        this.generating = true;
+        this.generateMapFull(meshes, data, info, physics, app, localPlayer);
+        this.generating = false;
       },
     );
+    console.log(
+      'MAP SPAWNED:',
+      new Date() - start,
+      'meshes count:',
+      output.meshes.length,
+      output.meshes,
+    );
+
     output.meshes.map(f => {
       this.add(f);
       this.cMeshes.push(f);
+      f.updateMatrixWorld();
     });
     this.allMeshes = output.allMeshes;
 

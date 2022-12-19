@@ -289,36 +289,17 @@ export default function Playground() {
       <DomRenderer />
       <Canvas app={app} />
       <ClaimsNotification />
-      <WorldObjectsList
-        setSelectedApp={setSelectedApp}
-        selectedApp={selectedApp}
-      />
-      <EditorMode
-        selectedScene={selectedScene}
-        setSelectedScene={setSelectedScene}
-        selectedRoom={selectedRoom}
-        setSelectedRoom={setSelectedRoom}
-      />
       <LoadingBox />
       <DragAndDrop />
-      <MapGen />
-      <StyledLoader
-        visible={tilesLoaded || !avatarLoaded}
-        label="Loading assets..."
-        size={80}
-      />
+      <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
       {openAdventures ? (
         <Adventures />
       ) : (
         <div>
           <IoHandler />
-          <Header setSelectedApp={setSelectedApp} selectedApp={selectedApp} />
           <Stats app={app} />
           <Crosshair />
-          <QuickMenu />
-          <ZoneTitleCard />
           <Quests />
-          <PlayMode />
           <GrabKeyIndicators />
           <FocusBar />
         </div>
@@ -331,6 +312,7 @@ const Holder = styled.div`
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 `;
 
 const StyledCanvas = styled.canvas`

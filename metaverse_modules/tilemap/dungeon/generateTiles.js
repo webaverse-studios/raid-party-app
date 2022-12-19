@@ -186,7 +186,7 @@ const makePrompt = (i, biomeInfo) => {
     res.req_type = 'tile';
     res.through_cache = true;
   } else if (i === 13) {
-    res.prompt = biomeInfo + ' peack';
+    res.prompt = biomeInfo + ' spike';
     res.label = 'peak';
   } else if (i === 14) {
     res.prompt = biomeInfo + ' bone';

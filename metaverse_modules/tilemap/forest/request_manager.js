@@ -125,7 +125,7 @@ const getInputImageFrom = prompt => {
       ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747990505181204/pile_of_stones.png'
       : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748906780233758/ruin_stones.png';
   } else if (prompt.includes('torch')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1052945806593900564/torch.png';
+    return 'https://cdn.discordapp.com/attachments/1046461392913440789/1054400040602435614/torch1.png';
   } else if (prompt.includes('bush') && !prompt.includes('sand')) {
     return rnd < 0.5
       ? 'https://cdn.discordapp.com/attachments/632242008148148225/1052945804949733456/raspberry_bush.png'

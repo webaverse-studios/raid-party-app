@@ -107,6 +107,7 @@ export default function Adventures() {
                   type: 'enter_adventure',
                   app,
                   prompt,
+                  prompt_type: d.type,
                   is_pregenerated: true,
                   prompt_id: index,
                 });

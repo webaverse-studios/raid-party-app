@@ -52,6 +52,7 @@ export default e => {
   let forest = null;
   let dungeon = null;
   const input_prompt = app.getComponent('prompt').prompt;
+  const input_prompt_type = app.getComponent('prompt').type;
   let rerolling = false;
 
   localPlayer.addEventListener('reroll_map', async e => {
@@ -90,7 +91,9 @@ export default e => {
       const prompt = input_prompt;
       console.log('prompt', prompt);
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
-      const biomeType = (await getBiomeType(prompt)).trim();
+      const biomeType = input_prompt_type
+        ? input_prompt_type
+        : (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
       starting_biome = biomeType;
 

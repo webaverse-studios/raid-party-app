@@ -36,7 +36,7 @@ export default e => {
   console.log('startingY', startingY, localPlayer.position);
   let mapMenuIsOpen = false;
 
-  const generateMap = async prompt => {
+  const generateMap = async (prompt, type) => {
     localPlayer.dispatchEvent({
       type: 'loading_map',
       app,
@@ -57,6 +57,7 @@ export default e => {
       key: 'prompt',
       value: {
         prompt: prompt,
+        type: type,
       },
     };
 
@@ -84,7 +85,7 @@ export default e => {
 
   localPlayer.addEventListener('enter_adventure', e => {
     console.log('enter_adventure', e, e.prompt);
-    generateMap(e.prompt);
+    generateMap(e.prompt, e.prompt_type);
   });
   localPlayer.addEventListener('back_map', e => {
     if (!generated || !tiles || !tilemapApp) {

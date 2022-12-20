@@ -31,6 +31,7 @@
     "@solana/wallet-adapter-phantom": "^0.9.16",
     "@tanstack/react-query": "^4.19.1",
     "@tanstack/react-query-devtools": "^4.19.1",
+    "agentkeepalive": "^4.2.1",
     "babel-plugin-custom-import-path-transform": "^1.0.3",
     "classnames": "^2.3.1",
     "encoding-japanese": "^2.0.0",

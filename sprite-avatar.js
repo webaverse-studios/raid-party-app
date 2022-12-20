@@ -24,6 +24,9 @@ class SpriteAvatar {
     this.actionSprite = null;
 
     this.meshApp = null;
+
+    //testing
+    this.shadowObj = null;
   }
   makeSpriteAvatar(blop) {
     if (!this.meshApp) {
@@ -103,10 +106,23 @@ class SpriteAvatar {
         currentAction: null,
       };
 
-      this.actionSprite.scale.set(0.75, 0.75, 0.75);
+      this.actionSprite.scale.set(0.5, 0.5, 0.5);
       this.actionSprite.updateMatrixWorld();
 
+      const shadowGeometry = new THREE.CircleGeometry(0.2, 32);
+      const shadowMaterial = new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.2,
+      });
+
+      this.shadowObj = new THREE.Mesh(shadowGeometry, shadowMaterial);
+      this.shadowObj.rotation.x = Math.PI / 2;
+      this.shadowObj.updateMatrixWorld();
+
       this.meshApp.add(this.actionSprite);
+      //this.meshApp.add(this.shadowObj);
       this.meshApp.updateMatrixWorld();
 
       let offset = new THREE.Vector3(0, 0, 0); //1.25, 0.75, 0
@@ -125,6 +141,17 @@ class SpriteAvatar {
 
     let velX = Math.round(parseFloat(avatarVelocity.x).toFixed(2));
     let velZ = Math.round(parseFloat(avatarVelocity.z).toFixed(2));
+
+    let threshold = 4;
+    let isRunning = Math.abs(velX) >= threshold || Math.abs(velZ) >= threshold;
+
+    if (actionSprite.currentAction) {
+      if (isRunning) {
+        actionSprite.currentAction.tileDisplayDuration = 145;
+      } else {
+        actionSprite.currentAction.tileDisplayDuration = 175;
+      }
+    }
 
     if (velX > 0) {
       if (actionSprite.currentAction !== actions.walk_right) {
@@ -160,7 +187,6 @@ class SpriteAvatar {
         this.updateAnimation();
         this.spriteMixer.update(delta);
         this.meshApp.updateMatrixWorld();
-        //console.log('we updating', delta);
       }
     }
   }

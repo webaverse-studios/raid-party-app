@@ -211,6 +211,7 @@ function SpriteMixer() {
     let spriteMaterial = new THREE.SpriteMaterial({
       map: texture,
       color: 0xffffff,
+      alphaTest: 0.5,
     });
 
     let actionSprite = new THREE.Sprite(spriteMaterial);

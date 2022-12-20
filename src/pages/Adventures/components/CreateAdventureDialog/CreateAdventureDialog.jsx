@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
 import BorderButton from '../../../../components/Buttons/BorderButton';
 import IconButton from '../../../../components/Buttons/IconButton';
@@ -7,21 +7,13 @@ import {AppContext} from '../../../../App';
 import {AnimatePresence, motion} from 'framer-motion';
 
 const PROMPTS = [
-  'Unicorn Forest',
-  'Icy Forest',
-  'Haunted Forest',
-  "Wizard's Forest",
-  'Rainbow Forest',
-  'Dark Forest',
-  'Blazing Forest',
-  'Unicorn Dungeon',
-  'Icy Dungeon',
-  'Haunted Dungeon',
-  "Wizard's Dungeon",
-  'Rainbow Dungeon',
-  'Dark Dungeon',
-  'Desert Forest',
-  'Blazing Dungeon',
+  'Unicorn',
+  'Icy',
+  'Haunted',
+  "Wizard's",
+  'Rainbow',
+  'Dark',
+  'Blazing',
 ];
 
 export default function CreateAdventureDialog() {
@@ -29,6 +21,23 @@ export default function CreateAdventureDialog() {
   const {app, openCreateAdventure, setOpenCreateAdventure} =
     useContext(AppContext);
   const [mapPrompt, setMapPrompt] = useState('');
+  const [isForest, setIsForest] = useState(true);
+  const [isDungeon, setIsDungeon] = useState(false);
+
+  useEffect(() => {
+    if (isForest) {
+      setIsDungeon(false);
+    } else {
+      setIsDungeon(true);
+    }
+  }, [isForest]);
+  useEffect(() => {
+    if (isDungeon) {
+      setIsForest(false);
+    } else {
+      setIsForest(true);
+    }
+  }, [isDungeon]);
 
   const createNew = () => {
     const prompt = mapPrompt;
@@ -36,6 +45,7 @@ export default function CreateAdventureDialog() {
       return;
     }
 
+    console.log('prompt.type:', isForest ? 'forest' : 'dungeon');
     localPlayer.dispatchEvent({
       type: 'update_adventures',
       app,
@@ -45,6 +55,7 @@ export default function CreateAdventureDialog() {
       type: 'enter_adventure',
       app,
       prompt,
+      prompt_type: isForest ? 'forest' : 'dungeon',
       is_pregenerated: true,
     });
   };
@@ -72,6 +83,34 @@ export default function CreateAdventureDialog() {
                 setMapPrompt(e.target.value);
               }}
             />
+            Forest:{' '}
+            {isForest ? (
+              <CheckboxChecked
+                onClick={() => {
+                  setIsForest(!isForest);
+                }}
+              />
+            ) : (
+              <Checkbox
+                onClick={() => {
+                  setIsForest(!isForest);
+                }}
+              />
+            )}
+            Dungeon:{' '}
+            {isDungeon ? (
+              <CheckboxChecked
+                onClick={() => {
+                  setIsDungeon(!isDungeon);
+                }}
+              />
+            ) : (
+              <Checkbox
+                onClick={() => {
+                  setIsDungeon(!isDungeon);
+                }}
+              />
+            )}
             <BorderButton
               icon="/images/rp/wizard.svg"
               title="Generate"
@@ -152,4 +191,45 @@ const CloseButton = styled(IconButton)`
   right: 0;
   z-index: 1;
   transform: translate(50%, -50%);
+`;
+
+const CheckboxChecked = styled.div`
+  /* Group 112 */
+
+  width: 53px;
+  height: 53px;
+
+  /* Ellipse 12 */
+
+  box-sizing: border-box;
+
+  width: 53px;
+  height: 53px;
+
+  background: #aa85ab;
+  border: 5px solid #977398;
+  box-shadow: 0px 22px 4px rgba(0, 0, 0, 0.14), inset 0px 10px 0px #c1a0b4;
+  border-radius: 24px;
+
+  /* Ellipse 13 */
+
+  width: 31px;
+  height: 31px;
+
+  background: #ffffff;
+  border-radius: 24px;
+`;
+
+const Checkbox = styled.div`
+  /* Ellipse 12 */
+
+  box-sizing: border-box;
+
+  width: 53px;
+  height: 53px;
+
+  background: #aa85ab;
+  border: 5px solid #977398;
+  box-shadow: 0px 22px 4px rgba(0, 0, 0, 0.14), inset 0px 10px 0px #c1a0b4;
+  border-radius: 24px;
 `;

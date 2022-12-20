@@ -44,6 +44,10 @@ export default e => {
     });
 
     generated = true;
+    if (tilemapApp) {
+      metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
+    }
+
     tiles.clearMap();
     console.log('spawning tilemap tiles:', tiles);
     const component = {

@@ -1,15 +1,20 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
-import {AppContext} from '../../App';
-import BorderButton from '../Buttons/BorderButton';
-import metaversefile from '../../../metaversefile-api';
+
+import {AppContext} from '../../../../App';
+import metaversefile from '../../../../../metaversefile-api';
+import BorderButton from '../../../../components/Buttons/BorderButton';
 
 export default function Toolbar() {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app, setOpenAdventures} = useContext(AppContext);
 
+  const stopPropagation = event => {
+    event.stopPropagation();
+  };
+
   return (
-    <Holder>
+    <Holder onClick={stopPropagation}>
       <Content>
         <Background />
         <BorderButton

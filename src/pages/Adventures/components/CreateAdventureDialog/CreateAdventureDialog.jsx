@@ -6,6 +6,24 @@ import metaversefile from '../../../../../metaversefile-api';
 import {AppContext} from '../../../../App';
 import {AnimatePresence, motion} from 'framer-motion';
 
+const PROMPTS = [
+  'Unicorn Forest',
+  'Icy Forest',
+  'Haunted Forest',
+  "Wizard's Forest",
+  'Rainbow Forest',
+  'Dark Forest',
+  'Blazing Forest',
+  'Unicorn Dungeon',
+  'Icy Dungeon',
+  'Haunted Dungeon',
+  "Wizard's Dungeon",
+  'Rainbow Dungeon',
+  'Dark Dungeon',
+  'Desert Forest',
+  'Blazing Dungeon',
+];
+
 export default function CreateAdventureDialog() {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app, openCreateAdventure, setOpenCreateAdventure} =
@@ -32,24 +50,7 @@ export default function CreateAdventureDialog() {
   };
 
   const setRandomPrompt = () => {
-    const prompts = [
-      'Unicorn Forest',
-      'Icy Forest',
-      'Haunted Forest',
-      "Wizard's Forest",
-      'Rainbow Forest',
-      'Dark Forest',
-      'Blazing Forest',
-      'Unicorn Dungeon',
-      'Icy Dungeon',
-      'Haunted Dungeon',
-      "Wizard's Dungeon",
-      'Rainbow Dungeon',
-      'Dark Dungeon',
-      'Desert Forest',
-      'Blazing Dungeon',
-    ];
-    const prompt = prompts[Math.floor(Math.random() * prompts.length)];
+    const prompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
 
     setMapPrompt(prompt);
   };
@@ -65,7 +66,7 @@ export default function CreateAdventureDialog() {
         >
           <Content>
             <TextArea
-              placeholder="Map Prompt"
+              placeholder="Enter map description"
               value={mapPrompt}
               onChange={e => {
                 setMapPrompt(e.target.value);

@@ -317,9 +317,10 @@ const SpritePreview = styled.div`
   border: 0.2em solid #fffcf7;
   box-shadow: 0px 0.3em 0px rgba(0, 0, 0, 0.14);
   border-radius: 1.2em;
-  lay: flex;
+  display: flex;
   justify-content: center;
   align-items: center;
+  overflow: hidden;
   > img {
     object-fit: none;
     object-position: 0 0;

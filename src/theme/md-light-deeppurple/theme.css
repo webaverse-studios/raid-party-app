@@ -4838,12 +4838,14 @@
 .p-tabview .p-tabview-nav li {
   margin-right: 0;
 }
-.p-tabview-nav-link{
+
+.p-tabview-nav-link {
   width: 100%;
   display: flex;
   justify-content: center;
   gap: 12px;
 }
+
 .p-tabview .p-tabview-nav li .p-tabview-nav-link {
   border: solid rgba(0, 0, 0, 0.12);
   border-width: 0 0 1px 0;
@@ -8822,259 +8824,12 @@
 
 
 /* Customizations to the designer theme should be defined here */
-.p-button-label {
-  font-weight: 700;
-}
-
-.p-inputtext {
-  background: #f2f2f2;
-}
-
-.p-button.p-button-third {
-  background: #e4e4e4;
-}
-
 .p-overlaypanel {
-  box-shadow: none;
-  filter: drop-shadow(0px 0.25em 0.25em rgba(0, 0, 0, 0.25));
-  border: 1px solid #E6E6E6;
-}
-
-.p-datatable {
-  border: 1px solid #E6E6E6;
+  background: #f5dfb8;
+  border: 3px solid #e0cbab;
   border-radius: 0.5em;
-  background: transparent;
 }
 
-.p-paginator {
-  border: none;
-  background: transparent;
-}
-
-.p-datatable .p-datatable-thead>tr>th {
-  background: transparent;
-}
-
-.p-datatable .p-datatable-tbody>tr>td {
-  font-style: normal;
-  font-weight: 700;
-  font-size: 0.875em;
-  line-height: 1.0625em;
-}
-
-.p-datatable-thead {
-  background: #f7f7f7;
-  font-size: 0.875em;
-  text-transform: uppercase;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-}
-
-.p-nav-overlay {
-  filter: none;
-  margin: 0 !important;
-  background-color: transparent;
-  border: none;
-}
-
-.p-nav-overlay::before {
-  display: none;
-}
-
-.p-nav-overlay::after {
-  display: none;
-}
-
-.p-nav-overlay .p-overlaypanel-content {
-  padding: 0;
-}
-
-.p-checkbox .p-checkbox-box {
-  border-radius: 0.25em;
-}
-
-.p-multiselect {
-  background: #f2f2f2;
-  border: 1px solid #f2f2f2;
-}
-
-.p-autocomplete-multiple-container {
-  gap: 0.2em;
-}
-
-.p-autocomplete .p-autocomplete-multiple-container .p-autocomplete-token {
-  margin-right: 0;
-}
-
-.p-splitter .p-splitter-gutter {
-  background-color: #1e4f6e;
-}
-
-.p-splitter .p-splitter-gutter .p-splitter-gutter-handle {
-  background: #f85f5f;
-}
-
-
-
-/*tab view */
-.tabview-header-icon i, .tabview-header-icon span {
-  vertical-align: middle;
-  color: #003c36;
-}
-.tabview-header-icon span {
-  margin: 0 3.8rem;
-}
-
-.p-link {
-  background-color: #003c3691;
-}
-
-.p-tabview .p-tabview-nav li .p-tabview-nav-link>.p-ink {
-  background-color: #003c3691;
-}
-
-.filter_icon>span {
-  color: white;
-}
-
-.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
-  color: #003c36;
-}
-
-.p-tabview .p-tabview-nav .p-tabview-ink-bar {
-  background-color: #003c36;
-}
-
-.p-tabview-selected {
-  background-color: #003c3647;
-}
-
-.tabview-header-icon span {
-  margin: 0 .5rem;
-}
-
-.p-tabview p {
-  line-height: 1.5;
-  margin: 0;
-}
-
-.p-button-white {
-  width: 1.2rem;
-  background-color: white;
-  color: black;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-}
-
-.popup-up-action-button {
-  margin-right: 20px;
-  font-weight: bolder;
-}
-
-.country_autocomplete {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-}
-
-.p-autocomplete {
-  width: 100%;
-}
-
-.autocomplete_input {
-  width: 100%;
-  color: black;
-  border: none;
-  padding: 0;
-  margin: 0;
-  background-color: transparent;
-}
-
-.autocomplete_input:enabled:focus {
-
-  border-radius: none;
-  box-shadow: none;
-}
-
-.search_icon {
-  color: grey;
-}
-
-.divider_auto {
-  margin-left: 8px;
-  border-left: solid 1px grey;
-  padding-left: 8px;
-
-}
-
-.filter_icon {
-  display: inline-flex;
-  justify-content: center;
-  cursor: pointer;
-}
-
-
-
-.country_autocomplete {
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-.mapboxgl-popup-content {
-  padding: 0;
-}
-
-.p-autocomplete-panel {
-  left: -10px;
-}
-
-.search_input {
-  width: 100%;
-  border: none;
-  outline: none;
-  padding: 5px;
-
-}
-
-.search_input::foucs {
-  outline: none;
-
-}
-
-.p-tabview-panels {
-  background: #ffffff;
-  padding: 0.5em;
-}
-
-.p-paginator .p-paginator-pages {
-  display: flex;
-  align-items: center;
-}
-
-.mapboxgl-popup {
-  z-index: 9999;
-}
-
-.p-dropdown-sm {
-  font-size: 0.9em;
-}
-
-.p-dropdown-sm>span {
-  padding: 0.5em;
-}
-.mapboxgl-popup{
-  z-index: 995;
-}
-
-
-.p-tabview .p-tabview-nav{
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus{
-  width: 100%;
-  display: flex;
-  justify-content: center;
+.p-overlaypanel:after {
+  border-bottom-color: #f5dfb8;
 }

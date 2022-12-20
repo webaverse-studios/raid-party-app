@@ -72,8 +72,12 @@ export default function Adventures() {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app} = useContext(AppContext);
 
+  const stopPropagation = event => {
+    event.stopPropagation();
+  };
+
   return (
-    <Holder>
+    <Holder onClick={stopPropagation}>
       <Header />
       <MiddleContainer>
         <Cards

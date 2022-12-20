@@ -24,7 +24,9 @@ export default function Characters() {
             if (currentSprite) {
               setPageIndex(1);
             } else {
-              toast('Please generate a new sprite');
+              toast(
+                'Please generate a new sprite or choose one pre-generated sprite',
+              );
             }
           }}
         />

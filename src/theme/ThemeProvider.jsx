@@ -57,6 +57,7 @@ const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    user-select: none;
     padding: 0;
     margin: 0;
   }

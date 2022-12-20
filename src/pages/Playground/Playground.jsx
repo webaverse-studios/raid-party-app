@@ -39,7 +39,8 @@ import Loader from '../../components/Loader';
 import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
-import Toolbar from '../../components/Toolbar';
+import Toolbar from './components/Toolbar';
+import Profile from './components/Profile';
 
 const localPlayer = metaversefile.useLocalPlayer();
 
@@ -270,8 +271,10 @@ export default function Playground() {
       <Quests />
       <GrabKeyIndicators />
       <FocusBar />
+      <IoHandler />
       <Toolbar />
-      {openAdventures ? <Adventures /> : <IoHandler />}
+      <Profile />
+      {openAdventures && <Adventures />}
       <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
     </Holder>
   );

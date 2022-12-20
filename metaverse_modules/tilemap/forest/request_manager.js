@@ -191,6 +191,24 @@ export const generateImageNew = async (
   return blobs.length === 1 ? blobs[0] : blobs;
 };
 
+export const forestExists = async (input, biomeType) => {
+  const resp = await axios.get(
+    'https://cors.webaverse.studio/http://216.153.50.206:7778/check',
+    {
+      params: {
+        imgType: input,
+        biomeType: biomeType,
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+      },
+      responseType: 'json',
+    },
+  );
+  return resp.data;
+};
+
 export const generateImage = async prompt => {
   const params = {
     s: prompt + ' 2d top down game invisible background',

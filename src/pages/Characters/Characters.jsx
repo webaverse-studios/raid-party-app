@@ -7,9 +7,10 @@ import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
 import Title from './components/Title';
 import GeneratorTap from './components/GeneratorTap';
 import {AppContext} from '../../App';
+import {toast} from 'react-toastify';
 
 export default function Characters() {
-  const {setPageIndex} = useContext(AppContext);
+  const {currentSprite, setPageIndex} = useContext(AppContext);
   return (
     <Holder>
       <Title />
@@ -20,7 +21,11 @@ export default function Characters() {
         <ShadowButton
           title="Next"
           onClick={() => {
-            setPageIndex(1);
+            if (currentSprite) {
+              setPageIndex(1);
+            } else {
+              toast('Please generate a new sprite');
+            }
           }}
         />
       </RaiseFadeAnimation>

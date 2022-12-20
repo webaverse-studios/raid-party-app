@@ -1,5 +1,6 @@
 import React, {useState, useContext, createContext, useEffect} from 'react';
 import {QueryClientProvider, QueryClient} from '@tanstack/react-query';
+import {ToastContainer} from 'react-toastify';
 
 import ThemeProvider from './theme/ThemeProvider';
 
@@ -100,6 +101,7 @@ export const App = () => {
         >
           {pageIndex === 0 && <Characters />}
           {pageIndex === 1 && <Playground />}
+          <ToastContainer theme="colored" />
         </AppContext.Provider>
       </QueryClientProvider>
     </ThemeProvider>

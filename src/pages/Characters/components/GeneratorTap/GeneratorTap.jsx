@@ -8,23 +8,9 @@ import BorderButton from '../../../../components/Buttons/BorderButton';
 import {generateAvatar} from '../../../../api/sprite';
 import {device} from '../../../../theme/device';
 import {AppContext} from '../../../../App';
+import {blobToBase64} from '../../../../utils/BlobToBase64';
 
-async function saveSprites(sprites) {
-  let count = 0;
-  for (let i = 0; i < sprites.data.length; i++) {
-    const img = sprites.data[i].image;
-    const blob = await fetch(img).then(r => r.blob());
-    const reader = new FileReader();
-    reader.readAsDataURL(blob);
-    reader.onloadend = () => {
-      const base64data = reader.result;
-      sprites.data[i].image = base64data;
-      count++;
-    };
-  }
-  while (sprites.data.length !== count) {
-    await new Promise(resolve => setTimeout(resolve, 50));
-  }
+function saveSprites(sprites) {
   localStorage.setItem('sprites', JSON.stringify(sprites));
 }
 
@@ -40,19 +26,6 @@ function loadSprites() {
     }
 
     parsed = JSON.parse(saved);
-    for (let i = 0; i < parsed.data.length; i++) {
-      const img = parsed.data[i].image;
-      const byteString = atob(img.split(',')[1]);
-      const mimeString = img.split(',')[0].split(':')[1].split(';')[0];
-      const ab = new ArrayBuffer(byteString.length);
-      const ia = new Uint8Array(ab);
-      for (let j = 0; j < byteString.length; j++) {
-        ia[j] = byteString.charCodeAt(j);
-      }
-      const blob = new Blob([ab], {type: mimeString});
-      const url = URL.createObjectURL(blob);
-      parsed.data[i].image = url;
-    }
   } catch (error) {
     console.warn('Error loading rooms from local storage.');
   }
@@ -60,18 +33,16 @@ function loadSprites() {
 }
 
 export default function GeneratorTap() {
-  const {setCurrentSprite} = useContext(AppContext);
+  const {currentSprite, setCurrentSprite} = useContext(AppContext);
   const [tabIndex, setTabIndex] = useState(0);
-  const [selectedItem, setSelectedItem] = useState(null);
   const [describe, setDescribe] = useState('');
   const [fetching, setFetching] = useState(false);
-  const [sprite, setSprite] = useState('');
   const [preRolledSprites, setPreRolledSprites] = useState([]);
 
   const handleClick =
-    item =>
+    sprite =>
     ({getItemById, scrollToItem}) => {
-      setSelectedItem(item);
+      setCurrentSprite(sprite);
     };
 
   const fetchSprite = useCallback(async () => {
@@ -82,19 +53,21 @@ export default function GeneratorTap() {
     setFetching(true);
 
     try {
-      const image = await generateAvatar(describe);
-      const url = URL.createObjectURL(image);
+      const blob = await generateAvatar(describe);
+      const base64 = await blobToBase64(blob);
 
-      const oldSprites = loadSprites();
       const newSprite = {
         id: nanoid(),
         name: describe,
-        image: url,
+        image: base64,
       };
+
+      const oldSprites = loadSprites();
       oldSprites.data.push(newSprite);
+
       saveSprites(oldSprites);
 
-      setSprite(url);
+      setCurrentSprite(newSprite);
     } finally {
       setFetching(false);
     }
@@ -129,9 +102,11 @@ export default function GeneratorTap() {
       </TabList>
       {tabIndex === 0 && (
         <TabPanel>
-          <SpritePreview>{sprite && <img src={sprite} />}</SpritePreview>
+          <SpritePreview>
+            {currentSprite && <img src={currentSprite.image} />}
+          </SpritePreview>
           <TextArea
-            placeholder="User's Entered Description"
+            placeholder="Enter sprite description"
             value={describe}
             onChange={e => {
               setDescribe(e.target.value);
@@ -150,12 +125,12 @@ export default function GeneratorTap() {
       {tabIndex === 1 && (
         <TabPanel>
           <ScrollMenu LeftArrow={LeftArrow} RightArrow={RightArrow}>
-            {preRolledSprites.map((item, index) => (
+            {preRolledSprites.map((sprite, index) => (
               <Card
                 key={index}
-                item={item}
-                selected={selectedItem?.id === item.id}
-                onClick={handleClick(item)}
+                sprite={sprite}
+                selected={currentSprite?.id === sprite.id}
+                onClick={handleClick(sprite)}
               />
             ))}
           </ScrollMenu>
@@ -289,13 +264,12 @@ const RightArrow = () => {
   );
 };
 
-const Card = ({onClick, selected, item}) => {
+const Card = ({onClick, selected, sprite}) => {
   const visibility = useContext(VisibilityContext);
-  const visible = visibility.isItemVisible(item.id);
   return (
     <CardHolder onClick={() => onClick(visibility)}>
       {selected && <CardCheck src="/images/rp/check.svg" />}
-      {item.image && <CardPreview src={item.image} alt="" />}
+      {sprite.image && <CardPreview src={sprite.image} alt="" />}
     </CardHolder>
   );
 };

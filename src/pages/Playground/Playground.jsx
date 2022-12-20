@@ -41,7 +41,9 @@ import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
 import Toolbar from '../../components/Toolbar';
 
-const _startApp = async (weba, canvas) => {
+const localPlayer = metaversefile.useLocalPlayer();
+
+const _startApp = async (weba, canvas, sprite) => {
   weba.setContentLoaded();
   weba.bindInput();
   weba.bindInterface();
@@ -54,37 +56,14 @@ const _startApp = async (weba, canvas) => {
   await universe.handleUrlUpdate();
   partyManager.inviteDefaultPlayer();
 
-  const sprites = _getSprites();
-
-  if (sprites) {
-    const selectedSprite = sprites.data[sprites.data.length - 1]; // hack
-    console.log(selectedSprite, 'selectedSprite');
-    playersManager
-      .getLocalPlayer()
-      .avatar.makeSpriteAvatar(selectedSprite.image);
-  }
+  // Set sprite
+  playersManager.getLocalPlayer().avatar.makeSpriteAvatar(sprite.image);
 
   await weba.startLoop();
 };
 
-const _getSprites = () => {
-  let parsed = [];
-
-  try {
-    const saved = localStorage.getItem('sprites');
-
-    if (!saved) {
-      return {data: []};
-    }
-
-    parsed = JSON.parse(saved);
-  } catch (error) {
-    console.warn('Error loading rooms from local storage.');
-  }
-  return parsed;
-};
-
 const Canvas = ({app}) => {
+  const {currentSprite} = useContext(AppContext);
   const canvasRef = useRef(null);
   const [domHover, setDomHover] = useState(null);
 
@@ -93,7 +72,7 @@ const Canvas = ({app}) => {
   useEffect(() => {
     if (canvasRef.current) {
       if (!isStarted.current) {
-        _startApp(app, canvasRef.current);
+        _startApp(app, canvasRef.current, currentSprite);
         isStarted.current = true;
       }
     }
@@ -114,8 +93,6 @@ const Canvas = ({app}) => {
 
   return <StyledCanvas domhover={domHover} ref={canvasRef} />;
 };
-
-const localPlayer = metaversefile.useLocalPlayer();
 
 export default function Playground() {
   const {

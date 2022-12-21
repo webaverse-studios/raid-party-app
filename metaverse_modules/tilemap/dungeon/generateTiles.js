@@ -281,13 +281,19 @@ const makePrompt = (i, biomeInfo) => {
   return res;
 };
 
-export async function generateTiles(biomeType, biomeInfo) {
+export async function generateTiles(biomeType, biomeInfo, localPlayer) {
   const sprites = {};
 
   const maxCount = 35;
   let currentCount = 0;
   const start = Date.now();
 
+  localPlayer.dispatchEvent({
+    type: 'load_count',
+    app,
+    total: maxCount,
+    progress: currentCount,
+  });
   for (let i = 0; i < maxCount; i++) {
     const data = makePrompt(i, biomeInfo);
     if (data.through_cache) {
@@ -312,6 +318,13 @@ export async function generateTiles(biomeType, biomeInfo) {
       ).then(img => {
         console.log('img:', img);
         currentCount++;
+
+        localPlayer.dispatchEvent({
+          type: 'load_count',
+          app,
+          total: maxCount,
+          progress: currentCount,
+        });
         if (!img) {
           return;
         }
@@ -326,6 +339,12 @@ export async function generateTiles(biomeType, biomeInfo) {
     console.log('currentCount / maxCount:', currentCount, maxCount);
   }
 
+  localPlayer.dispatchEvent({
+    type: 'load_count',
+    app,
+    total: maxCount,
+    progress: maxCount,
+  });
   const done = Date.now();
   console.log('done in:', done - start);
 

@@ -14,7 +14,7 @@ export default function Toolbar() {
   };
 
   return (
-    <Holder onClick={stopPropagation}>
+    <Holder onClick={stopPropagation} onKeyDown={stopPropagation}>
       <Content>
         <Background />
         <BorderButton

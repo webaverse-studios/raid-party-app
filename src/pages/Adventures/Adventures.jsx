@@ -77,7 +77,7 @@ export default function Adventures() {
   };
 
   return (
-    <Holder onClick={stopPropagation}>
+    <Holder onClick={stopPropagation} onKeyDown={stopPropagation}>
       <Header />
       <MiddleContainer>
         <Cards

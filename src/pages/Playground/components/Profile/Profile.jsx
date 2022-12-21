@@ -14,7 +14,7 @@ export default function Profile() {
   };
 
   return (
-    <Holder onClick={stopPropagation}>
+    <Holder onClick={stopPropagation} onKeyDown={stopPropagation}>
       <Content>
         <UserProfile onClick={e => op.current.toggle(e)}>
           <Photo>{currentSprite && <img src={currentSprite.image} />}</Photo>

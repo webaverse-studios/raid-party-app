@@ -161,6 +161,12 @@ export default e => {
         let pathImg = null;
         const maxCount = fe ? 15 : 14;
         let currentTiles = 0;
+        localPlayer.dispatchEvent({
+          type: 'load_count',
+          app,
+          total: maxCount,
+          progress: currentTiles,
+        });
         for (let i = 0; i < biome.tiles.length; i++) {
           for (let j = 0; j < 1; j++) {
             if (biome.tiles[i].includes('tree')) {
@@ -168,12 +174,24 @@ export default e => {
                 await generateImageCache(biomeInfo + ' tree1', 'forest').then(
                   imgs => {
                     currentTiles++;
+                    localPlayer.dispatchEvent({
+                      type: 'load_count',
+                      app,
+                      total: maxCount,
+                      progress: currentTiles,
+                    });
                     textures[biome.tiles[i]].push(imgs);
                   },
                 );
                 generateImageCache(biomeInfo + ' tree0', 'forest').then(
                   imgs => {
                     currentTiles++;
+                    localPlayer.dispatchEvent({
+                      type: 'load_count',
+                      app,
+                      total: maxCount,
+                      progress: currentTiles,
+                    });
                     textures[biome.tiles[i]].push(imgs);
                   },
                 );
@@ -181,6 +199,12 @@ export default e => {
                 generateImageNew(biomeInfo + ' tree').then(imgs => {
                   console.log('generating tree');
                   currentTiles++;
+                  localPlayer.dispatchEvent({
+                    type: 'load_count',
+                    app,
+                    total: maxCount,
+                    progress: currentTiles,
+                  });
                   textures[biome.tiles[i]].push(imgs[0]);
                   textures[biome.tiles[i]].push(imgs[1]);
                 });
@@ -194,6 +218,12 @@ export default e => {
               generateImageNew(biomeInfo + ' house').then(imgs => {
                 console.log('generating house');
                 currentTiles++;
+                localPlayer.dispatchEvent({
+                  type: 'load_count',
+                  app,
+                  total: maxCount,
+                  progress: currentTiles,
+                });
                 console.log('images:', imgs.length);
                 textures[biome.tiles[11]].push(imgs[0]);
                 textures[biome.tiles[12]].push(imgs[1]);
@@ -217,6 +247,12 @@ export default e => {
                 generateImageCache('path misc', biomeType).then(img => {
                   console.log('generating path');
                   currentTiles++;
+                  localPlayer.dispatchEvent({
+                    type: 'load_count',
+                    app,
+                    total: maxCount,
+                    progress: currentTiles,
+                  });
                   textures[biome.tiles[20]].push(img);
                   textures[biome.tiles[21]].push(img);
                   textures[biome.tiles[22]].push(img);
@@ -244,12 +280,24 @@ export default e => {
                   generateImageNew(prompt).then(img => {
                     console.log('generating biome.tiles[i]', biome.tiles[i]);
                     currentTiles++;
+                    localPlayer.dispatchEvent({
+                      type: 'load_count',
+                      app,
+                      total: maxCount,
+                      progress: currentTiles,
+                    });
                     textures[biome.tiles[i]].push(img);
                   });
                 } else {
                   generateImageCache(prompt, biomeType).then(img => {
                     console.log('generating biome.tiles[i]', biome.tiles[i]);
                     currentTiles++;
+                    localPlayer.dispatchEvent({
+                      type: 'load_count',
+                      app,
+                      total: maxCount,
+                      progress: currentTiles,
+                    });
                     textures[biome.tiles[i]].push(img);
                   });
                 }
@@ -262,6 +310,13 @@ export default e => {
           console.log('current tiles:', currentTiles, '/', maxCount);
           await new Promise(resolve => setTimeout(resolve, 50));
         }
+
+        localPlayer.dispatchEvent({
+          type: 'load_count',
+          app,
+          total: maxCount,
+          progress: maxCount,
+        });
 
         console.log('generated images:', textures);
         const timeDiff = new Date() - start;

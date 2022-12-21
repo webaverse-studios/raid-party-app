@@ -112,6 +112,10 @@ export default function Playground() {
     setApps,
     avatarLoaded,
     setAvatarLoaded,
+    loadedTileCount,
+    setLoadedTileCount,
+    tileMaxCount,
+    setTileMaxCount,
     tilesLoaded,
     setTilesLoaded,
     openAdventures,
@@ -133,6 +137,10 @@ export default function Playground() {
   useEffect(() => {
     localPlayer.addEventListener('loading_map', e => {
       setTilesLoaded(e.loading);
+    });
+    localPlayer.addEventListener('load_count', e => {
+      setTileMaxCount(e.total);
+      setLoadedTileCount(e.progress);
     });
   }, []);
 
@@ -271,11 +279,19 @@ export default function Playground() {
       <Quests />
       <GrabKeyIndicators />
       <FocusBar />
-
+      <IoHandler />
       <Toolbar />
       <Profile />
-      {openAdventures ? <Adventures /> : <IoHandler />}
-      <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
+      {openAdventures && <Adventures />}
+      <StyledLoader
+        visible={tilesLoaded}
+        label={
+          tileMaxCount === 0
+            ? 'Loading webaverse engine...'
+            : `Loaded ${loadedTileCount} / ${tileMaxCount} tiles`
+        }
+        size={70}
+      />
     </Holder>
   );
 }

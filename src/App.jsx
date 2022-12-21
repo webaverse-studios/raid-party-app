@@ -56,6 +56,8 @@ export const App = () => {
   const [state, setState] = useState({openedPanel: null});
   const [uiMode, setUIMode] = useState('normal');
   const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [tileMaxCount, setTileMaxCount] = useState(0);
+  const [loadedTileCount, setLoadedTileCount] = useState(0);
   const [tilesLoaded, setTilesLoaded] = useState(true);
   const [selectedApp, setSelectedApp] = useState(null);
   const [selectedScene, setSelectedScene] = useState(getCurrentSceneSrc());
@@ -87,6 +89,10 @@ export const App = () => {
             setSelectedRoom,
             avatarLoaded,
             setAvatarLoaded,
+            tileMaxCount,
+            setTileMaxCount,
+            loadedTileCount,
+            setLoadedTileCount,
             tilesLoaded,
             setTilesLoaded,
             pageIndex,

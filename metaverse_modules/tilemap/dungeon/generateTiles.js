@@ -230,7 +230,7 @@ const makePrompt = (i, biomeInfo) => {
     res.prompt = biomeInfo + ' skull';
     res.label = 'skull';
   } else if (i === 20) {
-    res.prompt = biomeInfo + ' lanp';
+    res.prompt = biomeInfo + ' lamp';
     res.label = 'lamp';
   } else if (i === 21) {
     res.prompt = biomeInfo + ' large stone';

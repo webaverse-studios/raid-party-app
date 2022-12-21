@@ -82,13 +82,13 @@ const Photo = styled.div`
 const Items = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1em;
 `;
 
 const Item = styled.div`
   cursor: pointer;
   color: #4c4c4c;
   transition: all 0.3s ease-out;
+  padding: 0.7em 0;
   &:hover {
     color: #d33043;
   }

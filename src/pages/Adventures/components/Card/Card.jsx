@@ -1,36 +1,10 @@
-import {motion} from 'framer-motion';
 import React from 'react';
 import styled from 'styled-components';
 
 export default function Card({data, className, onClick}) {
   return (
-    <Holder
-      className={className}
-      onClick={onClick}
-      variants={{
-        open: {
-          opacity: 1,
-          y: 0,
-          transition: {
-            type: 'spring',
-            damping: 12,
-            stiffness: 200,
-          },
-        },
-        closed: {
-          opacity: 0,
-          y: 20,
-          transition: {
-            type: 'spring',
-            damping: 12,
-            stiffness: 200,
-          },
-        },
-      }}
-    >
-      <Preview>
-        <img src={data.preview} alt="" />
-      </Preview>
+    <Holder className={className} onClick={onClick}>
+      <Preview image={data.preview} />
       <Caption>
         <div>
           <Title>{data.name}</Title>
@@ -42,12 +16,9 @@ export default function Card({data, className, onClick}) {
   );
 }
 
-const Holder = styled(motion.li)`
-  width: 17em;
-  height: 12em;
+const Holder = styled.div`
   background: #f5e1b5;
   border: 5px solid #e1cda8;
-  box-shadow: 0px 22px 0px rgba(0, 0, 0, 0.14);
   border-radius: 24px;
   display: flex;
   flex-direction: column;
@@ -56,16 +27,21 @@ const Holder = styled(motion.li)`
   cursor: pointer;
   &:hover {
     background: #fcf0cd;
-    padding-top: 0.4em;
-    border-color: #475f74;
+    filter: drop-shadow(0px 0.8em 0.8em rgba(0, 0, 0, 0.45));
   }
 `;
 
 const Preview = styled.div`
   width: 100%;
+  min-height: 9em;
+  height: 9em;
   flex: 1;
   border-radius: 1em;
   overflow: hidden;
+  background-image: ${props => `url(${props.image})`};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 `;
 
 const Caption = styled.div`

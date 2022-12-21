@@ -9,7 +9,7 @@ import GeneratorTap from './components/GeneratorTap';
 import {AppContext} from '../../App';
 import {toast} from 'react-toastify';
 
-export default function Characters() {
+export default function AvatarGenerator() {
   const {currentSprite, setPageIndex} = useContext(AppContext);
   return (
     <Holder>

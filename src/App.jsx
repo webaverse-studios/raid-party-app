@@ -12,7 +12,7 @@ import {world} from '../world';
 import {AccountContext} from './hooks/web3AccountProvider';
 import {ChainContext} from './hooks/chainProvider';
 
-import Characters from './pages/Characters';
+import AvatarGenerator from './pages/AvatarGenerator';
 import Playground from './pages/Playground';
 
 export const getCurrentSceneSrc = () => {
@@ -64,6 +64,7 @@ export const App = () => {
   const [selectedRoom, setSelectedRoom] = useState(getCurrentRoom());
   const [pageIndex, setPageIndex] = useState(0);
   const [openAdventures, setOpenAdventures] = useState(false);
+  const [openChangeCharacter, setOpenChangeCharacter] = useState(false);
   const [openCreateAdventure, setOpenCreateAdventure] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(null);
 
@@ -99,13 +100,15 @@ export const App = () => {
             setPageIndex,
             openAdventures,
             setOpenAdventures,
+            openChangeCharacter,
+            setOpenChangeCharacter,
             openCreateAdventure,
             setOpenCreateAdventure,
             currentSprite,
             setCurrentSprite,
           }}
         >
-          {pageIndex === 0 && <Characters />}
+          {pageIndex === 0 && <AvatarGenerator />}
           {pageIndex === 1 && <Playground />}
           <ToastContainer theme="colored" />
         </AppContext.Provider>

@@ -41,6 +41,7 @@ import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
 import Toolbar from './components/Toolbar';
 import Profile from './components/Profile';
+import ChangeCharactor from '../ChangeCharactor';
 
 const localPlayer = metaversefile.useLocalPlayer();
 
@@ -282,7 +283,8 @@ export default function Playground() {
       <IoHandler />
       <Toolbar />
       <Profile />
-      {openAdventures && <Adventures />}
+      <Adventures />
+      <ChangeCharactor />
       <StyledLoader
         visible={tilesLoaded}
         label={

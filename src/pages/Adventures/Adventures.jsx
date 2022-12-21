@@ -5,12 +5,12 @@ import {motion} from 'framer-motion';
 import metaversefile from '../../../metaversefile-api.js';
 
 import {MiddleContainer} from '../../components/Containers';
+import PageTransition from '../../components/Animations/PageTransition';
 
 import Header from './components/Header';
 import Card from './components/Card';
 import {AppContext} from '../../App';
 import CreateAdventureDialog from './components/CreateAdventureDialog/CreateAdventureDialog.jsx';
-
 const ADVENTURES_DATA = [
   {
     name: 'Haunt of the Nightmare Knight',
@@ -70,70 +70,87 @@ const ADVENTURES_DATA = [
 
 export default function Adventures() {
   const localPlayer = metaversefile.useLocalPlayer();
-  const {app} = useContext(AppContext);
-
-  const stopPropagation = event => {
-    event.stopPropagation();
-  };
+  const {app, openAdventures} = useContext(AppContext);
 
   return (
-    <Holder onClick={stopPropagation} onKeyDown={stopPropagation}>
-      <Header />
-      <MiddleContainer>
-        <Cards
-          initial="closed"
-          animate="open"
-          variants={{
-            open: {
-              transition: {staggerChildren: 0.09, delayChildren: 0.4},
-            },
-            closed: {
-              transition: {staggerChildren: 0.05, staggerDirection: -1},
-            },
-          }}
-        >
-          {ADVENTURES_DATA.map((d, index) => (
-            <Card
-              key={index}
-              data={d}
-              onClick={() => {
-                const prompt = d.name + ' ' + d.type;
-                localPlayer.dispatchEvent({
-                  type: 'update_adventures',
-                  app,
-                  open_adventures: false,
-                });
-                localPlayer.dispatchEvent({
-                  type: 'enter_adventure',
-                  app,
-                  prompt,
-                  prompt_type: d.type,
-                  is_pregenerated: true,
-                  prompt_id: index,
-                });
-              }}
-            />
-          ))}
-        </Cards>
-      </MiddleContainer>
-      <CreateAdventureDialog />
-    </Holder>
+    <PageTransition visible={openAdventures}>
+      <Holder>
+        <Header />
+        <MiddleContainer>
+          <Cards
+            className="grid"
+            initial="closed"
+            animate="open"
+            variants={{
+              open: {
+                transition: {staggerChildren: 0.09, delayChildren: 0.4},
+              },
+              closed: {
+                transition: {staggerChildren: 0.05, staggerDirection: -1},
+              },
+            }}
+          >
+            {ADVENTURES_DATA.map((d, index) => (
+              <motion.div
+                key={index}
+                className="col-12 md:col-6 lg:col-4 p-4"
+                variants={{
+                  open: {
+                    opacity: 1,
+                    y: 0,
+                    transition: {
+                      type: 'spring',
+                      damping: 12,
+                      stiffness: 200,
+                    },
+                  },
+                  closed: {
+                    opacity: 0,
+                    y: 20,
+                    transition: {
+                      type: 'spring',
+                      damping: 12,
+                      stiffness: 200,
+                    },
+                  },
+                }}
+              >
+                <Card
+                  data={d}
+                  onClick={() => {
+                    const prompt = d.name + ' ' + d.type;
+                    localPlayer.dispatchEvent({
+                      type: 'update_adventures',
+                      app,
+                      open_adventures: false,
+                    });
+                    localPlayer.dispatchEvent({
+                      type: 'enter_adventure',
+                      app,
+                      prompt,
+                      prompt_type: d.type,
+                      is_pregenerated: true,
+                      prompt_id: index,
+                    });
+                  }}
+                />
+              </motion.div>
+            ))}
+          </Cards>
+        </MiddleContainer>
+        <CreateAdventureDialog />
+      </Holder>
+    </PageTransition>
   );
 }
 
 const Holder = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 999;
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: #30404e;
+  overflow-y: auto;
 `;
 
-const Cards = styled(motion.ul)`
-  display: flex;
-  gap: 1em;
-  flex-wrap: wrap;
+const Cards = styled(motion.div)`
   margin-top: 4em;
 `;

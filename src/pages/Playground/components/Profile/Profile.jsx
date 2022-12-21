@@ -5,7 +5,7 @@ import {OverlayPanel} from 'primereact/overlaypanel';
 import {AppContext} from '../../../../App';
 
 export default function Profile() {
-  const {currentSprite} = useContext(AppContext);
+  const {currentSprite, setOpenChangeCharacter} = useContext(AppContext);
 
   const op = useRef(null);
 
@@ -21,7 +21,14 @@ export default function Profile() {
         </UserProfile>
         <OverlayPanel ref={op}>
           <Items>
-            <Item>Change Avatar</Item>
+            <Item
+              onClick={() => {
+                op.current.hide();
+                setOpenChangeCharacter(true);
+              }}
+            >
+              Change Avatar
+            </Item>
             <Item>Preferences</Item>
             <Item>Logout</Item>
           </Items>

@@ -170,7 +170,7 @@ export const generateImageNew = async (
   };
   console.log('body:', body);
   const resp = await axios.post(
-    'https://cors.webaverse.studio/https://ai_dev.webaverse.studio/predictions',
+    'https://cors.webaverse.studio/https://ai_prod.webaverse.studio/predictions',
     body,
     {
       headers: {

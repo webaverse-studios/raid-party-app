@@ -23,12 +23,14 @@ export default class Dungeon {
   biomeInfo = '';
   biomeType = '';
   spot = null;
+  localPlayer = null;
 
   constructor(app, physics, localPlayer, biomeInfo, biomeType) {
     this.app = app;
     this.physics = physics;
     this.biomeInfo = biomeInfo;
     this.biomeType = biomeType;
+    this.localPlayer = localPlayer;
 
     app.addEventListener('triggerin', async e => {
       if (
@@ -140,7 +142,7 @@ export default class Dungeon {
   }
 
   async regenerateMap(type, info) {
-    await generateTiles(type, info);
+    await generateTiles(type, info, this.localPlayer);
 
     const tiles = Textures.tilesTextures(this.assets);
     const props = Textures.propsTextures(this.assets);
@@ -163,7 +165,11 @@ export default class Dungeon {
       }
     });
 
-    const sprites = await generateTiles(this.biomeType, this.biomeInfo);
+    const sprites = await generateTiles(
+      this.biomeType,
+      this.biomeInfo,
+      this.localPlayer,
+    );
     //loop sprite keys, values
     for (const [key, value] of Object.entries(sprites)) {
       const _key = key.replace('_wall', '').trim();

@@ -165,7 +165,7 @@ export default e => {
           for (let j = 0; j < 1; j++) {
             if (biome.tiles[i].includes('tree')) {
               if (fe) {
-                generateImageCache(biomeInfo + ' tree1', 'forest').then(
+                await generateImageCache(biomeInfo + ' tree1', 'forest').then(
                   imgs => {
                     currentTiles++;
                     textures[biome.tiles[i]].push(imgs);

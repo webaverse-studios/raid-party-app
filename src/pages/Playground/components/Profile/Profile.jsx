@@ -3,9 +3,11 @@ import styled from 'styled-components';
 import {OverlayPanel} from 'primereact/overlaypanel';
 
 import {AppContext} from '../../../../App';
+import metaversefile from '../../../../../metaversefile-api';
 
 export default function Profile() {
-  const {currentSprite} = useContext(AppContext);
+  const localPlayer = metaversefile.useLocalPlayer();
+  const {setPageIndex, currentSprite} = useContext(AppContext);
 
   const op = useRef(null);
 
@@ -21,7 +23,20 @@ export default function Profile() {
         </UserProfile>
         <OverlayPanel ref={op}>
           <Items>
-            <Item>Change Avatar</Item>
+            <Item
+              onClick={e => {
+                localPlayer.dispatchEvent({
+                  type: 'back_map',
+                  app,
+                });
+
+                op.current.toggle(e);
+                console.log('dadada');
+                setPageIndex(0);
+              }}
+            >
+              Change Avatar
+            </Item>
             <Item>Preferences</Item>
             <Item>Logout</Item>
           </Items>

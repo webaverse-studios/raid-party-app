@@ -66,6 +66,7 @@ export const generateImageNew = async (
   req_type,
   strength = 0.85,
   guidance_scale = 7.5,
+  tries = 0,
 ) => {
   if (!agent) {
     agent = new Agent({
@@ -107,7 +108,29 @@ export const generateImageNew = async (
   console.log(resp);
 
   const blobs = [];
+
+  if (resp.data.output.file[0][0].length < 9000 && tries < 5) {
+    console.log(prompt, 'is black');
+    return generateImageNew(
+      prompt,
+      label,
+      req_type,
+      strength,
+      guidance_scale,
+      tries + 1,
+    );
+  }
   for (const file of resp.data.output.file[0]) {
+    if (
+      prompt.includes('spikes') ||
+      prompt.includes('skull') ||
+      prompt.includes('bones')
+    ) {
+      console.log('file:', prompt);
+      console.log(file);
+      console.log(file.length, '============================================');
+    }
+    console.log(prompt, 'length:', file.length);
     const blob = b64toBlob(file.split(',')[1], 'image/png');
     const url = URL.createObjectURL(blob);
     console.log(prompt, ':', url);
@@ -186,7 +209,7 @@ const makePrompt = (i, biomeInfo) => {
     res.req_type = 'tile';
     res.through_cache = true;
   } else if (i === 13) {
-    res.prompt = biomeInfo + ' spike';
+    res.prompt = biomeInfo + ' spikes';
     res.label = 'peak';
   } else if (i === 14) {
     res.prompt = biomeInfo + ' bone';

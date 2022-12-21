@@ -284,7 +284,6 @@ export default class Dungeon {
   hasProp = (tilemap, x, y) => {
     try {
       const id = tilemap[y][x];
-      console.log('id:', id);
       return id !== 0;
     } catch (e) {
       return true;
@@ -295,7 +294,6 @@ export default class Dungeon {
     for (let y = 0; y < tilemap.length; y++) {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
-        console.log('spawning propt:', id, 'at', x, y, '');
         if (id === 0) {
           continue;
         }

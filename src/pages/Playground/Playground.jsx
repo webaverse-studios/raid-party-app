@@ -271,10 +271,10 @@ export default function Playground() {
       <Quests />
       <GrabKeyIndicators />
       <FocusBar />
-      <IoHandler />
+
       <Toolbar />
       <Profile />
-      {openAdventures && <Adventures />}
+      {openAdventures ? <Adventures /> : <IoHandler />}
       <StyledLoader visible={tilesLoaded} label="Loading assets..." size={80} />
     </Holder>
   );

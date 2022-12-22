@@ -1,10 +1,12 @@
 import React, {useContext, useEffect, useState} from 'react';
 import styled from 'styled-components';
+import {AnimatePresence, motion} from 'framer-motion';
+
 import BorderButton from '../../../../components/Buttons/BorderButton';
 import IconButton from '../../../../components/Buttons/IconButton';
 import metaversefile from '../../../../../metaversefile-api';
 import {AppContext} from '../../../../App';
-import {AnimatePresence, motion} from 'framer-motion';
+import {toast} from 'react-toastify';
 
 const PROMPTS = [
   'Unicorn',
@@ -16,53 +18,37 @@ const PROMPTS = [
   'Blazing',
 ];
 
+const localPlayer = metaversefile.useLocalPlayer();
+
 export default function CreateAdventureDialog() {
-  const localPlayer = metaversefile.useLocalPlayer();
   const {app, openCreateAdventure, setOpenCreateAdventure} =
     useContext(AppContext);
   const [mapPrompt, setMapPrompt] = useState('');
-  const [isForest, setIsForest] = useState(true);
-  const [isDungeon, setIsDungeon] = useState(false);
-
-  useEffect(() => {
-    if (isForest) {
-      setIsDungeon(false);
-    } else {
-      setIsDungeon(true);
-    }
-  }, [isForest]);
-  useEffect(() => {
-    if (isDungeon) {
-      setIsForest(false);
-    } else {
-      setIsForest(true);
-    }
-  }, [isDungeon]);
+  const [mapType, setMapType] = useState('forest');
 
   const createNew = () => {
-    const prompt = mapPrompt;
-    if (!prompt) {
+    if (mapPrompt === '') {
+      toast('Please enter a map description');
       return;
     }
 
-    console.log('prompt.type:', isForest ? 'forest' : 'dungeon');
     localPlayer.dispatchEvent({
       type: 'update_adventures',
       app,
       open_adventures: false,
     });
+
     localPlayer.dispatchEvent({
       type: 'enter_adventure',
       app,
-      prompt,
-      prompt_type: isForest ? 'forest' : 'dungeon',
+      prompt: mapPrompt,
+      prompt_type: mapType,
       is_pregenerated: true,
     });
   };
 
   const setRandomPrompt = () => {
     const prompt = PROMPTS[Math.floor(Math.random() * PROMPTS.length)];
-
     setMapPrompt(prompt);
   };
 
@@ -76,6 +62,32 @@ export default function CreateAdventureDialog() {
           animate={{opacity: 1}}
         >
           <Content>
+            <CloseButton
+              icon="/images/rp/close.svg"
+              onClick={() => {
+                setOpenCreateAdventure(false);
+              }}
+            />
+            <TypeSelector>
+              <TypeItem
+                image="/images/rp/forest.jpg"
+                active={mapType === 'forest'}
+                onClick={() => {
+                  setMapType('forest');
+                }}
+              >
+                <div>Forest</div>
+              </TypeItem>
+              <TypeItem
+                image="/images/rp/dungeon.jpg"
+                active={mapType === 'dungeon'}
+                onClick={() => {
+                  setMapType('dungeon');
+                }}
+              >
+                <div>Dungeon</div>
+              </TypeItem>
+            </TypeSelector>
             <TextArea
               placeholder="Enter map description"
               value={mapPrompt}
@@ -83,46 +95,14 @@ export default function CreateAdventureDialog() {
                 setMapPrompt(e.target.value);
               }}
             />
-            Forest:{' '}
-            {isForest ? (
-              <CheckboxChecked
-                onClick={() => {
-                  setIsForest(!isForest);
-                }}
+            <div className="flex gap-2">
+              <BorderButton title="Randomize" onClick={setRandomPrompt} />
+              <BorderButton
+                icon="/images/rp/wizard.svg"
+                title="Generate"
+                onClick={createNew}
               />
-            ) : (
-              <Checkbox
-                onClick={() => {
-                  setIsForest(!isForest);
-                }}
-              />
-            )}
-            Dungeon:{' '}
-            {isDungeon ? (
-              <CheckboxChecked
-                onClick={() => {
-                  setIsDungeon(!isDungeon);
-                }}
-              />
-            ) : (
-              <Checkbox
-                onClick={() => {
-                  setIsDungeon(!isDungeon);
-                }}
-              />
-            )}
-            <BorderButton
-              icon="/images/rp/wizard.svg"
-              title="Generate"
-              onClick={createNew}
-            />
-            <BorderButton title="Randomize" onClick={setRandomPrompt} />
-            <CloseButton
-              icon="/images/rp/close.svg"
-              onClick={() => {
-                setOpenCreateAdventure(false);
-              }}
-            />
+            </div>
           </Content>
         </Holder>
       )}
@@ -163,7 +143,7 @@ const TextArea = styled.textarea`
   font-size: 0.9em;
   line-height: 2;
   padding: 1em;
-  width: 20em;
+  width: 100%;
   height: 7em;
   background-color: #fff1d6;
   border: 0.2em solid #e1cda8;
@@ -193,43 +173,32 @@ const CloseButton = styled(IconButton)`
   transform: translate(50%, -50%);
 `;
 
-const CheckboxChecked = styled.div`
-  /* Group 112 */
-
-  width: 53px;
-  height: 53px;
-
-  /* Ellipse 12 */
-
-  box-sizing: border-box;
-
-  width: 53px;
-  height: 53px;
-
-  background: #aa85ab;
-  border: 5px solid #977398;
-  box-shadow: 0px 22px 4px rgba(0, 0, 0, 0.14), inset 0px 10px 0px #c1a0b4;
-  border-radius: 24px;
-
-  /* Ellipse 13 */
-
-  width: 31px;
-  height: 31px;
-
-  background: #ffffff;
-  border-radius: 24px;
+const TypeSelector = styled.div`
+  min-width: 10em;
+  width: 100%;
+  min-height: 10em;
+  display: flex;
+  border-radius: 0.5em;
+  overflow: hidden;
+  border: 0.2em solid #e1cda8;
 `;
 
-const Checkbox = styled.div`
-  /* Ellipse 12 */
-
-  box-sizing: border-box;
-
-  width: 53px;
-  height: 53px;
-
-  background: #aa85ab;
-  border: 5px solid #977398;
-  box-shadow: 0px 22px 4px rgba(0, 0, 0, 0.14), inset 0px 10px 0px #c1a0b4;
-  border-radius: 24px;
+const TypeItem = styled.div`
+  flex: 1;
+  height: inherit;
+  background-image: ${props => `url(${props.image})`};
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  cursor: pointer;
+  opacity: ${props => (props.active ? 1 : 0.7)};
+  transition: all 0.3s ease-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  > div {
+    font-size: 0.9em;
+    opacity: ${props => (props.active ? 1 : 0)};
+  }
 `;

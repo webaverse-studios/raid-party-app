@@ -169,7 +169,7 @@ const getInputImageFrom = prompt => {
     return flowers[Math.floor(Math.random() * flowers.length)];
   } else if (prompt.includes('tree')) {
     const trees = [
-      'https://cdn.discordapp.com/attachments/632242008148148225/1052945804215717888/tree_init.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055485235346817168/init_tree.png',
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055143952866623529/treeinit.png',
     ];
     return trees[Math.floor(Math.random() * trees.length)];

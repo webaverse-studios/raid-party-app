@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 
 import ShadowButton from '../../components/Buttons/ShadowButton';
@@ -11,8 +11,15 @@ import PageTransition from '../../components/Animations/PageTransition';
 import {playersManager} from '../../../players-manager';
 
 export default function ChangeCharactor() {
-  const {openChangeCharacter, setOpenChangeCharacter, currentSprite} =
-    useContext(AppContext);
+  const {
+    openChangeCharacter,
+    setOpenChangeCharacter,
+    currentSprite,
+    setCurrentSprite,
+  } = useContext(AppContext);
+
+  const [oldSprite, setOldSprite] = useState(currentSprite);
+
   return (
     <PageTransition visible={openChangeCharacter}>
       <Holder>
@@ -29,11 +36,13 @@ export default function ChangeCharactor() {
                   .getLocalPlayer()
                   .avatar.makeSpriteAvatar(currentSprite.image);
                 setOpenChangeCharacter(false);
+                setOldSprite(currentSprite);
               }}
             />
             <ShadowButton
               title="Cancel"
               onClick={() => {
+                setCurrentSprite(oldSprite);
                 setOpenChangeCharacter(false);
               }}
             />

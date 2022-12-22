@@ -28,7 +28,7 @@ class Scene2DManager {
     switch (this.perspective) {
       case 'isometric': {
         this.zoomFactor = THREE.MathUtils.clamp(
-          (this.zoomFactor += e.deltaY * 0.01),
+          (this.zoomFactor -= e.deltaY * 0.01),
           1,
           1.5,
         );
@@ -42,7 +42,7 @@ class Scene2DManager {
       }
       case 'top-down': {
         this.zoomFactor = THREE.MathUtils.clamp(
-          (this.zoomFactor += e.deltaY * 0.001),
+          (this.zoomFactor -= e.deltaY * 0.001),
           1,
           2.5,
         );

@@ -100,42 +100,79 @@ const getInputImageFrom = prompt => {
   const rnd = Math.random();
 
   if (prompt.includes('house')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1052945792043847782/house.png';
+    const houses = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945792043847782/house.png',
+    ];
+    return houses[Math.floor(Math.random() * houses.length)];
   } else if (
     (prompt.includes('forest') || prompt.includes('grass')) &&
     !prompt.includes('deep')
   ) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227184285421618/sprite_010.png';
+    const forests = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1049227184285421618/sprite_010.png',
+    ];
+    return forests[Math.floor(Math.random() * forests.length)];
   } else if (prompt.includes('stone')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227226186530846/sprite_067.png';
+    const stones = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1049227226186530846/sprite_067.png',
+    ];
+    return stones[Math.floor(Math.random() * stones.length)];
   } else if (prompt.includes('water')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227245383847956/sprite_192.png';
+    const waters = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1049227245383847956/sprite_192.png',
+    ];
+    return waters[Math.floor(Math.random() * waters.length)];
   } else if (prompt.includes('sand') && !prompt.includes('bush')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1052945791678947409/flowering_bush.png';
+    const sands = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945791678947409/flowering_bush.png',
+    ];
+    return sands[Math.floor(Math.random() * sands.length)];
   } else if (prompt.includes('deep forest')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227265063526420/sprite_199.png';
+    const deepForests = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1049227265063526420/sprite_199.png',
+    ];
+    return deepForests[Math.floor(Math.random() * deepForests.length)];
   } else if (prompt.includes('path')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1049227296646635530/sprite_213.png';
+    const paths = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1049227296646635530/sprite_213.png',
+    ];
+    return paths[Math.floor(Math.random() * paths.length)];
   } else if (prompt.includes('rock')) {
-    return rnd < 0.5
-      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1052945805440454686/rock_pile.png'
-      : 'https://cdn.discordapp.com/attachments/632242008148148225/1052945805910212699/ruin_stones.png';
+    const rocks = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945805440454686/rock_pile.png',
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945805910212699/ruin_stones.png',
+    ];
+    return rocks[Math.floor(Math.random() * rocks.length)];
   } else if (prompt.includes('sand bush')) {
-    return rnd < 0.5
-      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1050747990505181204/pile_of_stones.png'
-      : 'https://cdn.discordapp.com/attachments/632242008148148225/1050748906780233758/ruin_stones.png';
+    const sandBushes = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1050747990505181204/pile_of_stones.png',
+      'https://cdn.discordapp.com/attachments/632242008148148225/1050748906780233758/ruin_stones.png',
+    ];
+    return sandBushes[Math.floor(Math.random() * sandBushes.length)];
   } else if (prompt.includes('torch')) {
-    return 'https://cdn.discordapp.com/attachments/1046461392913440789/1054400040602435614/torch1.png';
+    const torches = [
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1054400040602435614/torch1.png',
+      'https://cdn.discordapp.com/attachments/632242008148148225/1050328302637817867/torch.png',
+    ];
+    return torches[Math.floor(Math.random() * torches.length)];
   } else if (prompt.includes('bush') && !prompt.includes('sand')) {
-    return rnd < 0.5
-      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1052945804949733456/raspberry_bush.png'
-      : 'https://cdn.discordapp.com/attachments/632242008148148225/1052945791678947409/flowering_bush.png';
+    const bushes = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945804949733456/raspberry_bush.png',
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945791678947409/flowering_bush.png',
+    ];
+    return bushes[Math.floor(Math.random() * bushes.length)];
   } else if (prompt.includes('flower')) {
-    return rnd < 0.5
-      ? 'https://cdn.discordapp.com/attachments/632242008148148225/1052945793671233546/flower_1.png'
-      : 'https://cdn.discordapp.com/attachments/632242008148148225/1052945794103255080/flower_2.png';
+    const flowers = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945793671233546/flower_1.png',
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945794103255080/flower_2.png',
+    ];
+    return flowers[Math.floor(Math.random() * flowers.length)];
   } else if (prompt.includes('tree')) {
-    return 'https://cdn.discordapp.com/attachments/632242008148148225/1052945804215717888/tree_init.png';
+    const trees = [
+      'https://cdn.discordapp.com/attachments/632242008148148225/1052945804215717888/tree_init.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055143952866623529/treeinit.png',
+    ];
+    return trees[Math.floor(Math.random() * trees.length)];
   }
 };
 

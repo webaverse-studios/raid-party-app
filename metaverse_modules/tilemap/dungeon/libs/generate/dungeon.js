@@ -282,7 +282,7 @@ function createTilesLayer(tree, args) {
 
   tiles = carveCorridors(tree, duplicateTilemap(tiles));
   tiles = carveRooms(tree, duplicateTilemap(tiles));
-  tiles = computeTilesMask(duplicateTilemap(tiles));
+  // tiles = computeTilesMask(duplicateTilemap(tiles));
   tiles = carveDoors(tree, tiles);
 
   return tiles;

@@ -90,7 +90,7 @@ export default class Dungeon {
     return false;
   };
 
-  addCollider(x, y, group, direction, setTrigger = false) {
+  addCollider(x, y, direction, setTrigger = false) {
     let px = 0;
     let pz = 0;
 
@@ -129,7 +129,6 @@ export default class Dungeon {
     this.colliders.push(physicsObject);
     this.app.add(physicsObject);
   }
-  removeCollider(x, y) {}
 
   randomString(length) {
     const chars =
@@ -160,7 +159,7 @@ export default class Dungeon {
 
   async waitForLoad() {
     document.addEventListener('keydown', e => {
-      if (e.key == 'u') {
+      if (e.key === 'u') {
         this.regenerateMap(this.biomeType, this.biomeInfo);
       }
     });
@@ -170,11 +169,12 @@ export default class Dungeon {
       this.biomeInfo,
       this.localPlayer,
     );
-    //loop sprite keys, values
+
+    // loop sprite keys, values
     for (const [key, value] of Object.entries(sprites)) {
       const _key = key.replace('_wall', '').trim();
       for (const [key2, value2] of Object.entries(TEXTURE_ASSET)) {
-        if (key2 == _key || (_key == 'handcuff' && key2.includes(_key))) {
+        if (key2 === _key || (_key === 'handcuff' && key2.includes(_key))) {
           TEXTURE_ASSET[key2].file_url = value;
           break;
         }
@@ -266,21 +266,24 @@ export default class Dungeon {
             layer: TileLayer.tiles,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
-          const oldPos = sprite.position;
           this.group.add(sprite);
           sprite.updateMatrixWorld();
+
           if (!this.spot) {
-            const isFree = this.hasProp(tilemap, y, x) && id == 0;
+            const isFree = this.hasProp(tilemap, y, x) && id === 0;
             if (isFree) {
               this.spot = [y * TILE_SIZE, x * TILE_SIZE];
             }
           }
-          if (texture) {
-            if (id !== 0 && id !== 46 && id !== 48) {
-              this.addCollider(x, y, this.group, direction);
-            } else if (id === 48) {
-              this.addCollider(x, y, this.group, direction, true);
-            }
+
+          if (
+            id !== TileType.Ground &&
+            id !== TileType.Wall &&
+            id !== TileType.Door
+          ) {
+            this.addCollider(x, y, direction);
+          } else if (id === TileType.Door) {
+            this.addCollider(x, y, direction, true);
           }
         }
       }
@@ -598,7 +601,7 @@ export default class Dungeon {
     for (let y = 0; y < grid.height; y++) {
       for (let x = 0; x < grid.width; x++) {
         if (
-          mergedTiles[y][x] === TileType.All ||
+          mergedTiles[y][x] === TileType.Wall ||
           mergedTiles[y][x] === TileType.Door
         ) {
           grid.setWalkableAt(x, y, true);

@@ -283,10 +283,8 @@ export default class Tiles extends THREE.Object3D {
       for (let j = 0; j < 1; j++) {
         if (tiles[i].includes('tree')) {
           generateImageNew(
-            'top-down view of a ' +
               biomeInfo +
-              ' tree' +
-              ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic',
+              ' tree' ,
           ).then(imgs => {
             textures[tiles[i]].push(imgs[0]);
             textures[tiles[i]].push(imgs[1]);
@@ -299,10 +297,8 @@ export default class Tiles extends THREE.Object3D {
           houseDone = true;
 
           generateImageNew(
-            'top-down view of a ' +
               biomeInfo +
-              ' house' +
-              ', surrounded by completely black, stardew valley, strdwvlly style, completely black background, HD, detailed, clean lines, realistic',
+              ' house' ,
           ).then(imgs => {
             console.log('images:', imgs.length);
             textures[tiles[11]].push(imgs[0]);

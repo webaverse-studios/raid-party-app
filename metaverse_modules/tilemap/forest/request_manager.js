@@ -103,6 +103,9 @@ const getInputImageFrom = prompt => {
     const houses = [
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055518031863885904/house_5-removebg-preview.png',
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055518772078858250/CicPTs-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055839085845020742/1006-10063387_pixelart-pixel-art-viking-house-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055839085496914001/housee-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055831264483102771/Stardew-Valley-8_11_2022-1_09_40-AM-1080x675.jpg.png'
     ];
     return houses[Math.floor(Math.random() * houses.length)];
   } else if (
@@ -172,6 +175,8 @@ const getInputImageFrom = prompt => {
     const trees = [
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055485235346817168/init_tree.png',
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055143952866623529/treeinit.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055847557726736475/tree_pngg-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055848388450594876/treee-removebg-preview.png'
     ];
     return trees[Math.floor(Math.random() * trees.length)];
   }

@@ -35,6 +35,9 @@ const _loadTexture = u =>
 export default class AssetManagerForest {
   constructor(textures) {
     this.textures = textures;
+    for (let i = 0; i < textures.length; i++) {
+      textures[i].encoding = THREE.sRGBEncoding;
+    }
   }
 
   static async loadUrls(urls) {

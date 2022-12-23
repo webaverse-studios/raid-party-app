@@ -14,6 +14,7 @@ const _loadTexture = key =>
         TEXTURE_ASSET[key].file_url,
         t => {
           TEXTURE_ASSET[key].texture = t;
+          TEXTURE_ASSET[key].texture.encoding = THREE.sRGBEncoding;
           accept(t);
         },
         function onProgress() {},
@@ -26,6 +27,7 @@ const _loadTexture = key =>
         `${BASE_URL}${TEXTURE_ASSET[key].path}${key}${TEXTURE_ASSET[key].ext}`,
         t => {
           TEXTURE_ASSET[key].texture = t;
+          TEXTURE_ASSET[key].texture.encoding = THREE.sRGBEncoding;
           accept(t);
         },
         function onProgress() {},

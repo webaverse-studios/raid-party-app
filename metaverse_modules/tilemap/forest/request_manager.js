@@ -101,7 +101,8 @@ const getInputImageFrom = prompt => {
 
   if (prompt.includes('house')) {
     const houses = [
-      'https://cdn.discordapp.com/attachments/632242008148148225/1052945792043847782/house.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055518031863885904/house_5-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055518772078858250/CicPTs-removebg-preview.png',
     ];
     return houses[Math.floor(Math.random() * houses.length)];
   } else if (
@@ -151,8 +152,8 @@ const getInputImageFrom = prompt => {
     return sandBushes[Math.floor(Math.random() * sandBushes.length)];
   } else if (prompt.includes('torch')) {
     const torches = [
-      'https://cdn.discordapp.com/attachments/1046461392913440789/1054400040602435614/torch1.png',
       'https://cdn.discordapp.com/attachments/632242008148148225/1050328302637817867/torch.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055521896881463387/torch.png',
     ];
     return torches[Math.floor(Math.random() * torches.length)];
   } else if (prompt.includes('bush') && !prompt.includes('sand')) {

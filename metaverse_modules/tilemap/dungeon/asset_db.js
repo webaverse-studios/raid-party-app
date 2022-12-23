@@ -72,6 +72,7 @@ export const getAssetURL = prompt => {
   } else if (prompt === 'torch') {
     const torches = [
       'https://cdn.discordapp.com/attachments/632242008148148225/1050328302637817867/torch.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055521896881463387/torch.png',
     ];
     return torches[Math.floor(Math.random() * torches.length)];
   } else if (prompt === 'stones_small') {
@@ -96,7 +97,7 @@ export const getAssetURL = prompt => {
     return skulls[Math.floor(Math.random() * skulls.length)];
   } else if (prompt === 'peak') {
     const peaks = [
-      'https://cdn.discordapp.com/attachments/1046461392913440789/1054399510702473246/sprite_0.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055521761262841968/Spike_Trap.png',
     ];
     return peaks[Math.floor(Math.random() * peaks.length)];
   } else if (prompt === 'mana_small') {

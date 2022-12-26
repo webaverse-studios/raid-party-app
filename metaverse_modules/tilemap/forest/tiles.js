@@ -272,7 +272,8 @@ export default class Tiles extends THREE.Object3D {
     const start = new Date();
     let houseDone = false;
     let pathImg = null;
-    const maxCount = 14;
+    const houseNumber = 4;
+    const maxCount = 14 + houseNumber - 1;
     let currentTiles = 0;
 
     for (let i = 0; i < tiles.length; i++) {
@@ -282,10 +283,7 @@ export default class Tiles extends THREE.Object3D {
     for (let i = 0; i < tiles.length; i++) {
       for (let j = 0; j < 1; j++) {
         if (tiles[i].includes('tree')) {
-          generateImageNew(
-              biomeInfo +
-              ' tree' ,
-          ).then(imgs => {
+          generateImageNew(biomeInfo + ' tree').then(imgs => {
             textures[tiles[i]].push(imgs[0]);
             textures[tiles[i]].push(imgs[1]);
             currentTiles++;
@@ -294,24 +292,24 @@ export default class Tiles extends THREE.Object3D {
           if (houseDone) {
             continue;
           }
-          houseDone = true;
 
-          generateImageNew(
-              biomeInfo +
-              ' house' ,
-          ).then(imgs => {
-            console.log('images:', imgs.length);
-            textures[tiles[11]].push(imgs[0]);
-            textures[tiles[12]].push(imgs[1]);
-            textures[tiles[13]].push(imgs[2]);
-            textures[tiles[14]].push(imgs[3]);
-            textures[tiles[15]].push(imgs[4]);
-            textures[tiles[16]].push(imgs[5]);
-            textures[tiles[17]].push(imgs[6]);
-            textures[tiles[18]].push(imgs[7]);
-            textures[tiles[19]].push(imgs[8]);
-            currentTiles++;
-          });
+          houseDone = true;
+          for (let i = 0; i < houseNumber; i++) {
+            generateImageNew(biomeInfo + ' house').then(imgs => {
+              console.log('generating house');
+              currentTiles++;
+              console.log('images:', imgs.length);
+              textures[tiles[11]].push(imgs[0]);
+              textures[tiles[12]].push(imgs[1]);
+              textures[tiles[13]].push(imgs[2]);
+              textures[tiles[14]].push(imgs[3]);
+              textures[tiles[15]].push(imgs[4]);
+              textures[tiles[16]].push(imgs[5]);
+              textures[tiles[17]].push(imgs[6]);
+              textures[tiles[18]].push(imgs[7]);
+              textures[tiles[19]].push(imgs[8]);
+            });
+          }
         } else {
           let prompt = tiles[i];
 

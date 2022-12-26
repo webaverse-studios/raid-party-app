@@ -174,7 +174,7 @@ export default function generateForest(
 
     cloneMesh.position.set(
       (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      0.25,
+      4,
       (x - TILE_AMOUNT / 2) * TILE_SIZE,
     );
     props.push({type: treeSprite, x: y, y: x});
@@ -561,15 +561,16 @@ export default function generateForest(
       return Math.random() < 0.5;
     });
 
-    const houseUpLeft = info + ' house Up Left_0';
-    const houseUpMiddle = info + ' house Up Middle_0';
-    const houseUpRight = info + ' house Up Right_0';
-    const houseMiddleLeft = info + ' house Middle Left_0';
-    const houseMiddleMiddle = info + ' house Middle Middle_0';
-    const houseMiddleRight = info + ' house Middle Right_0';
-    const houseDownLeft = info + ' house Down Left_0';
-    const houseDownMiddle = info + ' house Down Middle_0';
-    const houseDownRight = info + ' house Down Right_0';
+    console.log(_meshes);
+    const houseUpLeft = info + ' house Up Left_';
+    const houseUpMiddle = info + ' house Up Middle_';
+    const houseUpRight = info + ' house Up Right_';
+    const houseMiddleLeft = info + ' house Middle Left_';
+    const houseMiddleMiddle = info + ' house Middle Middle_';
+    const houseMiddleRight = info + ' house Middle Right_';
+    const houseDownLeft = info + ' house Down Left_';
+    const houseDownMiddle = info + ' house Down Middle_';
+    const houseDownRight = info + ' house Down Right_';
 
     const resHouses = [];
     //place houses in the areas
@@ -588,16 +589,18 @@ export default function generateForest(
         [i + 2, j + 1],
         [i + 2, j + 2],
       ];
+
+      const houseInt = Math.floor(Math.random() * 4);
       const sprites = [
-        houseUpLeft,
-        houseUpMiddle,
-        houseUpRight,
-        houseMiddleLeft,
-        houseMiddleMiddle,
-        houseMiddleRight,
-        houseDownLeft,
-        houseDownMiddle,
-        houseDownRight,
+        houseUpLeft + houseInt,
+        houseUpMiddle + houseInt,
+        houseUpRight + houseInt,
+        houseMiddleLeft + houseInt,
+        houseMiddleMiddle + houseInt,
+        houseMiddleRight + houseInt,
+        houseDownLeft + houseInt,
+        houseDownMiddle + houseInt,
+        houseDownRight + houseInt,
       ];
 
       const doorIndex = 7;
@@ -621,7 +624,7 @@ export default function generateForest(
         const cloneMesh = _meshes[sprites[i]].clone();
         cloneMesh.position.set(
           (locs[i][1] - TILE_AMOUNT / 2) * TILE_SIZE,
-          i < 3 ? 0.25 : 0.2,
+          i < 6 ? 4 : 0.2,
           (locs[i][0] - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         if (i >= 3) {

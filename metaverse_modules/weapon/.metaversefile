@@ -1,0 +1,21 @@
+{
+  "name": "stick",
+  "start_url": "index.js",
+  "description": "good ol woopin stick",
+  "components": [
+    {
+      "key": "physics",
+      "value": true
+    },
+    {
+      "key": "animation",
+      "value": false
+    },
+    {
+      "key": "wear"
+    },
+    {
+      "key": "use"
+    }
+  ]
+}

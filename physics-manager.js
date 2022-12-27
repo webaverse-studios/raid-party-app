@@ -32,6 +32,7 @@ const localMatrix = new THREE.Matrix4() */
 // fake shared material to prevent shader instantiation
 const redMaterial = new THREE.MeshBasicMaterial({
   color: 0xff0000,
+  wireframe: true,
   // side: THREE.DoubleSide,
 });
 
@@ -191,7 +192,7 @@ class PhysicsScene extends EventTarget {
       redMaterial,
     );
     physicsMesh.scale.copy(size);
-    physicsMesh.visible = false;
+    // physicsMesh.visible = false;
     physicsObject.add(physicsMesh);
     physicsObject.updateMatrixWorld();
     const {bounds} = this.getGeometryForPhysicsId(physicsId);
@@ -621,6 +622,18 @@ class PhysicsScene extends EventTarget {
     );
 
     freePhysicsId(physicsObject.physicsId);
+
+    //
+    const child = physicsObject.children[0];
+    if (child) {
+      child.geometry?.dispose();
+      child.material?.dispose();
+      physicsObject.remove(child);
+      physicsObject.updateMatrixWorld();
+    }
+    if (physicsObject.parent) {
+      physicsObject.parent.remove(physicsObject);
+    }
   }
 
   getLinearVelocity(physicsObject, velocity) {

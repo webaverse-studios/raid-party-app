@@ -13,7 +13,7 @@ import {Data, Textures} from './libs/utils/index.js';
 import {Grid, IDAStarFinder} from './libs/pathfinder/index.js';
 import {generateTiles} from './generateTiles.js';
 import {TEXTURE_ASSET} from './libs/utils/assets.js';
-import physicsManager from '../../../physics-manager.js';
+import {nanoid} from 'nanoid';
 
 const {useLocalPlayer} = metaversefile;
 
@@ -25,6 +25,11 @@ export default class Dungeon {
   spot = null;
   localPlayer = null;
   meshes = [];
+  dungeon = null;
+  oldDungeon = null;
+  tempDungeon = null;
+  assets = null;
+  colliders = [];
 
   constructor(app, physics, localPlayer, biomeInfo, biomeType) {
     this.app = app;
@@ -32,23 +37,6 @@ export default class Dungeon {
     this.biomeInfo = biomeInfo;
     this.biomeType = biomeType;
     this.localPlayer = localPlayer;
-
-    app.addEventListener('triggerin', async e => {
-      if (
-        e.oppositePhysicsId ===
-        localPlayer.characterPhysics.characterController.physicsId
-      ) {
-        console.log('local player trigger in');
-      }
-    });
-    app.addEventListener('triggerout', async e => {
-      if (
-        e.oppositePhysicsId ===
-        localPlayer.characterPhysics.characterController.physicsId
-      ) {
-        console.log('local player trigger out');
-      }
-    });
 
     this.assets = null;
 
@@ -76,17 +64,12 @@ export default class Dungeon {
     this.pivot.add(this.tempGroup);
     this.tempGroup.updateMatrixWorld();
 
-    this.playerPosition = new THREE.Vector3();
-  }
+    //
+    // Colliders
+    //
+    this.colliders = [];
 
-  randomString(length) {
-    const chars =
-      '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    let result = '';
-    for (let i = length; i > 0; --i) {
-      result += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return result;
+    this.playerPosition = new THREE.Vector3();
   }
 
   async regenerateMap(type, info) {
@@ -140,7 +123,7 @@ export default class Dungeon {
       containerSplitRetries: 30,
       corridorWidth: 4,
       tileWidth: 32,
-      seed: this.randomString(21),
+      seed: nanoid(),
       debug: false,
       rooms: Data.loadRooms(),
     });
@@ -153,8 +136,8 @@ export default class Dungeon {
 
     // Clear old group
     this.oldGroup.children.forEach(node => {
-      node?.geometry?.dispose();
-      node?.material?.dispose();
+      node.geometry?.dispose();
+      node.material?.dispose();
       this.oldGroup.remove(node);
       node.updateMatrixWorld();
     });
@@ -168,8 +151,8 @@ export default class Dungeon {
 
     // Clear group
     this.group.children.forEach(node => {
-      node?.geometry?.dispose();
-      node?.material?.dispose();
+      node.geometry?.dispose();
+      node.material?.dispose();
       this.group.remove(node);
       node.updateMatrixWorld();
     });
@@ -191,6 +174,8 @@ export default class Dungeon {
       dungeon.layers.monsters,
       Textures.monstersTextures(this.assets),
     );
+
+    this.addColliders();
   }
 
   drawTiles = (tilemap, sprites, direction) => {
@@ -198,6 +183,7 @@ export default class Dungeon {
       for (let x = 0; x < tilemap[y].length; x++) {
         const id = tilemap[y][x];
         const texture = sprites[id];
+
         if (texture) {
           const geometry = new THREE.PlaneGeometry(TILE_SIZE, TILE_SIZE, 1, 1);
           geometry.rotateX(-Math.PI / 2);
@@ -216,18 +202,23 @@ export default class Dungeon {
           this.group.add(sprite);
           sprite.updateMatrixWorld();
 
-          // Add collision
-          if (id === TileType.Wall) {
+          // Add colliders
+          if (id === TileType.Wall || id === TileType.Hole) {
+            const pos = new THREE.Vector3();
+            sprite.getWorldPosition(pos);
             const physicsObject = this.physics.addBoxGeometry(
-              new THREE.Vector3(x * TILE_SIZE, 0, y * TILE_SIZE),
+              pos,
               new THREE.Quaternion().setFromEuler(
                 new THREE.Euler(0, 0, Math.PI / 2),
               ),
-              new THREE.Vector3(COLLIDER_SIZE, COLLIDER_SIZE, COLLIDER_SIZE),
+              new THREE.Vector3(5, COLLIDER_SIZE, COLLIDER_SIZE),
               false,
             );
-            this.group.add(physicsObject);
+            this.app.add(physicsObject);
+            physicsObject.updateMatrixWorld();
+            this.colliders.push(physicsObject);
           }
+          this.group.updateMatrixWorld();
 
           if (!this.spot) {
             const isFree = this.hasProp(tilemap, y, x) && id === 0;
@@ -351,8 +342,8 @@ export default class Dungeon {
 
           // Clear temp group
           this.tempGroup.children.forEach(node => {
-            node?.geometry?.dispose();
-            node?.material?.dispose();
+            node.geometry?.dispose();
+            node.material?.dispose();
             this.tempGroup.remove(node);
             node.updateMatrixWorld();
           });
@@ -604,7 +595,6 @@ export default class Dungeon {
             node?.material?.dispose();
             this.group.remove(node);
             node.updateMatrixWorld();
-            break;
           }
         }
         this.group.updateMatrixWorld();
@@ -646,7 +636,6 @@ export default class Dungeon {
             node?.material?.dispose();
             this.oldGroup.remove(node);
             node.updateMatrixWorld();
-            break;
           }
         }
         this.oldGroup.updateMatrixWorld();
@@ -671,6 +660,9 @@ export default class Dungeon {
         this.oldGroup.updateMatrixWorld();
       }
     }
+
+    this.removeColliders();
+    this.addColliders();
   }
 
   frame() {
@@ -678,7 +670,66 @@ export default class Dungeon {
     const localPlayer = useLocalPlayer();
     this.playerPosition.copy(localPlayer.position);
 
-    // create next dungeon
+    // create next dungeons
     this.createNextDungeon();
+  }
+
+  //
+  // Remove colliders
+  //
+  removeColliders() {
+    this.colliders.forEach(collider => this.physics.removeGeometry(collider));
+    this.colliders.length = 0;
+  }
+
+  //
+  // Add colliders
+  //
+  addColliders() {
+    for (let i = 0; i < this.group.children.length; i++) {
+      const child = this.group.children[i];
+      if (
+        (child.userData.type === TileType.Wall ||
+          child.userData.type === TileType.Hole) &&
+        child.userData.layer === TileLayer.tiles
+      ) {
+        const pos = new THREE.Vector3();
+        child.getWorldPosition(pos);
+        const physicsObject = this.physics.addBoxGeometry(
+          pos,
+          new THREE.Quaternion().setFromEuler(
+            new THREE.Euler(0, 0, Math.PI / 2),
+          ),
+          new THREE.Vector3(5, COLLIDER_SIZE, COLLIDER_SIZE),
+          false,
+        );
+        this.app.add(physicsObject);
+        physicsObject.updateMatrixWorld();
+        this.colliders.push(physicsObject);
+      }
+    }
+
+    for (let i = 0; i < this.oldGroup.children.length; i++) {
+      const child = this.oldGroup.children[i];
+      if (
+        (child.userData.type === TileType.Wall ||
+          child.userData.type === TileType.Hole) &&
+        child.userData.layer === TileLayer.tiles
+      ) {
+        const pos = new THREE.Vector3();
+        child.getWorldPosition(pos);
+        const physicsObject = this.physics.addBoxGeometry(
+          pos,
+          new THREE.Quaternion().setFromEuler(
+            new THREE.Euler(0, 0, Math.PI / 2),
+          ),
+          new THREE.Vector3(5, COLLIDER_SIZE, COLLIDER_SIZE),
+          false,
+        );
+        this.app.add(physicsObject);
+        physicsObject.updateMatrixWorld();
+        this.colliders.push(physicsObject);
+      }
+    }
   }
 }

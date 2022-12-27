@@ -175,6 +175,7 @@ export default class Dungeon {
       Textures.monstersTextures(this.assets),
     );
 
+    this.removeColliders();
     this.addColliders();
   }
 

@@ -99,10 +99,10 @@ export default function generateForest(
         0,
         (x - TILE_AMOUNT / 2) * TILE_SIZE,
       ),
-      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
+      new THREE.Quaternion(),
       halfSize
-        ? new THREE.Vector3(0.25, 0.25, 0.25)
-        : new THREE.Vector3(0.5, 0.5, 0.5),
+        ? new THREE.Vector3(0.25, 10, 0.25)
+        : new THREE.Vector3(0.5, 10, 0.5),
       false,
     );
     if (setTrigger) {
@@ -632,7 +632,6 @@ export default function generateForest(
       }
 
       for (let i = 0; i < locs.length; i++) {
-        //check the tile below door if it has a collider
         mapArr[locs[i][1]][locs[i][0]] = i < 3 ? 0 : 1;
         grid.setWalkableAt(locs[i][1], locs[i][0], i < 3);
 
@@ -664,7 +663,6 @@ export default function generateForest(
         const start = resHouses[i];
         const end = resHouses[i + 1];
 
-        //get one tile down from the start and end
         let path = null;
         try {
           const startDown = [start[0], start[1] + 1];

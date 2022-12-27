@@ -1,7 +1,7 @@
 import metaversefile from 'metaversefile';
 import * as THREE from 'three';
 import AssetManager from './AssetManager.js';
-import {SNAP_SIZE, TILE_SIZE} from './constants.js';
+import {COLLIDER_SIZE, SNAP_SIZE, TILE_SIZE} from './constants.js';
 import {
   Direction,
   generate,
@@ -24,6 +24,7 @@ export default class Dungeon {
   biomeType = '';
   spot = null;
   localPlayer = null;
+  meshes = [];
 
   constructor(app, physics, localPlayer, biomeInfo, biomeType) {
     this.app = app;
@@ -78,58 +79,6 @@ export default class Dungeon {
     this.playerPosition = new THREE.Vector3();
   }
 
-  colliders = [];
-  meshObjects = [];
-
-  colliderExists = (x, y) => {
-    for (let i = 0; i < this.colliders.length; i++) {
-      if (this.colliders[i].x === x && this.colliders[i].y === y) {
-        return true;
-      }
-    }
-    return false;
-  };
-
-  addCollider(x, y, direction, setTrigger = false) {
-    let px = 0;
-    let pz = 0;
-
-    switch (direction) {
-      case Direction.right:
-        px = this.oldGroup.position.x + this.dungeon.width * TILE_SIZE;
-        pz += this.oldGroup.position.z;
-        break;
-      case Direction.left:
-        px = this.oldGroup.position.x - this.dungeon.width * TILE_SIZE;
-        pz += this.oldGroup.position.z;
-        break;
-      case Direction.down:
-        pz = this.oldGroup.position.z + this.dungeon.height * TILE_SIZE;
-        px += this.oldGroup.position.x;
-        break;
-      case Direction.up:
-        pz = this.oldGroup.position.z - this.dungeon.height * TILE_SIZE;
-        px += this.oldGroup.position.x;
-        break;
-    }
-
-    const x1 = x * TILE_SIZE + px;
-    const y1 = y * TILE_SIZE + pz;
-
-    const physicsObject = this.physics.addBoxGeometry(
-      new THREE.Vector3(x1, 0, y1),
-      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-      new THREE.Vector3(0.3, 0.3, 0.3),
-      false,
-    );
-    if (setTrigger) {
-      physicsManager.getScene().setTrigger(physicsObject.physicsId);
-    }
-
-    this.colliders.push(physicsObject);
-    this.app.add(physicsObject);
-  }
-
   randomString(length) {
     const chars =
       '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -146,15 +95,13 @@ export default class Dungeon {
     const tiles = Textures.tilesTextures(this.assets);
     const props = Textures.propsTextures(this.assets);
 
-    console.log('meshObjects:', this.meshObjects.length);
-    for (let i = 0; i < this.meshObjects.length; i++) {
+    for (let i = 0; i < this.meshes.length; i++) {
       const texture =
-        this.meshObjects[i].type === 'prop'
-          ? props[this.meshObjects[i]]
-          : tiles[this.meshObjects[i]];
-      this.meshObjects[i].sprite.material.map = texture;
+        this.meshes[i].type === 'prop'
+          ? props[this.meshes[i]]
+          : tiles[this.meshes[i]];
+      this.meshes[i].sprite.material.map = texture;
     }
-    console.log('map regenerated');
   }
 
   async waitForLoad() {
@@ -269,21 +216,24 @@ export default class Dungeon {
           this.group.add(sprite);
           sprite.updateMatrixWorld();
 
+          // Add collision
+          if (id === TileType.Wall) {
+            const physicsObject = this.physics.addBoxGeometry(
+              new THREE.Vector3(x * TILE_SIZE, 0, y * TILE_SIZE),
+              new THREE.Quaternion().setFromEuler(
+                new THREE.Euler(0, 0, Math.PI / 2),
+              ),
+              new THREE.Vector3(COLLIDER_SIZE, COLLIDER_SIZE, COLLIDER_SIZE),
+              false,
+            );
+            this.group.add(physicsObject);
+          }
+
           if (!this.spot) {
             const isFree = this.hasProp(tilemap, y, x) && id === 0;
             if (isFree) {
               this.spot = [y * TILE_SIZE, x * TILE_SIZE];
             }
-          }
-
-          if (
-            id !== TileType.Ground &&
-            id !== TileType.Wall &&
-            id !== TileType.Door
-          ) {
-            this.addCollider(x, y, direction);
-          } else if (id === TileType.Door) {
-            this.addCollider(x, y, direction, true);
           }
         }
       }
@@ -323,10 +273,9 @@ export default class Dungeon {
             layer: TileLayer.props,
           };
           sprite.position.set(x * TILE_SIZE, 0, y * TILE_SIZE);
-          this.meshObjects.push({x, y, sprite, key: 'id', type: 'prop'});
+          this.meshes.push({x, y, sprite, key: 'id', type: 'prop'});
           this.group.add(sprite);
           sprite.updateMatrixWorld();
-          this.addCollider(x, y, this.group, direction);
         }
       }
     }

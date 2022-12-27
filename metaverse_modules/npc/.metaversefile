@@ -1,0 +1,5 @@
+{
+  "name": "npc",
+  "description": "npc",
+  "start_url": "index.js"
+}

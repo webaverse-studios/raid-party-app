@@ -207,6 +207,7 @@ function SpriteMixer() {
     texture.wrapT = THREE.RepeatWrapping;
     texture.wrapS = THREE.MirroredRepeatWrapping;
     texture.repeat.set(1 / tilesHoriz, 1 / tilesVert);
+    texture.encoding = THREE.sRGBEncoding;
 
     let spriteMaterial = new THREE.SpriteMaterial({
       map: texture,

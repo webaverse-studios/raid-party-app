@@ -4,6 +4,7 @@ import {BufferedCubicNoise} from './utils/bufferedCubicNoise';
 import PF from 'pathfinding';
 import * as THREE from 'three';
 import physicsManager from '../../../physics-manager.js';
+import {YLayer} from './constants';
 
 let addedAroundColliders = false;
 //move the generation into a test script, to log 10s map
@@ -91,7 +92,7 @@ export default function generateForest(
     init(0);
   }
 
-  function addCollider(y, x, setTrigger = false) {
+  function addCollider(y, x, setTrigger = false, halfSize = false) {
     const physicsObject = physics.addBoxGeometry(
       new THREE.Vector3(
         (y - TILE_AMOUNT / 2) * TILE_SIZE,
@@ -99,7 +100,9 @@ export default function generateForest(
         (x - TILE_AMOUNT / 2) * TILE_SIZE,
       ),
       new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-      new THREE.Vector3(0.5, 0.5, 0.5),
+      halfSize
+        ? new THREE.Vector3(0.25, 0.25, 0.25)
+        : new THREE.Vector3(0.5, 0.5, 0.5),
       false,
     );
     if (setTrigger) {
@@ -152,12 +155,24 @@ export default function generateForest(
     const cloneTreeMesh = _meshes[prop].clone();
     cloneTreeMesh.position.set(
       (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      type === 'flower' ? 0.005 : 0.01,
+      type === 'flower' ? YLayer.FLOWER : YLayer.PROP,
       (x - TILE_AMOUNT / 2) * TILE_SIZE,
     );
 
     if (type !== 'flower' && type !== 'torch') {
-      addCollider(y, x);
+      addCollider(
+        y,
+        x,
+        false,
+        type === 'rock' || type === 'stone' || type.includes('bush'),
+      );
+    }
+    if (type === 'torch' || type === 'flower') {
+      cloneTreeMesh.scale.set(
+        cloneTreeMesh.scale.x / 2,
+        cloneTreeMesh.scale.y / 2,
+        cloneTreeMesh.scale.z / 2,
+      );
     }
 
     meshes.push(cloneTreeMesh);
@@ -174,7 +189,7 @@ export default function generateForest(
 
     cloneMesh.position.set(
       (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      4,
+      YLayer.TREE_UP,
       (x - TILE_AMOUNT / 2) * TILE_SIZE,
     );
     props.push({type: treeSprite, x: y, y: x});
@@ -268,7 +283,7 @@ export default function generateForest(
           const cloneMesh = _meshes[tileName].clone();
           cloneMesh.position.set(
             (y - TILE_AMOUNT / 2) * TILE_SIZE,
-            0,
+            YLayer.GROUND,
             (x - TILE_AMOUNT / 2) * TILE_SIZE,
           );
           meshes.push(cloneMesh);
@@ -495,7 +510,7 @@ export default function generateForest(
             const cloneMesh = _meshes[spriteName].clone();
             cloneMesh.position.set(
               (y - TILE_AMOUNT / 2) * TILE_SIZE,
-              0.05,
+              YLayer.PATH,
               (x - TILE_AMOUNT / 2) * TILE_SIZE,
             );
             meshes.push(cloneMesh);
@@ -624,7 +639,7 @@ export default function generateForest(
         const cloneMesh = _meshes[sprites[i]].clone();
         cloneMesh.position.set(
           (locs[i][1] - TILE_AMOUNT / 2) * TILE_SIZE,
-          i < 6 ? 4 : 0.2,
+          i < 6 ? YLayer.HOUSE_UP : YLayer.HOUSE_DOWN,
           (locs[i][0] - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         if (i >= 3) {
@@ -815,7 +830,7 @@ export default function generateForest(
         const cloneMesh = _meshes[spriteName].clone();
         cloneMesh.position.set(
           (y - TILE_AMOUNT / 2) * TILE_SIZE,
-          0.05,
+          YLayer.PATH,
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         meshes.push(cloneMesh);
@@ -910,7 +925,7 @@ export default function generateForest(
       const cloneMesh = _meshes[monster].clone();
       cloneMesh.position.set(
         (center[1] - TILE_AMOUNT / 2) * TILE_SIZE,
-        0.1,
+        YLayer.MONSTER,
         (center[0] - TILE_AMOUNT / 2) * TILE_SIZE,
       );
       meshes.push(cloneMesh);

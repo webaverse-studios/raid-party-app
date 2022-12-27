@@ -128,6 +128,8 @@ export default class Dungeon {
       rooms: Data.loadRooms(),
     });
     this.drawDungeon(newDungeon);
+
+    this.addColliders();
   }
 
   drawDungeon(dungeon, direction) {
@@ -174,9 +176,6 @@ export default class Dungeon {
       dungeon.layers.monsters,
       Textures.monstersTextures(this.assets),
     );
-
-    this.removeColliders();
-    this.addColliders();
   }
 
   drawTiles = (tilemap, sprites, direction) => {
@@ -318,6 +317,10 @@ export default class Dungeon {
 
       // Create corridor to connect two dungeons
       this.createCorridorToConnectDungeons(detectedDoor);
+
+      //
+      this.removeColliders();
+      this.addColliders();
     } else {
       // Detect door in old dungeon
       if (this.oldDungeon) {
@@ -362,6 +365,9 @@ export default class Dungeon {
 
           // Create corridor to connect two dungeons
           this.createCorridorToConnectDungeons(detectedDoor);
+
+          this.removeColliders();
+          this.addColliders();
         }
       }
     }
@@ -661,9 +667,6 @@ export default class Dungeon {
         this.oldGroup.updateMatrixWorld();
       }
     }
-
-    this.removeColliders();
-    this.addColliders();
   }
 
   frame() {

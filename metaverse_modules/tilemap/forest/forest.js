@@ -5,6 +5,7 @@ import PF from 'pathfinding';
 import * as THREE from 'three';
 import physicsManager from '../../../physics-manager.js';
 import {YLayer} from './constants';
+import metaversefile from 'metaversefile';
 
 let addedAroundColliders = false;
 //move the generation into a test script, to log 10s map
@@ -970,10 +971,33 @@ export default function generateForest(
     addedAroundColliders = true;
   }
 
+  const npcs = [];
+  for (let i = 0; i < 5; i++) {
+    npcs.push(
+      metaversefile.addTrackedApp(
+        '../../metaverse_modules/npc/',
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Quaternion(0, 0, 0, 1),
+        new THREE.Vector3(1, 1, 1),
+        [],
+      ),
+    );
+  }
+
+  const weapon = metaversefile.addTrackedApp(
+    '../../metaverse_modules/weapon/',
+    new THREE.Vector3(0, 1, 0),
+    new THREE.Quaternion(0, 0, 0, 1),
+    new THREE.Vector3(1, 1, 1),
+    [],
+  );
+
   return {
     meshes: meshes,
     allMeshes: allMeshes,
     colliders: colliders,
     spot: spot,
+    npcs: npcs,
+    weapon: weapon,
   };
 }

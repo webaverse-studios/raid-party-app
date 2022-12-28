@@ -6,6 +6,7 @@ import {
   generateImageCache,
   generateImageNew,
 } from './request_manager';
+import metaversefile from 'metaversefile';
 
 // this file's base url
 const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -21,6 +22,8 @@ export default class Tiles extends THREE.Object3D {
   biomeInfo = '';
   cMeshes = [];
   spot = [0, 0];
+  npcs = [];
+  weapon = null;
 
   constructor() {
     super();
@@ -210,6 +213,20 @@ export default class Tiles extends THREE.Object3D {
       });
       this.cMeshes = [];
     }
+    if (this.npcs) {
+      this.npcs.forEach(async npc => {
+        const _npc = await npc;
+        metaversefile.removeTrackedApp(_npc.getComponent('instanceId'));
+      });
+      this.npcs = [];
+    }
+    if (this.weapon) {
+      const cleanWeapon = async () => {
+        const _weapon = await this.weapon;
+        metaversefile.removeTrackedApp(_weapon.getComponent('instanceId'));
+      };
+      cleanWeapon();
+    }
 
     console.log('SPAWNING MAP:');
 
@@ -260,6 +277,8 @@ export default class Tiles extends THREE.Object3D {
 
     this.colliders = output.colliders;
     this.spot = output.spot;
+    this.npcs = output.npcs;
+    this.weapon = output.weapon;
   }
 
   sleep = ms => {

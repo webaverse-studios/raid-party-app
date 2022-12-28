@@ -59,8 +59,8 @@ export default class Tiles extends THREE.Object3D {
         0,
         (x - TILE_AMOUNT / 2) * TILE_SIZE,
       ),
-      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-      new THREE.Vector3(0.5, 0.5, 0.5),
+      new THREE.Quaternion(),
+      new THREE.Vector3(0.5, 10, 0.5),
       false,
     );
     if (setTrigger) {

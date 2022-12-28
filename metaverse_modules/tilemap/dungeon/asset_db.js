@@ -92,7 +92,8 @@ export const getAssetURL = prompt => {
     return left_webs[Math.floor(Math.random() * left_webs.length)];
   } else if (prompt === 'skull') {
     const skulls = [
-      'https://cdn.discordapp.com/attachments/632242008148148225/1050328292621811742/skull.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1056534569563717733/skull_2.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1056534569920254022/skull_1.png',
     ];
     return skulls[Math.floor(Math.random() * skulls.length)];
   } else if (prompt === 'peak') {

@@ -91,9 +91,8 @@ export default e => {
       const prompt = input_prompt;
       console.log('prompt', prompt);
       const biomeInfo = (await getBiomeInfo(prompt)).trim();
-      const biomeType = input_prompt_type
-        ? input_prompt_type
-        : (await getBiomeType(prompt)).trim();
+      const biomeType =
+        input_prompt_type || (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
       starting_biome = biomeType;
 
@@ -159,7 +158,8 @@ export default e => {
         const start = new Date();
         let houseDone = false;
         let pathImg = null;
-        const maxCount = fe ? 15 : 14;
+        const houseNumber = 4;
+        const maxCount = (fe ? 15 : 14) + houseNumber - 1;
         let currentTiles = 0;
         localPlayer.dispatchEvent({
           type: 'load_count',
@@ -215,26 +215,28 @@ export default e => {
               }
 
               houseDone = true;
-              generateImageNew(biomeInfo + ' house').then(imgs => {
-                console.log('generating house');
-                currentTiles++;
-                localPlayer.dispatchEvent({
-                  type: 'load_count',
-                  app,
-                  total: maxCount,
-                  progress: currentTiles,
+              for (let i = 0; i < houseNumber; i++) {
+                generateImageNew(biomeInfo + ' house').then(imgs => {
+                  console.log('generating house');
+                  currentTiles++;
+                  localPlayer.dispatchEvent({
+                    type: 'load_count',
+                    app,
+                    total: maxCount,
+                    progress: currentTiles,
+                  });
+                  console.log('images:', imgs.length);
+                  textures[biome.tiles[11]].push(imgs[0]);
+                  textures[biome.tiles[12]].push(imgs[1]);
+                  textures[biome.tiles[13]].push(imgs[2]);
+                  textures[biome.tiles[14]].push(imgs[3]);
+                  textures[biome.tiles[15]].push(imgs[4]);
+                  textures[biome.tiles[16]].push(imgs[5]);
+                  textures[biome.tiles[17]].push(imgs[6]);
+                  textures[biome.tiles[18]].push(imgs[7]);
+                  textures[biome.tiles[19]].push(imgs[8]);
                 });
-                console.log('images:', imgs.length);
-                textures[biome.tiles[11]].push(imgs[0]);
-                textures[biome.tiles[12]].push(imgs[1]);
-                textures[biome.tiles[13]].push(imgs[2]);
-                textures[biome.tiles[14]].push(imgs[3]);
-                textures[biome.tiles[15]].push(imgs[4]);
-                textures[biome.tiles[16]].push(imgs[5]);
-                textures[biome.tiles[17]].push(imgs[6]);
-                textures[biome.tiles[18]].push(imgs[7]);
-                textures[biome.tiles[19]].push(imgs[8]);
-              });
+              }
             } else {
               const prompt = biome.tiles[i];
 
@@ -374,9 +376,9 @@ export default e => {
       }
     }
     if (dungeon) {
-      console.log('cleaning dungeon colliders:', dungeon.colliders.length);
-      for (let i = 0; i < dungeon.colliders.length; i++) {
-        physics.removeGeometry(dungeon.colliders[i]);
+      console.log('cleaning dungeon colliders:', dungeon.mainColliders.length);
+      for (let i = 0; i < dungeon.mainColliders.length; i++) {
+        physics.removeGeometry(dungeon.mainColliders[i].col);
       }
     }
   });

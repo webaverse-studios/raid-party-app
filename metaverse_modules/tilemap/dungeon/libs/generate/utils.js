@@ -65,7 +65,7 @@ export function randomWeights(weights, values) {
   let s = 0;
   const lastIndex = weights.length - 1;
 
-  for (var i = 0; i < lastIndex; ++i) {
+  for (let i = 0; i < lastIndex; ++i) {
     s += weights[i];
     if (num < s) {
       return values[i];
@@ -100,4 +100,14 @@ export function duplicateTilemap(tilemap) {
 
 export function randomNumber(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function randomString(length) {
+  const chars =
+    '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  let result = '';
+  for (let i = length; i > 0; --i) {
+    result += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return result;
 }

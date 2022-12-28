@@ -97,12 +97,15 @@ const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
 };
 
 const getInputImageFrom = prompt => {
-  const rnd = Math.random();
-
   if (prompt.includes('house')) {
     const houses = [
-      'https://cdn.discordapp.com/attachments/1046461392913440789/1055518031863885904/house_5-removebg-preview.png',
-      'https://cdn.discordapp.com/attachments/1046461392913440789/1055518772078858250/CicPTs-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299930319954030/Ranch.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299929980207114/Museum.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299929640472696/Medical_Clinic.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299929200074782/market.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299928839356527/castle.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299928503816202/Trailer.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1057299928172470322/small_castle.png',
     ];
     return houses[Math.floor(Math.random() * houses.length)];
   } else if (
@@ -172,6 +175,8 @@ const getInputImageFrom = prompt => {
     const trees = [
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055485235346817168/init_tree.png',
       'https://cdn.discordapp.com/attachments/1046461392913440789/1055143952866623529/treeinit.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055847557726736475/tree_pngg-removebg-preview.png',
+      'https://cdn.discordapp.com/attachments/1046461392913440789/1055848388450594876/treee-removebg-preview.png',
     ];
     return trees[Math.floor(Math.random() * trees.length)];
   }

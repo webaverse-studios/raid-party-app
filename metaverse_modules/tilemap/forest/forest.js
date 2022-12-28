@@ -4,6 +4,7 @@ import {BufferedCubicNoise} from './utils/bufferedCubicNoise';
 import PF from 'pathfinding';
 import * as THREE from 'three';
 import physicsManager from '../../../physics-manager.js';
+import {YLayer} from './constants';
 
 let addedAroundColliders = false;
 //move the generation into a test script, to log 10s map
@@ -91,15 +92,17 @@ export default function generateForest(
     init(0);
   }
 
-  function addCollider(y, x, setTrigger = false) {
+  function addCollider(y, x, setTrigger = false, halfSize = false) {
     const physicsObject = physics.addBoxGeometry(
       new THREE.Vector3(
         (y - TILE_AMOUNT / 2) * TILE_SIZE,
         0,
         (x - TILE_AMOUNT / 2) * TILE_SIZE,
       ),
-      new THREE.Quaternion().setFromEuler(new THREE.Euler(0, 0, Math.PI / 2)),
-      new THREE.Vector3(0.5, 0.5, 0.5),
+      new THREE.Quaternion(),
+      halfSize
+        ? new THREE.Vector3(0.25, 10, 0.25)
+        : new THREE.Vector3(0.5, 10, 0.5),
       false,
     );
     if (setTrigger) {
@@ -152,12 +155,24 @@ export default function generateForest(
     const cloneTreeMesh = _meshes[prop].clone();
     cloneTreeMesh.position.set(
       (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      type === 'flower' ? 0.005 : 0.01,
+      type === 'flower' ? YLayer.FLOWER : YLayer.PROP,
       (x - TILE_AMOUNT / 2) * TILE_SIZE,
     );
 
     if (type !== 'flower' && type !== 'torch') {
-      addCollider(y, x);
+      addCollider(
+        y,
+        x,
+        false,
+        type === 'rock' || type === 'stone' || type.includes('bush'),
+      );
+    }
+    if (type === 'torch' || type === 'flower') {
+      cloneTreeMesh.scale.set(
+        cloneTreeMesh.scale.x / 2,
+        cloneTreeMesh.scale.y / 2,
+        cloneTreeMesh.scale.z / 2,
+      );
     }
 
     meshes.push(cloneTreeMesh);
@@ -174,7 +189,7 @@ export default function generateForest(
 
     cloneMesh.position.set(
       (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      0.25,
+      YLayer.TREE_UP,
       (x - TILE_AMOUNT / 2) * TILE_SIZE,
     );
     props.push({type: treeSprite, x: y, y: x});
@@ -268,7 +283,7 @@ export default function generateForest(
           const cloneMesh = _meshes[tileName].clone();
           cloneMesh.position.set(
             (y - TILE_AMOUNT / 2) * TILE_SIZE,
-            0,
+            YLayer.GROUND,
             (x - TILE_AMOUNT / 2) * TILE_SIZE,
           );
           meshes.push(cloneMesh);
@@ -495,7 +510,7 @@ export default function generateForest(
             const cloneMesh = _meshes[spriteName].clone();
             cloneMesh.position.set(
               (y - TILE_AMOUNT / 2) * TILE_SIZE,
-              0.05,
+              YLayer.PATH,
               (x - TILE_AMOUNT / 2) * TILE_SIZE,
             );
             meshes.push(cloneMesh);
@@ -561,15 +576,16 @@ export default function generateForest(
       return Math.random() < 0.5;
     });
 
-    const houseUpLeft = info + ' house Up Left_0';
-    const houseUpMiddle = info + ' house Up Middle_0';
-    const houseUpRight = info + ' house Up Right_0';
-    const houseMiddleLeft = info + ' house Middle Left_0';
-    const houseMiddleMiddle = info + ' house Middle Middle_0';
-    const houseMiddleRight = info + ' house Middle Right_0';
-    const houseDownLeft = info + ' house Down Left_0';
-    const houseDownMiddle = info + ' house Down Middle_0';
-    const houseDownRight = info + ' house Down Right_0';
+    console.log(_meshes);
+    const houseUpLeft = info + ' house Up Left_';
+    const houseUpMiddle = info + ' house Up Middle_';
+    const houseUpRight = info + ' house Up Right_';
+    const houseMiddleLeft = info + ' house Middle Left_';
+    const houseMiddleMiddle = info + ' house Middle Middle_';
+    const houseMiddleRight = info + ' house Middle Right_';
+    const houseDownLeft = info + ' house Down Left_';
+    const houseDownMiddle = info + ' house Down Middle_';
+    const houseDownRight = info + ' house Down Right_';
 
     const resHouses = [];
     //place houses in the areas
@@ -588,16 +604,18 @@ export default function generateForest(
         [i + 2, j + 1],
         [i + 2, j + 2],
       ];
+
+      const houseInt = Math.floor(Math.random() * 4);
       const sprites = [
-        houseUpLeft,
-        houseUpMiddle,
-        houseUpRight,
-        houseMiddleLeft,
-        houseMiddleMiddle,
-        houseMiddleRight,
-        houseDownLeft,
-        houseDownMiddle,
-        houseDownRight,
+        houseUpLeft + houseInt,
+        houseUpMiddle + houseInt,
+        houseUpRight + houseInt,
+        houseMiddleLeft + houseInt,
+        houseMiddleMiddle + houseInt,
+        houseMiddleRight + houseInt,
+        houseDownLeft + houseInt,
+        houseDownMiddle + houseInt,
+        houseDownRight + houseInt,
       ];
 
       const doorIndex = 7;
@@ -614,14 +632,13 @@ export default function generateForest(
       }
 
       for (let i = 0; i < locs.length; i++) {
-        //check the tile below door if it has a collider
         mapArr[locs[i][1]][locs[i][0]] = i < 3 ? 0 : 1;
         grid.setWalkableAt(locs[i][1], locs[i][0], i < 3);
 
         const cloneMesh = _meshes[sprites[i]].clone();
         cloneMesh.position.set(
           (locs[i][1] - TILE_AMOUNT / 2) * TILE_SIZE,
-          i < 3 ? 0.25 : 0.2,
+          i < 6 ? YLayer.HOUSE_UP : YLayer.HOUSE_DOWN,
           (locs[i][0] - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         if (i >= 3) {
@@ -646,7 +663,6 @@ export default function generateForest(
         const start = resHouses[i];
         const end = resHouses[i + 1];
 
-        //get one tile down from the start and end
         let path = null;
         try {
           const startDown = [start[0], start[1] + 1];
@@ -812,7 +828,7 @@ export default function generateForest(
         const cloneMesh = _meshes[spriteName].clone();
         cloneMesh.position.set(
           (y - TILE_AMOUNT / 2) * TILE_SIZE,
-          0.05,
+          YLayer.PATH,
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         meshes.push(cloneMesh);
@@ -907,7 +923,7 @@ export default function generateForest(
       const cloneMesh = _meshes[monster].clone();
       cloneMesh.position.set(
         (center[1] - TILE_AMOUNT / 2) * TILE_SIZE,
-        0.1,
+        YLayer.MONSTER,
         (center[0] - TILE_AMOUNT / 2) * TILE_SIZE,
       );
       meshes.push(cloneMesh);

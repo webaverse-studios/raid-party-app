@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import physicsManager from '../../physics-manager';
 import AssetManager from './asset-manager';
+import metaversefile from 'metaversefile';
 
 // this file's base url
 const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -11,6 +12,7 @@ const TILE_AMOUNT = 25;
 export default class Tiles extends THREE.Object3D {
   app = null;
   physics = null;
+  npcs = [];
 
   constructor(app, physics) {
     super();
@@ -21,6 +23,21 @@ export default class Tiles extends THREE.Object3D {
 
   meshes = [];
   colliders = [];
+
+  spawnNPCs = async () => {
+    this.npcs = [];
+    for (let i = 0; i < 2; i++) {
+      this.npcs.push(
+        await metaversefile.addTrackedApp(
+          '../../metaverse_modules/npc/',
+          new THREE.Vector3(0, 0, 0),
+          new THREE.Quaternion(0, 0, 0, 1),
+          new THREE.Vector3(1, 1, 1),
+          [],
+        ),
+      );
+    }
+  };
 
   loadTiles(length) {
     const res = [];
@@ -37,6 +54,9 @@ export default class Tiles extends THREE.Object3D {
   }
 
   clearMap = () => {
+    for (let i = 0; i < this.npcs.length; i++) {
+      metaversefile.removeTrackedApp(this.npcs[i].getComponent('instanceId'));
+    }
     for (let i = 0; i < this.meshes.length; i++) {
       this.meshes[i].visible = false;
     }
@@ -50,6 +70,7 @@ export default class Tiles extends THREE.Object3D {
       this.meshes[i].visible = true;
     }
     this.addColliders();
+    this.spawnNPCs();
   };
 
   addCollider(y, x, setTrigger = false) {
@@ -98,6 +119,8 @@ export default class Tiles extends THREE.Object3D {
     }
 
     this.addColliders();
+
+    this.spawnNPCs();
   }
 
   addColliders() {

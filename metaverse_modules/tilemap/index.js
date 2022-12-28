@@ -370,6 +370,17 @@ export default e => {
 
   useCleanup(() => {
     if (forest) {
+      forest.npcs.forEach(async npc => {
+        const _npc = await npc;
+        metaversefile.removeTrackedApp(_npc.getComponent('instanceId'));
+      });
+
+      const cleanWeapon = async () => {
+        const _weapon = await forest.weapon;
+        metaversefile.removeTrackedApp(_weapon.getComponent('instanceId'));
+      };
+
+      cleanWeapon();
       console.log('cleaning forest colliders:', forest.colliders.length);
       for (let i = 0; i < forest.colliders.length; i++) {
         physics.removeGeometry(forest.colliders[i]);

@@ -1746,6 +1746,9 @@ class GameManager extends EventTarget {
   }
 
   menuDoubleTap() {
+    if (scene2DManager.enabled && scene2DManager.perspective === 'top-down') {
+      return;
+    }
     if (!this.isCrouched()) {
       const localPlayer = playersManager.getLocalPlayer();
       const narutoRunAction = localPlayer.getAction('narutoRun');
@@ -1780,6 +1783,9 @@ class GameManager extends EventTarget {
   }
 
   toggleFly() {
+    if (scene2DManager.enabled && scene2DManager.perspective === 'top-down') {
+      return;
+    }
     const localPlayer = playersManager.getLocalPlayer();
     const flyAction = localPlayer.getAction('fly');
     if (flyAction) {
@@ -1815,6 +1821,9 @@ class GameManager extends EventTarget {
   }
 
   toggleCrouch() {
+    if (scene2DManager.enabled && scene2DManager.perspective === 'top-down') {
+      return;
+    }
     const localPlayer = playersManager.getLocalPlayer();
     const crouchAction = localPlayer.getAction('crouch');
     if (crouchAction) {
@@ -1914,6 +1923,9 @@ class GameManager extends EventTarget {
   }
 
   jump(trigger) {
+    if (scene2DManager.enabled && scene2DManager.perspective === 'top-down') {
+      return;
+    }
     // add jump action
     this.ensureJump(trigger);
 
@@ -1926,6 +1938,9 @@ class GameManager extends EventTarget {
   }
 
   doubleJump() {
+    if (scene2DManager.enabled && scene2DManager.perspective === 'top-down') {
+      return;
+    }
     const localPlayer = playersManager.getLocalPlayer();
     localPlayer.addAction({
       type: 'doubleJump',

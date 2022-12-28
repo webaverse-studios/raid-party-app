@@ -10,7 +10,7 @@ import PageTransition from '../../components/Animations/PageTransition';
 import Header from './components/Header';
 import Card from './components/Card';
 import {AppContext} from '../../App';
-import CreateAdventureDialog from './components/CreateAdventureDialog/CreateAdventureDialog.jsx';
+import CreateAdventureDialog from './components/CreateAdventureDialog';
 const ADVENTURES_DATA = [
   {
     name: 'Haunt of the Nightmare Knight',

@@ -4,6 +4,7 @@ import physicsManager from './physics-manager.js';
 import {playersManager} from './players-manager.js';
 import {PathFinder} from './npc-utils.js';
 import {PointerControls} from './scene2D-utils.js';
+import cameraManager from './camera-manager.js';
 
 const localVector = new THREE.Vector3();
 

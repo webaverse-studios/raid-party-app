@@ -291,7 +291,7 @@ export default e => {
                     textures[biome.tiles[i]].push(img);
                   });
                 } else {
-                  generateImageCache(prompt, biomeType).then(img => {
+                  generateImageNew(prompt).then(img => {
                     console.log('generating biome.tiles[i]', biome.tiles[i]);
                     currentTiles++;
                     localPlayer.dispatchEvent({

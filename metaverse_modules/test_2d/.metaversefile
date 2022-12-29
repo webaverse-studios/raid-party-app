@@ -1,0 +1,8 @@
+{
+  "name": "tavern",
+  "description": "tavern",
+  "start_url": "index.js",
+  "components": {
+    "activate": true
+  }
+}

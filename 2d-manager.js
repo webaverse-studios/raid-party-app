@@ -199,6 +199,9 @@ class Scene2DManager {
   }
   update(timestamp, timeDiff) {
     //const localPlayer = playersManager.getLocalPlayer();
+    if (this.perspective === 'top-down') {
+      cameraManager.exitPointerLock();
+    }
 
     if (this.pointerControls) {
       this.pointerControls.update(timestamp, timeDiff);

@@ -42,6 +42,8 @@ import Adventures from '../Adventures';
 import Toolbar from './components/Toolbar';
 import Profile from './components/Profile';
 import ChangeCharactor from '../ChangeCharactor';
+import MapEditor from './components/MapEditor';
+import MapEditorToolbar from './components/MapEditorToolbar';
 
 const localPlayer = metaversefile.useLocalPlayer();
 
@@ -285,6 +287,8 @@ export default function Playground() {
       <Profile />
       <Adventures />
       <ChangeCharactor />
+      <MapEditor />
+      <MapEditorToolbar />
       <StyledLoader
         visible={tilesLoaded}
         label={

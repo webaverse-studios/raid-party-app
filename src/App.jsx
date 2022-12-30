@@ -67,6 +67,7 @@ export const App = () => {
   const [openChangeCharacter, setOpenChangeCharacter] = useState(false);
   const [openCreateAdventure, setOpenCreateAdventure] = useState(false);
   const [currentSprite, setCurrentSprite] = useState(null);
+  const [mapEditorVisible, setMapEditorVisible] = useState(false);
 
   return (
     <ThemeProvider>
@@ -106,6 +107,8 @@ export const App = () => {
             setOpenCreateAdventure,
             currentSprite,
             setCurrentSprite,
+            mapEditorVisible,
+            setMapEditorVisible,
           }}
         >
           {pageIndex === 0 && <AvatarGenerator />}

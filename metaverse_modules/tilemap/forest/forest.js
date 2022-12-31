@@ -113,7 +113,7 @@ export default function generateForest(
     colliders.push(physicsObject);
   }
 
-  function addProp(type, x, y) {
+  async function addProp(type, x, y) {
     if (!mapArr[y]) {
       mapArr[y] = {};
     }
@@ -122,65 +122,80 @@ export default function generateForest(
 
     props.push({type, x: y, y: x});
 
-    let prop =
-      type === 'tree'
-        ? treeTiles[Math.floor(Math.random() * treeTiles.length)]
-        : type === 'stone' || type === 'rock'
-        ? rockTiles[Math.floor(Math.random() * rockTiles.length)]
-        : type === 'flower'
-        ? flowerTiles[Math.floor(Math.random() * flowerTiles.length)]
-        : type === 'bush_normal'
-        ? bushNormalTiles[Math.floor(Math.random() * bushNormalTiles.length)]
-        : type === 'bush_sand'
-        ? bushSandTiles[Math.floor(Math.random() * bushSandTiles.length)]
-        : torchTiles[Math.floor(Math.random() * torchTiles.length)];
+    if (type === 'torch') {
+      const torch = await metaversefile.addTrackedApp(
+        '../../metaverse_modules/torch/',
+        new THREE.Vector3(
+          (y - TILE_AMOUNT / 2) * TILE_SIZE,
+          type === 'flower' ? YLayer.FLOWER : YLayer.PROP,
+          (x - TILE_AMOUNT / 2) * TILE_SIZE,
+        ),
+        new THREE.Quaternion(0, 0, 0, 1),
+        new THREE.Vector3(1, 1, 1),
+        [],
+      );
+      console.log(torch);
+    } else {
+      let prop =
+        type === 'tree'
+          ? treeTiles[Math.floor(Math.random() * treeTiles.length)]
+          : type === 'stone' || type === 'rock'
+          ? rockTiles[Math.floor(Math.random() * rockTiles.length)]
+          : type === 'flower'
+          ? flowerTiles[Math.floor(Math.random() * flowerTiles.length)]
+          : type === 'bush_normal'
+          ? bushNormalTiles[Math.floor(Math.random() * bushNormalTiles.length)]
+          : type === 'bush_sand'
+          ? bushSandTiles[Math.floor(Math.random() * bushSandTiles.length)]
+          : torchTiles[Math.floor(Math.random() * torchTiles.length)];
 
-    let prop2 = '';
-    if (type === 'tree' && prop.split('_').length - 1 === 2) {
-      prop2 = prop.trim().slice(0, -1) + '1';
-      //swap prop2 with prop
-      let temp = prop;
-      prop = prop2;
-      prop2 = temp;
-
-      while (prop2 === prop) {
-        const letter = prop.endsWith('1') ? '0' : '1';
-        prop = prop.slice(0, -1) + letter;
+      let prop2 = '';
+      if (type === 'tree' && prop.split('_').length - 1 === 2) {
+        prop2 = prop.trim().slice(0, -1) + '1';
         //swap prop2 with prop
         let temp = prop;
         prop = prop2;
         prop2 = temp;
+
+        while (prop2 === prop) {
+          const letter = prop.endsWith('1') ? '0' : '1';
+          prop = prop.slice(0, -1) + letter;
+          //swap prop2 with prop
+          let temp = prop;
+          prop = prop2;
+          prop2 = temp;
+        }
       }
-    }
 
-    const cloneTreeMesh = _meshes[prop].clone();
-    cloneTreeMesh.position.set(
-      (y - TILE_AMOUNT / 2) * TILE_SIZE,
-      type === 'flower' ? YLayer.FLOWER : YLayer.PROP,
-      (x - TILE_AMOUNT / 2) * TILE_SIZE,
-    );
-
-    if (type !== 'flower' && type !== 'torch') {
-      addCollider(
-        y,
-        x,
-        false,
-        type === 'rock' || type === 'stone' || type.includes('bush'),
+      const cloneTreeMesh = _meshes[prop].clone();
+      cloneTreeMesh.position.set(
+        (y - TILE_AMOUNT / 2) * TILE_SIZE,
+        type === 'flower' ? YLayer.FLOWER : YLayer.PROP,
+        (x - TILE_AMOUNT / 2) * TILE_SIZE,
       );
-    }
-    if (type === 'torch' || type === 'flower') {
-      cloneTreeMesh.scale.set(
-        cloneTreeMesh.scale.x / 2,
-        cloneTreeMesh.scale.y / 2,
-        cloneTreeMesh.scale.z / 2,
-      );
-    }
 
-    meshes.push(cloneTreeMesh);
-    allMeshes.push({type: prop, x, y, mesh: cloneTreeMesh});
+      if (type !== 'flower' && type !== 'torch') {
+        addCollider(
+          y,
+          x,
+          false,
+          type === 'rock' || type === 'stone' || type.includes('bush'),
+        );
+      }
+      if (type === 'torch' || type === 'flower') {
+        cloneTreeMesh.scale.set(
+          cloneTreeMesh.scale.x / 2,
+          cloneTreeMesh.scale.y / 2,
+          cloneTreeMesh.scale.z / 2,
+        );
+      }
 
-    if (prop2) {
-      addSecondPart(x, y, prop2);
+      meshes.push(cloneTreeMesh);
+      allMeshes.push({type: prop, x, y, mesh: cloneTreeMesh});
+
+      if (prop2) {
+        addSecondPart(x, y, prop2);
+      }
     }
   }
 

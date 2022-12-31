@@ -60,6 +60,7 @@
     "react-toastify": "^9.1.1",
     "seedrandom": "^3.0.5",
     "smile2emoji": "^3.1.1",
+    "socket.io-client": "^4.5.4",
     "stats.js": "^0.17.0",
     "styled-components": "^5.3.6",
     "three": "./packages/three",

@@ -1,0 +1,5 @@
+{
+  "name": "remotePlayer",
+  "description": "remotePlayer",
+  "start_url": "index.js"
+}

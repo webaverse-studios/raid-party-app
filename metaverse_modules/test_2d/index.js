@@ -2,6 +2,8 @@ import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import Tiles from './tiles';
 import {scene} from '../../renderer';
+import axios from 'axios';
+import {client} from './client';
 
 const {
   useApp,
@@ -27,7 +29,53 @@ export default e => {
     loading: true,
   });
 
+  const players = {};
   // locals
+
+  new client(
+    async clientId => {
+      console.log('spawned player');
+      const player = await metaversefile.addTrackedApp(
+        '../../metaverse_modules/remotePlayer/',
+        new THREE.Vector3(0, 0, 0),
+        new THREE.Quaternion(0, 0, 0, 1),
+        new THREE.Vector3(1, 1, 1),
+        [{key: 'clientId', value: clientId}],
+      );
+      players[clientId] = player;
+    },
+    clientId => {
+      if (players[clientId]) {
+        metaversefile.removeTrackedApp(
+          players[clientId].getComponent('instanceId'),
+        );
+        delete players[clientId];
+      }
+
+      console.log('dispawn remote player');
+    },
+    () => {
+      console.log('dispawn all remote players');
+      for (const key in players) {
+        if (players[key]) {
+          metaversefile.removeTrackedApp(
+            players[key].getComponent('instanceId'),
+          );
+          delete players[clientId];
+        }
+      }
+    },
+    (clientId, x, y, z) => {
+      if (players[clientId]) {
+        players[clientId].position.set(x, 1.5, z);
+        if (players[clientId].characterPhysics) {
+          players[clientId].characterPhysics.setPosition(players[clientId].app);
+          players[clientId].characterPhysics.reset();
+        }
+        players[clientId].updateMatrixWorld();
+      }
+    },
+  );
 
   let frameCb = null;
   let tiles = null;
@@ -37,6 +85,21 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
+      const test = await axios.post(
+        'http://216.153.50.202:8001/custom_message',
+        {
+          message: 'hi',
+          speaker: 'alex',
+          agent: 'test',
+          client: 'webaverse',
+          channel: '1',
+          spell_handler: 'echo',
+          isVoice: false,
+        },
+      );
+
+      console.log('resp:', test.data);
+
       tiles = new Tiles(app, physics);
       app.add(tiles);
 
@@ -111,7 +174,24 @@ export default e => {
     false,
   );
 
+  let prevX = 0;
+  let prevZ = 0;
+  let prevY = 0;
   useFrame(() => {
+    if (
+      prevX !== localPlayer.position.x ||
+      prevZ !== localPlayer.position.z ||
+      prevY !== localPlayer.position.y
+    ) {
+      prevX = localPlayer.position.x;
+      prevZ = localPlayer.position.z;
+      prevY = localPlayer.position.y;
+      client.instance.sendMovement(
+        localPlayer.position.x,
+        localPlayer.position.y,
+        localPlayer.position.z,
+      );
+    }
     frameCb && frameCb();
   });
 

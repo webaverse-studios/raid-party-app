@@ -83,7 +83,6 @@ export default e => {
   const startingY = localPlayer.position.y;
   console.log('startingY', startingY, localPlayer.position);
 
-  const g = new grid(50, 50);
   // initialization
   e.waitUntil(
     (async () => {

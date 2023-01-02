@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import physicsManager from '../../physics-manager';
 import AssetManager from './asset-manager';
 import metaversefile from 'metaversefile';
+import {grid, gridID} from './grid';
 
 // this file's base url
 const BASE_URL = import.meta.url.replace(/(\/)[^\/\\]*$/, '$1');
@@ -54,11 +55,26 @@ export default class Tiles extends THREE.Object3D {
   }
 
   generate(assetManager) {
+    const _grid = new grid(TILE_AMOUNT, TILE_AMOUNT);
+    _grid.randomize();
     const meshes = [];
     for (let i = 0; i < assetManager.textures.length; i++) {
-      const material = new THREE.MeshBasicMaterial({
-        map: assetManager.textures[i],
-      });
+      const material =
+        i === 0
+          ? new THREE.MeshStandardMaterial({
+              map: assetManager.textures[i],
+            })
+          : new THREE.MeshStandardMaterial({
+              map: assetManager.textures[i],
+              transparent: true,
+              specular: new THREE.Color(0x101010),
+              shininess: 40,
+              alphaTest: 0.15,
+              color: new THREE.Color(0xffffff),
+              metal: true,
+              wrapAround: true,
+              side: THREE.DoubleSide,
+            });
       const geometry = new THREE.PlaneGeometry(1, 1);
       geometry.rotateX(-Math.PI / 2);
       const mesh = new THREE.Mesh(geometry, material);
@@ -68,10 +84,12 @@ export default class Tiles extends THREE.Object3D {
     for (let z = 0; z < TILE_AMOUNT; z++) {
       for (let x = 0; x < TILE_AMOUNT; x++) {
         for (let i = 0; i < 2; i++) {
-          const cloneMesh = meshes[0].clone();
+          const gridTile = _grid.get(i, z, x);
+          console.log('Layer:', i, 'Tile:', gridTile);
+          const cloneMesh = meshes[gridTile === gridID.GROUND ? 0 : 1].clone();
           cloneMesh.position.set(
             (x - TILE_AMOUNT / 2) * TILE_SIZE,
-            0.05 * (i + 1),
+            i === 0 ? 0.05 : 1,
             (z - TILE_AMOUNT / 2) * TILE_SIZE,
           );
           cloneMesh.name = `tile_${x}_${z}`;
@@ -88,11 +106,13 @@ export default class Tiles extends THREE.Object3D {
       }
     }
 
+    console.log(meshes);
+
     console.log('colliders:', this.colliders);
   }
 
   async waitForLoad() {
-    const tiles = this.loadTiles(1);
+    const tiles = this.loadTiles(2);
     const assetManager = await AssetManager.loadUrls(tiles);
     this.generate(assetManager);
   }

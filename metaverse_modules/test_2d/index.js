@@ -4,6 +4,7 @@ import Tiles from './tiles';
 import {scene} from '../../renderer';
 import axios from 'axios';
 import {client} from './client';
+import {grid} from './grid';
 
 const {
   useApp,
@@ -32,7 +33,7 @@ export default e => {
   const players = {};
   // locals
 
-  new client(
+  /*new client(
     async clientId => {
       console.log('spawned player');
       const player = await metaversefile.addTrackedApp(
@@ -75,13 +76,14 @@ export default e => {
         players[clientId].updateMatrixWorld();
       }
     },
-  );
+  );*/
 
   let frameCb = null;
   let tiles = null;
   const startingY = localPlayer.position.y;
   console.log('startingY', startingY, localPlayer.position);
 
+  const g = new grid(50, 50);
   // initialization
   e.waitUntil(
     (async () => {
@@ -178,7 +180,7 @@ export default e => {
   let prevZ = 0;
   let prevY = 0;
   useFrame(() => {
-    if (
+    /* if (
       prevX !== localPlayer.position.x ||
       prevZ !== localPlayer.position.z ||
       prevY !== localPlayer.position.y
@@ -191,7 +193,7 @@ export default e => {
         localPlayer.position.y,
         localPlayer.position.z,
       );
-    }
+    }*/
     frameCb && frameCb();
   });
 

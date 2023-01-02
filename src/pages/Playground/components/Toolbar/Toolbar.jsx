@@ -7,7 +7,8 @@ import BorderButton from '../../../../components/Buttons/BorderButton';
 
 export default function Toolbar() {
   const localPlayer = metaversefile.useLocalPlayer();
-  const {app, setOpenAdventures} = useContext(AppContext);
+  const {app, setOpenAdventures, mapEditorVisible, setMapEditorVisible} =
+    useContext(AppContext);
 
   const stopPropagation = event => {
     event.stopPropagation();
@@ -22,6 +23,12 @@ export default function Toolbar() {
           onClick={e => {
             setOpenAdventures(true);
             e.stopPropagation();
+          }}
+        />
+        <BorderButton
+          icon="/images/rp/edit.svg"
+          onClick={() => {
+            setMapEditorVisible(!mapEditorVisible);
           }}
         />
         <BorderButton

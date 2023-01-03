@@ -1,11 +1,40 @@
 import {AnimatePresence, motion} from 'framer-motion';
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {AppContext} from '../../../../App';
-import BorderButton from '../../../../components/Buttons/BorderButton';
+import IconToolButton from '../../../../components/Buttons/IconToolButton';
+
+const EDIT_ACTIONS = [
+  {
+    key: 'select',
+    label: 'Select',
+    icon: '/images/rp/icon-select.svg',
+  },
+  {
+    key: 'stamp',
+    label: 'Stamp',
+    icon: '/images/rp/icon-stamp.svg',
+  },
+  {
+    key: 'eraser',
+    label: 'Eraser',
+    icon: '/images/rp/icon-eraser.svg',
+  },
+  {
+    key: 'hand',
+    label: 'Hand',
+    icon: '/images/rp/icon-hand.svg',
+  },
+  {
+    key: 'boxSelect',
+    label: 'Box select',
+    icon: '/images/rp/icon-box-select.svg',
+  },
+];
 
 export default function MapEditorToolbar() {
   const {mapEditorVisible} = useContext(AppContext);
+  const [activedAction, setActivedAction] = useState('');
 
   const stopPropagation = event => {
     event.stopPropagation();
@@ -34,10 +63,16 @@ export default function MapEditorToolbar() {
           exit="hide"
         >
           <Content>
-            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
+            {EDIT_ACTIONS.map(action => (
+              <IconToolButton
+                key={action.key}
+                icon={action.icon}
+                onClick={() => {
+                  setActivedAction(action.key);
+                }}
+                active={activedAction === action.key}
+              />
+            ))}
           </Content>
         </Holder>
       )}
@@ -59,4 +94,5 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   gap: 0.5em;
+  padding: 0.2em;
 `;

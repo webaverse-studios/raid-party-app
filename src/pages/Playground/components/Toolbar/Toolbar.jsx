@@ -19,34 +19,34 @@ export default function Toolbar() {
       <Content>
         <Background />
         <BorderButton
-          icon="/images/rp/wizard.svg"
+          icon="/images/rp/icon-notifications.svg"
           onClick={e => {
-            setOpenAdventures(true);
-            e.stopPropagation();
+            // localPlayer.dispatchEvent({
+            //   type: 'back_map',
+            //   app,
+            // });
           }}
         />
         <BorderButton
-          icon="/images/rp/edit.svg"
+          icon="/images/rp/icon-map.svg"
+          onClick={() => {
+            // localPlayer.dispatchEvent({
+            //   type: 'reroll_map',
+            //   app,
+            // });
+          }}
+        />
+        <BorderButton
+          icon="/images/rp/icon-editor.svg"
           onClick={() => {
             setMapEditorVisible(!mapEditorVisible);
           }}
         />
         <BorderButton
-          icon="/images/rp/edit.svg"
-          onClick={() => {
-            localPlayer.dispatchEvent({
-              type: 'reroll_map',
-              app,
-            });
-          }}
-        />
-        <BorderButton
-          icon="/images/rp/alarm.svg"
-          onClick={() => {
-            localPlayer.dispatchEvent({
-              type: 'back_map',
-              app,
-            });
+          icon="/images/rp/icon-adventures.svg"
+          onClick={e => {
+            setOpenAdventures(true);
+            e.stopPropagation();
           }}
         />
       </Content>

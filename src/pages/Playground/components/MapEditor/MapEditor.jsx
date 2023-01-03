@@ -26,7 +26,7 @@ export default function MapEditor() {
           }}
           transition={{
             type: 'tween',
-            duration: 0.6,
+            duration: 0.4,
           }}
           initial="hide"
           animate="show"

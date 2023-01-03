@@ -27,17 +27,17 @@ export default function MapEditorToolbar() {
           }}
           transition={{
             type: 'tween',
-            duration: 0.6,
+            duration: 0.4,
           }}
           initial="hide"
           animate="show"
           exit="hide"
         >
           <Content>
-            <BorderButton icon="/images/rp/wizard.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/wizard.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/wizard.svg" onClick={e => {}} />
-            <BorderButton icon="/images/rp/wizard.svg" onClick={e => {}} />
+            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
+            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
+            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
+            <BorderButton icon="/images/rp/icon-editor.svg" onClick={e => {}} />
           </Content>
         </Holder>
       )}

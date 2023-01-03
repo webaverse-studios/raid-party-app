@@ -63,7 +63,7 @@ export default function CreateAdventureDialog() {
         >
           <Content>
             <CloseButton
-              icon="/images/rp/close.svg"
+              icon="/images/rp/icon-close.svg"
               onClick={() => {
                 setOpenCreateAdventure(false);
               }}
@@ -98,7 +98,7 @@ export default function CreateAdventureDialog() {
             <div className="flex gap-2">
               <BorderButton title="Randomize" onClick={setRandomPrompt} />
               <BorderButton
-                icon="/images/rp/wizard.svg"
+                icon="/images/rp/icon-editor.svg"
                 title="Generate"
                 onClick={createNew}
               />

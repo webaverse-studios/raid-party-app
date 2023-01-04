@@ -26,6 +26,7 @@ export default class Tiles extends THREE.Object3D {
 
   spawnNPCs = async () => {
     this.npcs = [];
+    return;
     for (let i = 0; i < 2; i++) {
       this.npcs.push(
         await metaversefile.addTrackedApp(

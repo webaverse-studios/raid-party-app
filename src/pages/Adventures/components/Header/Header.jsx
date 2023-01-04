@@ -12,7 +12,7 @@ export default function Header() {
   return (
     <Holder>
       <ShadowButton
-        icon="/images/rp/back.svg"
+        icon="/images/rp/icon-back.svg"
         onClick={() => {
           localPlayer.dispatchEvent({
             type: 'update_adventures',

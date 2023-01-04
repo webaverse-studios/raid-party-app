@@ -90,14 +90,14 @@ export default e => {
     (async () => {
       const prompt = input_prompt;
       console.log('prompt', prompt);
-      const biomeInfo = (await getBiomeInfo(prompt)).trim();
+      const biomeInfo = input_prompt; // (await getBiomeInfo(prompt)).trim();
       const biomeType =
         input_prompt_type || (await getBiomeType(prompt)).trim();
       console.log('selected prompt:', prompt, '-', biomeInfo, '-', biomeType);
       starting_biome = biomeType;
 
       if (biomeType === 'forest') {
-        const fe = await forestExists(biomeInfo, biomeType);
+        const fe = false; //await forestExists(biomeInfo, biomeType);
         console.log('fe:', fe);
         // Get the biome information from the prompt
         const biome = {

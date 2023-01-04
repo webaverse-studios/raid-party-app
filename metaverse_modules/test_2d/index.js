@@ -5,6 +5,7 @@ import {scene} from '../../renderer';
 import axios from 'axios';
 import {client} from './client';
 import {grid} from './grid';
+import {forestMap} from './forestMap';
 
 const {
   useApp,
@@ -86,7 +87,7 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      const test = await axios.post(
+      /*const test = await axios.post(
         'http://216.153.50.202:8001/custom_message',
         {
           message: 'hi',
@@ -99,8 +100,7 @@ export default e => {
         },
       );
 
-      console.log('resp:', test.data);
-
+      console.log('resp:', test.data);*/
       tiles = new Tiles(app, physics);
       app.add(tiles);
 

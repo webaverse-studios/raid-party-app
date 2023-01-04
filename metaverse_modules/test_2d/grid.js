@@ -1,8 +1,11 @@
 export class grid {
   grid = {};
   gridMesh = {};
+  gridIDs = {};
+  totalGrid = [];
 
   constructor(sizeX, sizeY) {
+    this.gridIDs = gridID;
     for (let i = 0; i < layer_count; i++) {
       this.grid[i] = [];
       for (let x = 0; x < sizeX; x++) {
@@ -75,6 +78,15 @@ export class grid {
 
     return true;
   }
+
+  exportGrid = () => {
+    const data = {
+      grid: this.grid,
+      gridMesh: this.gridMesh,
+      gridIDs: this.gridIDs,
+    };
+    return data;
+  };
 }
 
 export const layer_count = 4;

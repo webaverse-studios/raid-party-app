@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import styled from 'styled-components';
+import {toast} from 'react-toastify';
 
 import ShadowButton from '../../components/Buttons/ShadowButton';
 import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
@@ -7,7 +8,6 @@ import RaiseFadeAnimation from '../../components/Animations/RaiseFadeAnimation';
 import Title from './components/Title';
 import GeneratorTap from './components/GeneratorTap';
 import {AppContext} from '../../App';
-import {toast} from 'react-toastify';
 
 export default function AvatarGenerator() {
   const {currentSprite, setPageIndex} = useContext(AppContext);

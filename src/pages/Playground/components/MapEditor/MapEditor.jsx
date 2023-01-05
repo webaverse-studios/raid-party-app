@@ -1,9 +1,13 @@
 import {AnimatePresence, motion} from 'framer-motion';
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {Dropdown} from 'primereact/dropdown';
 
 import {AppContext} from '../../../../App';
+import {blobToBase64} from '../../../../utils/BlobToBase64';
+import UrlToBase64 from '../../../../utils/UrlToBase64';
+import MapEditorDrawer from './MapEditorDrawer';
+import Loader from '../../../../components/Loader';
 
 const TILESETS = [
   {
@@ -40,7 +44,28 @@ export default function MapEditor() {
     event.stopPropagation();
   };
 
-  const [tileset, setTileset] = useState(TILESETS[0]);
+  const [imageLoading, setImageLoading] = useState(false);
+  const [tileset, setTileset] = useState(null);
+  const canvasRef = useRef();
+  const drawerRef = useRef();
+
+  useEffect(() => {
+    if (canvasRef.current) {
+      drawerRef.current = new MapEditorDrawer(canvasRef.current);
+    }
+  }, [canvasRef.current]);
+
+  useEffect(() => {
+    if (drawerRef.current) {
+      setImageLoading(true);
+      const image = new Image();
+      image.onload = () => {
+        drawerRef.current.drawImage(image);
+        setImageLoading(false);
+      };
+      image.src = tileset.url;
+    }
+  }, [tileset, drawerRef.current]);
 
   return (
     <AnimatePresence>
@@ -73,6 +98,10 @@ export default function MapEditor() {
               onChange={e => setTileset(e.value)}
               placeholder="Select a tileset"
             />
+            <CanvasHolder>
+              <Loader visible={imageLoading} />
+              <canvas ref={canvasRef} />
+            </CanvasHolder>
           </Content>
         </Holder>
       )}
@@ -94,4 +123,14 @@ const Content = styled.div`
   height: 100%;
   background-color: #f5dfb8;
   padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+`;
+
+const CanvasHolder = styled.div`
+  position: relative;
+  width: 100%;
+  flex: 1;
+  padding: 0.5em;
+  overflow: auto;
 `;

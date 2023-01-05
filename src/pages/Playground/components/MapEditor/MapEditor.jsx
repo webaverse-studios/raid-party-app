@@ -56,7 +56,7 @@ export default function MapEditor() {
   }, [canvasRef.current]);
 
   useEffect(() => {
-    if (drawerRef.current) {
+    if (drawerRef.current && tileset) {
       setImageLoading(true);
       const image = new Image();
       image.onload = () => {
@@ -68,44 +68,39 @@ export default function MapEditor() {
   }, [tileset, drawerRef.current]);
 
   return (
-    <AnimatePresence>
-      {mapEditorVisible && (
-        <Holder
-          onClick={stopPropagation}
-          onKeyDown={stopPropagation}
-          variants={{
-            show: {
-              x: 0,
-            },
-            hide: {
-              x: '100%',
-            },
-          }}
-          transition={{
-            type: 'tween',
-            duration: 0.4,
-          }}
-          initial="hide"
-          animate="show"
-          exit="hide"
-        >
-          <Content>
-            <Dropdown
-              className="w-full"
-              optionLabel="name"
-              value={tileset}
-              options={TILESETS}
-              onChange={e => setTileset(e.value)}
-              placeholder="Select a tileset"
-            />
-            <CanvasHolder>
-              <Loader visible={imageLoading} />
-              <canvas ref={canvasRef} />
-            </CanvasHolder>
-          </Content>
-        </Holder>
-      )}
-    </AnimatePresence>
+    <Holder
+      onClick={stopPropagation}
+      onKeyDown={stopPropagation}
+      variants={{
+        show: {
+          x: 0,
+        },
+        hide: {
+          x: '100%',
+        },
+      }}
+      transition={{
+        type: 'tween',
+        duration: 0.4,
+      }}
+      initial="hide"
+      animate={mapEditorVisible ? 'show' : 'hide'}
+    >
+      <Content>
+        <Dropdown
+          className="w-full"
+          optionLabel="name"
+          value={tileset}
+          options={TILESETS}
+          onChange={e => setTileset(e.value)}
+          placeholder="Select a tileset"
+        />
+        <CanvasHolder>
+          <Loader visible={imageLoading} />
+          <canvas ref={canvasRef} />
+        </CanvasHolder>
+      </Content>
+    </Holder>
   );
 }
 

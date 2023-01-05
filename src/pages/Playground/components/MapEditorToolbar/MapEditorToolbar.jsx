@@ -41,42 +41,37 @@ export default function MapEditorToolbar() {
   };
 
   return (
-    <AnimatePresence>
-      {mapEditorVisible && (
-        <Holder
-          onClick={stopPropagation}
-          onKeyDown={stopPropagation}
-          variants={{
-            show: {
-              x: 0,
-            },
-            hide: {
-              x: '-100%',
-            },
-          }}
-          transition={{
-            type: 'tween',
-            duration: 0.4,
-          }}
-          initial="hide"
-          animate="show"
-          exit="hide"
-        >
-          <Content>
-            {EDIT_ACTIONS.map(action => (
-              <IconToolButton
-                key={action.key}
-                icon={action.icon}
-                onClick={() => {
-                  setActivedAction(action.key);
-                }}
-                active={activedAction === action.key}
-              />
-            ))}
-          </Content>
-        </Holder>
-      )}
-    </AnimatePresence>
+    <Holder
+      onClick={stopPropagation}
+      onKeyDown={stopPropagation}
+      variants={{
+        show: {
+          x: 0,
+        },
+        hide: {
+          x: '-100%',
+        },
+      }}
+      transition={{
+        type: 'tween',
+        duration: 0.4,
+      }}
+      initial="hide"
+      animate={mapEditorVisible ? 'show' : 'hide'}
+    >
+      <Content>
+        {EDIT_ACTIONS.map(action => (
+          <IconToolButton
+            key={action.key}
+            icon={action.icon}
+            onClick={() => {
+              setActivedAction(action.key);
+            }}
+            active={activedAction === action.key}
+          />
+        ))}
+      </Content>
+    </Holder>
   );
 }
 

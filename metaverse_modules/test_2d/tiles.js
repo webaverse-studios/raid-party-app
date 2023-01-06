@@ -99,19 +99,19 @@ export default class Tiles extends THREE.Object3D {
         const cloneMesh = meshes[meshName.idx].clone();
         cloneMesh.position.set(
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
-          0.05,
+          _grid.layerValues[1],
           (z - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         cloneMesh.name = `tile_${x}_${z}`;
         this.meshes.push(cloneMesh);
         this.add(cloneMesh);
 
-        /*this.colliders.push({
+        this.colliders.push({
           x: (x - TILE_AMOUNT / 2) * TILE_SIZE,
           z: (z - TILE_AMOUNT / 2) * TILE_SIZE,
           cloneMesh,
           layer: 0,
-        });*/
+        });
       }
     }
 
@@ -126,12 +126,31 @@ export default class Tiles extends THREE.Object3D {
         const cloneMesh = meshes[meshName.idx].clone();
         cloneMesh.position.set(
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
-          gridTile === FOREST_GRID_IDS.TREE_DOWN ? 3.8 : 1,
+          gridTile === FOREST_GRID_IDS.TREE_DOWN ||
+            gridTile === FOREST_GRID_IDS.HOUSE_MIDDLE_LEFT ||
+            gridTile === FOREST_GRID_IDS.HOUSE_MIDDLE_MIDDLE ||
+            gridTile === FOREST_GRID_IDS.HOUSE_MIDDLE_RIGHT ||
+            gridTile === FOREST_GRID_IDS.HOUSE_DOWN_LEFT ||
+            gridTile === FOREST_GRID_IDS.HOUSE_DOWN_MIDDLE ||
+            gridTile === FOREST_GRID_IDS.HOUSE_DOWN_RIGHT
+            ? _grid.layerValues[3]
+            : gridTile === FOREST_GRID_IDS.HOUSE_UP_LEFT ||
+              gridTile === FOREST_GRID_IDS.HOUSE_UP_MIDDLE ||
+              gridTile === FOREST_GRID_IDS.HOUSE_UP_RIGHT
+            ? _grid.layerValues[4]
+            : _grid.layerValues[2],
           (z - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         cloneMesh.name = `tile_${x}_${z}`;
         this.meshes.push(cloneMesh);
         this.add(cloneMesh);
+
+        this.colliders.push({
+          x: (x - TILE_AMOUNT / 2) * TILE_SIZE,
+          z: (z - TILE_AMOUNT / 2) * TILE_SIZE,
+          cloneMesh,
+          layer: 1,
+        });
       }
     }
 
@@ -146,12 +165,19 @@ export default class Tiles extends THREE.Object3D {
         const cloneMesh = meshes[meshName.idx].clone();
         cloneMesh.position.set(
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
-          4,
+          _grid.layerValues[4],
           (z - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         cloneMesh.name = `tile_${x}_${z}`;
         this.meshes.push(cloneMesh);
         this.add(cloneMesh);
+
+        this.colliders.push({
+          x: (x - TILE_AMOUNT / 2) * TILE_SIZE,
+          z: (z - TILE_AMOUNT / 2) * TILE_SIZE,
+          cloneMesh,
+          layer: 2,
+        });
       }
     }
 
@@ -163,17 +189,22 @@ export default class Tiles extends THREE.Object3D {
 
         const gridTile = _grid.get(3, z, x);
         const meshName = getMesh(gridTile);
-        console.log(meshName);
-        console.log(meshes);
         const cloneMesh = meshes[meshName.idx].clone();
         cloneMesh.position.set(
           (x - TILE_AMOUNT / 2) * TILE_SIZE,
-          0.5,
+          _grid.layerValues[5],
           (z - TILE_AMOUNT / 2) * TILE_SIZE,
         );
         cloneMesh.name = `tile_${x}_${z}`;
         this.meshes.push(cloneMesh);
         this.add(cloneMesh);
+
+        this.colliders.push({
+          x: (x - TILE_AMOUNT / 2) * TILE_SIZE,
+          z: (z - TILE_AMOUNT / 2) * TILE_SIZE,
+          cloneMesh,
+          layer: 3,
+        });
       }
     }
 
@@ -188,7 +219,7 @@ export default class Tiles extends THREE.Object3D {
   }
 
   async waitForLoad() {
-    const tiles = this.loadTiles(13);
+    const tiles = this.loadTiles(22);
     const assetManager = await AssetManager.loadUrls(tiles);
     this.generate(assetManager);
   }

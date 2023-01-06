@@ -87,20 +87,6 @@ export default e => {
   // initialization
   e.waitUntil(
     (async () => {
-      /*const test = await axios.post(
-        'http://216.153.50.202:8001/custom_message',
-        {
-          message: 'hi',
-          speaker: 'alex',
-          agent: 'test',
-          client: 'webaverse',
-          channel: '1',
-          spell_handler: 'echo',
-          isVoice: false,
-        },
-      );
-
-      console.log('resp:', test.data);*/
       tiles = new Tiles(app, physics);
       app.add(tiles);
 
@@ -129,11 +115,15 @@ export default e => {
     // calculate objects intersecting the picking ray
     const intersects = raycaster.intersectObjects(scene.children, true);
 
+    const targetLayer = 0;
     console.log(intersects.length);
     for (let i = 0; i < intersects.length; i++) {
       const obj = intersects[i].object;
       for (let j = 0; j < tiles.colliders.length; j++) {
-        if (tiles.colliders[j].cloneMesh === obj) {
+        if (
+          tiles.colliders[j].cloneMesh === obj &&
+          tiles.colliders[j].layer === targetLayer
+        ) {
           console.log('found object:', obj.name, tiles.colliders[j].layer);
           obj.material = new THREE.MeshBasicMaterial({
             color: 0xff0000,

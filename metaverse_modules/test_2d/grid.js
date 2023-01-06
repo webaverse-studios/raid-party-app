@@ -3,9 +3,11 @@ export class grid {
   gridMesh = {};
   gridIDs = {};
   totalGrid = [];
+  layerValues = {};
 
-  constructor(sizeX, sizeY) {
+  constructor(sizeX, sizeY, layer_count = 4, _layerValues = layerValues) {
     this.gridIDs = gridID;
+    this.layerValues = _layerValues;
     for (let i = 0; i < layer_count; i++) {
       this.grid[i] = [];
       for (let x = 0; x < sizeX; x++) {
@@ -51,6 +53,9 @@ export class grid {
 
   set(gridId, x, y, gid) {
     this.grid[gridId][x][y] = gid;
+    if (gridId === 1) {
+      console.log('set', gridId, x, y, gid, '-', this.grid[gridId][x][y]);
+    }
   }
   setMesh(gridId, x, y, mesh) {
     this.gridMesh[gridId][x][y].mesh = mesh;
@@ -89,7 +94,14 @@ export class grid {
   };
 }
 
-export const layer_count = 4;
+export const layerValues = {
+  1: 0.05,
+  2: 1,
+  3: 3.8,
+  4: 4,
+  5: 0.1,
+};
+
 export const gridID = {
   GROUND: 0,
   WATER: 1,

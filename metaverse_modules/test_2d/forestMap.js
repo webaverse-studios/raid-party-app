@@ -98,6 +98,84 @@ export class forestMap extends grid {
     this.makeTotalGrid(sizeX, sizeY);
     this.makePathfinding(sizeX, sizeY);
 
+    const houseLocations = [];
+    while (houseLocations.length < rules.max_houses) {
+      const x = Math.floor(Math.random() * sizeX);
+      const y = Math.floor(Math.random() * sizeY);
+      const tile = this.get(0, x, y);
+      if (tile === this.gridIDs.WATER) {
+        continue;
+      }
+
+      const isWalkable = this.pfgrid.isWalkableAt(x, y);
+      if (!isWalkable) {
+        continue;
+      }
+
+      const isInside = x > 0 && x < sizeX - 1 && y > 0 && y < sizeY - 1;
+      if (!isInside) {
+        continue;
+      }
+
+      const isOverlapping = houseLocations.some(
+        loc => loc.x === x && loc.y === y,
+      );
+      if (isOverlapping) {
+        continue;
+      }
+
+      const allAreWalkable =
+        this.canBeHousePlaced(x, y) &&
+        this.canBeHousePlaced(x - 1, y) &&
+        this.canBeHousePlaced(x + 1, y) &&
+        this.canBeHousePlaced(x, y - 1) &&
+        this.canBeHousePlaced(x, y + 1) &&
+        this.canBeHousePlaced(x - 1, y - 1) &&
+        this.canBeHousePlaced(x + 1, y - 1) &&
+        this.canBeHousePlaced(x - 1, y + 1) &&
+        this.canBeHousePlaced(x + 1, y + 1);
+
+      if (!allAreWalkable) {
+        continue;
+      }
+
+      const doorX = x + 1;
+      const doorY = y;
+      const doorTile = {x: doorX - 1, y: doorY};
+      const isBlocked = !this.isWalkable(doorTile.x, doorTile.y).isWalkable;
+      console.log('isBlocked', isBlocked);
+
+      houseLocations.push({x, y});
+    }
+
+    console.log(houseLocations.length, 'house length');
+    for (let i = 0; i < houseLocations.length; i++) {
+      const loc = houseLocations[i];
+      this.totalGrid[loc.x][loc.y] = 1;
+      this.totalGrid[loc.x + 1][loc.y] = 1;
+      this.totalGrid[loc.x][loc.y - 1] = 1;
+      this.totalGrid[loc.x][loc.y + 1] = 1;
+      this.totalGrid[loc.x + 1][loc.y - 1] = 1;
+      this.totalGrid[loc.x + 1][loc.y + 1] = 1;
+
+      this.pfgrid.setWalkableAt(loc.x, loc.y, false);
+      this.pfgrid.setWalkableAt(loc.x + 1, loc.y, false);
+      this.pfgrid.setWalkableAt(loc.x, loc.y - 1, false);
+      this.pfgrid.setWalkableAt(loc.x, loc.y + 1, false);
+      this.pfgrid.setWalkableAt(loc.x + 1, loc.y - 1, false);
+      this.pfgrid.setWalkableAt(loc.x + 1, loc.y + 1, false);
+
+      this.set(1, loc.x, loc.y, this.gridIDs.HOUSE_MIDDLE_MIDDLE);
+      this.set(1, loc.x - 1, loc.y, this.gridIDs.HOUSE_UP_MIDDLE);
+      this.set(1, loc.x + 1, loc.y, this.gridIDs.HOUSE_DOWN_MIDDLE);
+      this.set(1, loc.x, loc.y - 1, this.gridIDs.HOUSE_MIDDLE_RIGHT);
+      this.set(1, loc.x, loc.y + 1, this.gridIDs.HOUSE_MIDDLE_LEFT);
+      this.set(1, loc.x - 1, loc.y - 1, this.gridIDs.HOUSE_UP_RIGHT);
+      this.set(1, loc.x + 1, loc.y - 1, this.gridIDs.HOUSE_DOWN_RIGHT);
+      this.set(1, loc.x - 1, loc.y + 1, this.gridIDs.HOUSE_UP_LEFT);
+      this.set(1, loc.x + 1, loc.y + 1, this.gridIDs.HOUSE_DOWN_LEFT);
+    }
+
     const paths = [];
     while (paths.length === 0) {
       for (let i = 0; i < rules.max_random_paths; i++) {
@@ -111,8 +189,6 @@ export class forestMap extends grid {
         }
       }
     }
-
-    console.log('PATHS:', paths);
 
     for (let i = 0; i < paths.length; i++) {
       const path = paths[i];
@@ -155,7 +231,15 @@ export class forestMap extends grid {
     const tile0 = this.get(0, x, y);
     const tile1 = this.get(1, x, y);
 
-    if (tile0 === this.gridIDs.WATER) {
+    if (
+      tile0 === this.gridIDs.WATER ||
+      tile1 === this.gridIDs.HOUSE_MIDDLE_LEFT ||
+      tile1 === this.gridIDs.HOUSE_MIDDLE_MIDDLE ||
+      tile1 === this.gridIDs.HOUSE_MIDDLE_RIGHT ||
+      tile1 === this.gridIDs.HOUSE_DOWN_LEFT ||
+      tile1 === this.gridIDs.HOUSE_DOWN_MIDDLE ||
+      tile1 === this.gridIDs.HOUSE_DOWN_RIGHT
+    ) {
       return {full: true, isWalkable: false};
     }
 
@@ -170,6 +254,19 @@ export class forestMap extends grid {
 
     return {full: true, isWalkable: true};
   }
+
+  canBeHousePlaced = (x, y) => {
+    if (!this.isWalkable(x, y).isWalkable) {
+      return false;
+    }
+
+    const tile = this.get(2, x, y);
+    if (tile === this.gridIDs.TREE_UP) {
+      return false;
+    }
+
+    return true;
+  };
 
   isRightLayer(layer, x, y) {
     const tile = this.get(layer, x, y);
@@ -190,7 +287,16 @@ export class forestMap extends grid {
         tile === this.gridIDs.BUSH ||
         tile === this.gridIDs.SAND_BUSH ||
         tile === this.gridIDs.FLOWER ||
-        tile === this.gridIDs.TREE_DOWN
+        tile === this.gridIDs.TREE_DOWN ||
+        tile === this.gridIDs.HOUSE_UP_RIGHT ||
+        tile === this.gridIDs.HOUSE_UP_MIDDLE ||
+        tile === this.gridIDs.HOUSE_UP_LEFT ||
+        tile === this.gridIDs.HOUSE_MIDDLE_RIGHT ||
+        tile === this.gridIDs.HOUSE_MIDDLE_MIDDLE ||
+        tile === this.gridIDs.HOUSE_MIDDLE_LEFT ||
+        tile === this.gridIDs.HOUSE_DOWN_RIGHT ||
+        tile === this.gridIDs.HOUSE_DOWN_MIDDLE ||
+        tile === this.gridIDs.HOUSE_DOWN_LEFT
       ) {
         return true;
       }
@@ -235,6 +341,15 @@ export const FOREST_GRID_IDS = {
   TREE_DOWN: 10,
   PATH: 11,
   TREE_UP: 12,
+  HOUSE_UP_RIGHT: 13,
+  HOUSE_UP_MIDDLE: 14,
+  HOUSE_UP_LEFT: 15,
+  HOUSE_MIDDLE_LEFT: 16,
+  HOUSE_MIDDLE_MIDDLE: 17,
+  HOUSE_MIDDLE_RIGHT: 18,
+  HOUSE_DOWN_RIGHT: 19,
+  HOUSE_DOWN_MIDDLE: 20,
+  HOUSE_DOWN_LEFT: 21,
 };
 
 export const getMesh = gid => {
@@ -264,5 +379,23 @@ export const getMesh = gid => {
     return {idx: 11, texture_id: 'sprite_012'};
   } else if (gid === FOREST_GRID_IDS.PATH) {
     return {idx: 12, texture_id: 'sprite_013'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_UP_RIGHT) {
+    return {idx: 13, texture_id: 'sprite_014'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_UP_MIDDLE) {
+    return {idx: 14, texture_id: 'sprite_015'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_UP_LEFT) {
+    return {idx: 15, texture_id: 'sprite_016'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_MIDDLE_RIGHT) {
+    return {idx: 16, texture_id: 'sprite_017'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_MIDDLE_MIDDLE) {
+    return {idx: 17, texture_id: 'sprite_018'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_MIDDLE_LEFT) {
+    return {idx: 18, texture_id: 'sprite_019'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_DOWN_RIGHT) {
+    return {idx: 19, texture_id: 'sprite_020'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_DOWN_MIDDLE) {
+    return {idx: 20, texture_id: 'sprite_021'};
+  } else if (gid === FOREST_GRID_IDS.HOUSE_DOWN_LEFT) {
+    return {idx: 21, texture_id: 'sprite_022'};
   }
 };

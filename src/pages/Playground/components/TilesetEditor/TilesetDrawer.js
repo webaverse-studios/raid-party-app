@@ -1,6 +1,12 @@
+const GRID_COLOR = 'rgba(0,255,217,0.7)';
+
 export default class TilesetDrawer {
   canvas;
   ctx;
+  image = null;
+  tileSize = 32;
+  imageWidth = 60;
+  imageHeight = 60;
   /**
    * @param {HTMLElement} canvas
    */
@@ -9,33 +15,40 @@ export default class TilesetDrawer {
     this.ctx = canvas.getContext('2d');
   }
 
-  /**
-   * @param {HTMLElement} image
-   */
-  drawImage(image) {
-    // set canvs size
-    this.canvas.width = image.naturalWidth;
-    this.canvas.height = image.naturalHeight;
-
-    // draw image
-    this.ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight);
-
-    // draw grid
-    this.drawGrid(image.naturalWidth, image.naturalHeight);
+  setDrawValues(image, tileSize) {
+    this.image = image;
+    this.imageWidth = image.naturalWidth;
+    this.imageHeight = image.naturalHeight;
+    this.tileSize = tileSize;
   }
 
-  drawGrid = (w, h, step = 32, color = 'rgba(0,255,217,0.7)') => {
-    this.ctx.strokeStyle = color;
+  resizeCanvas() {
+    this.canvas.width = this.imageWidth;
+    this.canvas.height = this.imageHeight;
+  }
+
+  drawImage() {
+    this.ctx.drawImage(this.image, 0, 0, this.imageWidth, this.imageHeight);
+  }
+
+  drawGrid = () => {
+    this.ctx.strokeStyle = GRID_COLOR;
     this.ctx.lineWidth = 0.5;
     this.ctx.beginPath();
-    for (let x = 0; x < w + 1; x += step) {
+    for (let x = 0; x < this.imageWidth + 1; x += this.tileSize) {
       this.ctx.moveTo(x, 0.5);
-      this.ctx.lineTo(x, h + 0.5);
+      this.ctx.lineTo(x, this.imageHeight + 0.5);
     }
-    for (let y = 0; y < h + 1; y += step) {
+    for (let y = 0; y < this.imageHeight + 1; y += this.tileSize) {
       this.ctx.moveTo(0, y + 0.5);
-      this.ctx.lineTo(w, y + 0.5);
+      this.ctx.lineTo(this.imageWidth, y + 0.5);
     }
     this.ctx.stroke();
+  };
+
+  drawAll = () => {
+    this.resizeCanvas();
+    this.drawImage();
+    this.drawGrid();
   };
 }

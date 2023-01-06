@@ -1,4 +1,4 @@
-import {AnimatePresence, motion} from 'framer-motion';
+import {motion} from 'framer-motion';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
 import {AppContext} from '../../../../App';

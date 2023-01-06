@@ -8833,3 +8833,7 @@
 .p-overlaypanel:after {
   border-bottom-color: #f5dfb8;
 }
+
+.p-dropdown-panel {
+  font-size: 0.7em;
+}

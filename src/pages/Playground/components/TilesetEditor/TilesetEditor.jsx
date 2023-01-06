@@ -1,12 +1,10 @@
-import {AnimatePresence, motion} from 'framer-motion';
+import {motion} from 'framer-motion';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 import styled from 'styled-components';
 import {Dropdown} from 'primereact/dropdown';
 
 import {AppContext} from '../../../../App';
-import {blobToBase64} from '../../../../utils/BlobToBase64';
-import UrlToBase64 from '../../../../utils/UrlToBase64';
-import MapEditorDrawer from './MapEditorDrawer';
+import TilesetDrawer from './TilesetDrawer';
 import Loader from '../../../../components/Loader';
 
 const TILESETS = [
@@ -37,7 +35,7 @@ const TILESETS = [
   },
 ];
 
-export default function MapEditor() {
+export default function TilesetEditor() {
   const {mapEditorVisible} = useContext(AppContext);
 
   const stopPropagation = event => {
@@ -51,7 +49,7 @@ export default function MapEditor() {
 
   useEffect(() => {
     if (canvasRef.current) {
-      drawerRef.current = new MapEditorDrawer(canvasRef.current);
+      drawerRef.current = new TilesetDrawer(canvasRef.current);
     }
   }, [canvasRef.current]);
 
@@ -64,6 +62,7 @@ export default function MapEditor() {
         setImageLoading(false);
       };
       image.src = tileset.url;
+      image.crossOrigin = 'Anonymous';
     }
   }, [tileset, drawerRef.current]);
 
@@ -88,7 +87,7 @@ export default function MapEditor() {
     >
       <Content>
         <Dropdown
-          className="w-full"
+          className="w-full mb-2"
           optionLabel="name"
           value={tileset}
           options={TILESETS}
@@ -120,12 +119,13 @@ const Content = styled.div`
   padding: 0.5em;
   display: flex;
   flex-direction: column;
+  font-size: 0.7em;
 `;
 
 const CanvasHolder = styled.div`
   position: relative;
   width: 100%;
   flex: 1;
-  padding: 0.5em;
   overflow: auto;
+  background-color: #282828;
 `;

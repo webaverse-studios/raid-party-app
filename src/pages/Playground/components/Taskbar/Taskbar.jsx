@@ -5,7 +5,7 @@ import {AppContext} from '../../../../App';
 import metaversefile from '../../../../../metaversefile-api';
 import BorderButton from '../../../../components/Buttons/BorderButton';
 
-export default function Toolbar() {
+export default function Taskbar() {
   const localPlayer = metaversefile.useLocalPlayer();
   const {app, setOpenAdventures, mapEditorVisible, setMapEditorVisible} =
     useContext(AppContext);

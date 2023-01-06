@@ -39,10 +39,10 @@ import Loader from '../../components/Loader';
 import {AppContext, getCurrentRoom, getCurrentSceneSrc} from '../../App';
 import metaversefile from '../../../metaversefile-api';
 import Adventures from '../Adventures';
-import Toolbar from './components/Toolbar';
+import Taskbar from './components/Taskbar';
 import Profile from './components/Profile';
 import ChangeCharactor from '../ChangeCharactor';
-import MapEditor from './components/MapEditor';
+import TilesetEditor from './components/TilesetEditor';
 import MapEditorToolbar from './components/MapEditorToolbar';
 
 const localPlayer = metaversefile.useLocalPlayer();
@@ -283,11 +283,11 @@ export default function Playground() {
       <GrabKeyIndicators />
       <FocusBar />
       <IoHandler />
-      <Toolbar />
+      <Taskbar />
       <Profile />
       <Adventures />
       <ChangeCharactor />
-      <MapEditor />
+      <TilesetEditor />
       <MapEditorToolbar />
       <StyledLoader
         visible={tilesLoaded}

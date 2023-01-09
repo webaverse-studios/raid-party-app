@@ -47,9 +47,22 @@ export default function TilesetEditor() {
   const [tileset, setTileset] = useState(null);
   const [tileSize, setTileSize] = useState(32);
   const [img, setImg] = useState(null);
+  const [left, setLeft] = useState(window.innerWidth - 400);
 
   const canvasRef = useRef();
   const drawerRef = useRef();
+
+  const resizeHandler = mouseDownEvent => {
+    function onMouseMove(mouseMoveEvent) {
+      setLeft(mouseMoveEvent.pageX);
+    }
+    function onMouseUp() {
+      document.body.removeEventListener('mousemove', onMouseMove);
+    }
+
+    document.body.addEventListener('mousemove', onMouseMove);
+    document.body.addEventListener('mouseup', onMouseUp, {once: true});
+  };
 
   // Init drawer
   useEffect(() => {
@@ -100,8 +113,10 @@ export default function TilesetEditor() {
       }}
       initial="hide"
       animate={mapEditorVisible ? 'show' : 'hide'}
+      left={left}
     >
       <Content>
+        <DragElement onMouseDown={resizeHandler} />
         <Dropdown
           className="w-full mb-3"
           optionLabel="name"
@@ -136,7 +151,8 @@ const Holder = styled(motion.div)`
   position: fixed;
   top: 0;
   right: 0;
-  width: 20em;
+  left: ${props => `${props.left}px`};
+  bottom: 0;
   height: 100%;
 `;
 
@@ -149,6 +165,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 0.7em;
+  min-width: 20em;
 `;
 
 const CanvasHolder = styled.div`
@@ -161,4 +178,16 @@ const CanvasHolder = styled.div`
 
 const Label = styled.label`
   line-height: 2;
+`;
+
+const DragElement = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  width: 0.5em;
+  height: 100%;
+  &:hover {
+    cursor: ew-resize;
+  }
 `;

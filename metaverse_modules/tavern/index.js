@@ -16,8 +16,6 @@ const {
 
 export default e => {
   const app = useApp();
-  const camera = useCamera();
-  const procGenManager = useProcGenManager();
   const physics = usePhysics();
   const localPlayer = useLocalPlayer();
   localPlayer.dispatchEvent({
@@ -33,8 +31,6 @@ export default e => {
   let tiles = null;
   let generated = false;
   const startingY = localPlayer.position.y;
-  console.log('startingY', startingY, localPlayer.position);
-  let mapMenuIsOpen = false;
 
   const generateMap = async (prompt, type) => {
     localPlayer.dispatchEvent({
@@ -49,7 +45,6 @@ export default e => {
     }
 
     tiles.clearMap();
-    console.log('spawning tilemap tiles:', tiles);
     const component = {
       key: 'resolution',
       value: {
@@ -60,8 +55,8 @@ export default e => {
     const component2 = {
       key: 'prompt',
       value: {
-        prompt: prompt,
-        type: type,
+        prompt,
+        type,
       },
     };
 
@@ -72,7 +67,6 @@ export default e => {
       new THREE.Vector3(1, 1, 1),
       [component, component2],
     );
-    console.log('tilemapApp', tilemapApp);
     const spot = tilemapApp.getComponent('spot')
       ? tilemapApp.getComponent('spot')
       : [0, 0];
@@ -106,7 +100,6 @@ export default e => {
     localPlayer.characterPhysics.setPosition(localPlayer.position);
     localPlayer.characterPhysics.reset();
     localPlayer.updateMatrixWorld();
-    console.log('removing tilemap tiles:', tiles);
     metaversefile.removeTrackedApp(tilemapApp.getComponent('instanceId'));
     tiles.unclearMap();
     generated = false;
@@ -117,7 +110,6 @@ export default e => {
       loading: false,
     });
 
-    mapMenuIsOpen = false;
     localPlayer.dispatchEvent({
       type: 'update_adventures',
       app,

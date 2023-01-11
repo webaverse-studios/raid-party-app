@@ -13,6 +13,8 @@ export default class Tiles extends THREE.Object3D {
   app = null;
   physics = null;
   npcs = [];
+  meshes = [];
+  colliders = [];
 
   constructor(app, physics) {
     super();
@@ -21,23 +23,8 @@ export default class Tiles extends THREE.Object3D {
     this.physics = physics;
   }
 
-  meshes = [];
-  colliders = [];
-
   spawnNPCs = async () => {
     this.npcs = [];
-    return;
-    for (let i = 0; i < 2; i++) {
-      this.npcs.push(
-        await metaversefile.addTrackedApp(
-          '../../metaverse_modules/npc/',
-          new THREE.Vector3(0, 0, 0),
-          new THREE.Quaternion(0, 0, 0, 1),
-          new THREE.Vector3(1, 1, 1),
-          [],
-        ),
-      );
-    }
   };
 
   loadTiles(length) {
@@ -144,8 +131,4 @@ export default class Tiles extends THREE.Object3D {
     const assetManager = await AssetManager.loadUrls(tiles);
     this.generate(assetManager);
   }
-}
-
-function randomIntFromInterval(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
 }

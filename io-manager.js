@@ -30,6 +30,7 @@ import storyManager from './story.js';
 // import domRenderer from './dom-renderer.jsx';
 import raycastManager from './raycast-manager.js';
 import scene2DManager from './2d-manager.js';
+import tilemapManager from './tilemap/tilemap-manager.js';
 
 // const localVector = new THREE.Vector3();
 // const localVector2 = new THREE.Vector3();
@@ -296,7 +297,7 @@ const _updateIo = timeDiff => {
           _updateHorizontalSideScroll(keysDirection);
           break;
         case 'top-down':
-          _updateHorizontal(keysDirection); //_updateHorizontalTopDown
+          _updateHorizontal(keysDirection); // _updateHorizontalTopDown
           break;
         case 'isometric':
           _updateHorizontalIsometric(keysDirection);
@@ -921,6 +922,7 @@ ioManager.dblclick = e => {
 // let mouseDown = false;
 let lastMouseButtons = 0;
 ioManager.mousedown = e => {
+  console.log('mouseDown');
   const changedButtons = lastMouseButtons ^ e.buttons;
   if (cameraManager.pointerLockElement) {
     if (changedButtons & 1 && e.buttons & 1) {
@@ -986,6 +988,9 @@ ioManager.mouseup = e => {
   // }
   lastMouseButtons = e.buttons;
   raycastManager.setLastMouseEvent(e);
+
+  //
+  tilemapManager.dispatchEvent(new MessageEvent('updateTile'));
 };
 ioManager.paste = e => {
   if (!window.document.activeElement) {

@@ -1,3 +1,5 @@
+import tilemapManager from '../../../../../tilemap/tilemap-manager';
+
 const GRID_COLOR = 'rgba(0,255,217,0.7)';
 
 export default class TilesetDrawer {
@@ -19,6 +21,10 @@ export default class TilesetDrawer {
   constructor(canvas) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
+
+    //
+    this.realCanvas = document.createElement('canvas');
+    this.realCtx = this.realCanvas.getContext('2d');
 
     // Add listeners
     this.canvas.addEventListener('pointerdown', this.onPointerDown.bind(this));
@@ -59,7 +65,6 @@ export default class TilesetDrawer {
       this.isMouseDown = false;
       this.drawAll();
       this.initSelectedTileData();
-      console.log(this.selectedTileData);
     }
   }
 
@@ -114,37 +119,23 @@ export default class TilesetDrawer {
     this.selectedTileData = null;
   }
 
-  // initTiles() {
-  //   let uuid = 0;
-  //   this.tiles = [];
-  //   for (let y = 0; y < this.imageHeight; y += this.tileSize) {
-  //     const cols = [];
-  //     for (let x = 0; x < this.imageWidth; x += this.tileSize) {
-  //       const tileData = this.ctx.getImageData(
-  //         x,
-  //         y,
-  //         this.tileSize,
-  //         this.tileSize,
-  //       );
-  //       cols.push({
-  //         uuid: uuid++,
-  //         coord: {x, y},
-  //         position: {x: x / this.tileSize, y: y / this.tileSize},
-  //         tileData,
-  //       });
-  //     }
-  //     this.tiles.push(cols);
-  //   }
-  // }
-
   resizeCanvas() {
     this.canvas.width = this.imageWidth;
     this.canvas.height = this.imageHeight;
+    this.realCanvas.width = this.imageWidth;
+    this.realCanvas.height = this.imageHeight;
   }
 
   drawImage() {
     if (this.image) {
       this.ctx.drawImage(this.image, 0, 0, this.imageWidth, this.imageHeight);
+      this.realCtx.drawImage(
+        this.image,
+        0,
+        0,
+        this.imageWidth,
+        this.imageHeight,
+      );
     }
   }
 
@@ -199,6 +190,9 @@ export default class TilesetDrawer {
         this.selectedRect.minY * this.tileSize,
         (this.selectedRect.maxX - this.selectedRect.minX + 1) * this.tileSize,
         (this.selectedRect.maxY - this.selectedRect.minY + 1) * this.tileSize,
+      );
+      tilemapManager.dispatchEvent(
+        new MessageEvent('setTileData', {data: this.selectedTileData}),
       );
     }
   };

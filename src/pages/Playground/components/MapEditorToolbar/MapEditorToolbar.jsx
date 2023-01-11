@@ -1,10 +1,11 @@
 import {motion} from 'framer-motion';
 import React, {useContext, useState} from 'react';
 import styled from 'styled-components';
+import tilemapManager from '../../../../../tilemap/tilemap-manager';
 import {AppContext} from '../../../../App';
 import IconToolButton from '../../../../components/Buttons/IconToolButton';
 
-const EDIT_ACTIONS = [
+export const TILEMAP_EDIT_ACTIONS = [
   {
     key: 'select',
     label: 'Select',
@@ -24,11 +25,6 @@ const EDIT_ACTIONS = [
     key: 'hand',
     label: 'Hand',
     icon: '/images/rp/icon-hand.svg',
-  },
-  {
-    key: 'boxSelect',
-    label: 'Box select',
-    icon: '/images/rp/icon-box-select.svg',
   },
 ];
 
@@ -60,12 +56,13 @@ export default function MapEditorToolbar() {
       animate={mapEditorVisible ? 'show' : 'hide'}
     >
       <Content>
-        {EDIT_ACTIONS.map(action => (
+        {TILEMAP_EDIT_ACTIONS.map(action => (
           <IconToolButton
             key={action.key}
             icon={action.icon}
             onClick={() => {
               setActivedAction(action.key);
+              tilemapManager.setAction(action.key);
             }}
             active={activedAction === action.key}
           />

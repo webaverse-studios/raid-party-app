@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import metaversefile from 'metaversefile';
 import Tiles from './tiles';
+import tilemapManager from '../../tilemap/tilemap-manager';
 
 const {
   useApp,
@@ -122,6 +123,8 @@ export default e => {
     (async () => {
       tiles = new Tiles(app, physics);
       app.add(tiles);
+
+      tilemapManager.setTiles(tiles.children);
 
       // load
       const _waitForLoad = async () => {

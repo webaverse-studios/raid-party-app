@@ -6,6 +6,7 @@ import {world} from './world.js';
 import physicsManager from './physics-manager.js';
 import domRenderer from './dom-renderer.jsx';
 import transformControls from './transform-controls.js';
+import tilemapManager from './tilemap/tilemap-manager.js';
 
 const localVector = new THREE.Vector3();
 const localQuaternion = new THREE.Quaternion();
@@ -52,6 +53,7 @@ class RaycastManager extends EventTarget {
     this.lastMouseEvent = new FakeMouseEvent();
     this.collision = new Collision();
     this.lastDomHover = false;
+    this.intersects = null;
   }
 
   getLastMouseEvent() {
@@ -90,18 +92,13 @@ class RaycastManager extends EventTarget {
           localVector2D.y >= -1 &&
           localVector2D.y <= 1
         ) {
-          /* const result = */ localRaycaster.setFromCamera(
-            localVector2D,
-            camera,
-          );
-          // console.log('return raycaster', result);
+          localRaycaster.setFromCamera(localVector2D, camera);
+
           return localRaycaster;
         } else {
-          // console.log('out of range');
           return null;
         }
       } else {
-        // console.log('no renderer');
         return null;
       }
     };
@@ -129,10 +126,6 @@ class RaycastManager extends EventTarget {
   }
 
   update() {
-    // console.log('update');
-
-    // try {
-
     const mouseEvent = cameraManager.pointerLockElement
       ? this.getCenterEvent()
       : this.lastMouseEvent;
@@ -141,7 +134,6 @@ class RaycastManager extends EventTarget {
     let mouseHoverPhysicsObject = null;
     // let mouseSelectedObject = null;
     let mouseHoverPhysicsId = 0;
-    // let htmlHover = false;
     let domHover = false;
 
     domRenderer.onBeforeRaycast();
@@ -160,56 +152,38 @@ class RaycastManager extends EventTarget {
       const physicsScene = physicsManager.getScene();
       const result = physicsScene.raycast(position, quaternion);
       if (result) {
-        // console.log('raycast', result);
-
         // check world apps
         const pair = world.appManager.getPairByPhysicsId(result.objectId);
         if (pair) {
           const [app, physicsObject] = pair;
           point = localVector.fromArray(result.point);
-
-          /* if (object.isHtml) {
-            htmlHover = true;
-          } else { */
-          // if (game.hoverEnabled) {
           mouseHoverApp = app;
           mouseHoverPhysicsObject = physicsObject;
           mouseHoverPhysicsId = result.objectId;
-          // }
-          // }
         } else {
           // check dom renderer
           const object = domRenderer
             .getPhysicsObjects()
             .find(o => o.physicsId === result.objectId);
           if (object) {
-            // console.log('got dom renderer object hit', object);
-            // XXX
             domHover = true;
           }
         }
       }
 
+      // Get raycast tile
+      this.intersects = raycaster.intersectObjects(tilemapManager.tiles);
+
       domRenderer.onAfterRaycast();
-    } /* else {
-      console.log('no result');
-    } */
+    }
+
     this.collision.set(
       mouseHoverApp,
       mouseHoverPhysicsObject,
       mouseHoverPhysicsId,
       point,
     );
-    /* const renderer = getRenderer();
-    if (htmlHover) {
-      renderer.domElement.classList.add('hover');
-    } else {
-      renderer.domElement.classList.remove('hover');
-    } */
 
-    // } catch (e) {
-    //   debugger;
-    // }
     if (domHover !== this.lastDomHover) {
       this.dispatchEvent(
         new MessageEvent('domhoverchange', {

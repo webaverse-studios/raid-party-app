@@ -185,7 +185,7 @@ export default class TilesetDrawer {
 
   initSelectedTileData = () => {
     if (this.selectedRect) {
-      this.selectedTileData = this.ctx.getImageData(
+      this.selectedTileData = this.realCtx.getImageData(
         this.selectedRect.minX * this.tileSize,
         this.selectedRect.minY * this.tileSize,
         (this.selectedRect.maxX - this.selectedRect.minX + 1) * this.tileSize,

@@ -44,6 +44,7 @@ import Profile from './components/Profile';
 import ChangeCharactor from '../ChangeCharactor';
 import TilesetEditor from './components/TilesetEditor';
 import MapEditorToolbar from './components/MapEditorToolbar';
+import tilemapManager from '../../../tilemap/tilemap-manager';
 
 const localPlayer = metaversefile.useLocalPlayer();
 
@@ -67,11 +68,12 @@ const _startApp = async (weba, canvas, sprite) => {
 };
 
 const Canvas = ({app}) => {
-  const {currentSprite} = useContext(AppContext);
+  const {currentSprite, mapEditorVisible} = useContext(AppContext);
   const canvasRef = useRef(null);
   const [domHover, setDomHover] = useState(null);
 
   const isStarted = useRef(false);
+  const isMouseDown = useRef(false);
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -95,7 +97,28 @@ const Canvas = ({app}) => {
     };
   }, []);
 
-  return <StyledCanvas domhover={domHover} ref={canvasRef} />;
+  const updateTile = () => {
+    if (mapEditorVisible && isMouseDown.current) {
+      tilemapManager.dispatchEvent(new MessageEvent('updateTile'));
+    }
+  };
+
+  return (
+    <StyledCanvas
+      domhover={domHover}
+      ref={canvasRef}
+      onPointerDown={() => {
+        isMouseDown.current = true;
+        updateTile();
+      }}
+      onPointerUp={() => {
+        isMouseDown.current = false;
+      }}
+      onPointerMove={() => {
+        updateTile();
+      }}
+    />
+  );
 };
 
 export default function Playground() {

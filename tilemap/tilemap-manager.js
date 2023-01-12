@@ -44,6 +44,7 @@ class TilemapManager extends EventTarget {
         if (raycastManager.intersects.length > 0) {
           const mesh = raycastManager.intersects[0].object;
           mesh.material.map = this.currentTexture;
+          mesh.material.transparent = true;
           mesh.material.needsUpdate = true;
         }
       }

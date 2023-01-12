@@ -74,7 +74,7 @@ export default function MapEditorToolbar() {
 
 const Holder = styled(motion.div)`
   position: fixed;
-  top: 9em;
+  top: 50%;
   left: 0;
 `;
 
@@ -87,4 +87,5 @@ const Content = styled.div`
   flex-direction: column;
   gap: 0.5em;
   padding: 0.2em;
+  transform: translateY(-50%);
 `;
